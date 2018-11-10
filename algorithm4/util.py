@@ -6,9 +6,6 @@ import algorithm4.db as db
 class DataUtil:
 
     def __init__(self):
-        self.enc_sentence_length = 100
-        self.dec_sentence_length = 200
-
         # Batch_size: 2
         input_batches, target_batches = self.load_data()
 
@@ -23,6 +20,9 @@ class DataUtil:
         self.enc_vocab, self.enc_reverse_vocab, self.enc_vocab_size = self.build_vocab(all_input_sentences)
         self.dec_vocab, self.dec_reverse_vocab, self.dec_vocab_size = self.build_vocab(all_target_sentences, is_target=True)
 
+        self.enc_sentence_length = self.max_seq_len(all_input_sentences)
+        self.dec_sentence_length = self.max_seq_len(all_target_sentences)
+
     def load_data(self):
         contents = db.select_chat_sequence()
         question = []
@@ -36,6 +36,13 @@ class DataUtil:
                     question.append(doc)
                     answer.append([sequence[1]] * len(doc))
         return question, answer
+
+    def max_seq_len(self, input):
+        max_seq_len = 0
+        for seq in input:
+            if len(seq) > max_seq_len:
+                max_seq_len = len(seq)
+        return max_seq_len
 
     def tokenizer(self, sentence):
         tokens = re.findall(r"[\w]+|[^\s\w]", sentence)

@@ -9,6 +9,7 @@ import tensorflow as tf
 import numpy as np
 
 from tensorflow.python.layers.core import Dense
+from tensorflow.python.ops.rnn_cell_impl import _zero_state_tensors
 from algorithm4.util import DataUtil
 
 
@@ -20,7 +21,7 @@ class DemoConfig:
     enc_emb_size = 30
     dec_emb_size = 30
     attn_size = 30
-    cell = tf.nn.rnn_cell.BasicLSTMCell
+    cell = tf.nn.rnn_cell.GRUCell
 
     # Training
     optimizer = tf.train.AdamOptimizer
@@ -117,7 +118,7 @@ class Seq2SeqModel(object):
             enc_emb_inputs = tf.nn.embedding_lookup(
                 self.enc_embedding, self.enc_inputs, name='emb_inputs')
             enc_cell = self.cell(self.hidden_size)
-
+            enc_cell = tf.nn.rnn_cell.DropoutWrapper(enc_cell, output_keep_prob=0.7)
             # enc_outputs: [batch_size x enc_sent_len x embedding_size]
             # enc_last_state: [batch_size x embedding_size]
             self.enc_outputs, self.enc_last_state = tf.nn.dynamic_rnn(
@@ -137,6 +138,7 @@ class Seq2SeqModel(object):
             batch_size = tf.shape(self.enc_inputs)[0]
 
             dec_cell = self.cell(self.hidden_size)
+            dec_cell = tf.nn.rnn_cell.DropoutWrapper(dec_cell, output_keep_prob=0.7)
 
             attn_mech = tf.contrib.seq2seq.LuongAttention(
                 num_units=self.attn_size,
@@ -152,9 +154,16 @@ class Seq2SeqModel(object):
                 #  attention_history=False, # (in ver 1.2)
                 name='Attention_Wrapper')
 
-            # output projection (replacing `OutputProjectionWrapper`)
-            initial_state = dec_cell.zero_state(dtype=tf.float32, batch_size=batch_size)
 
+           # initial_state = dec_cell.zero_state(dtype=tf.float32, batch_size=batch_size)
+            initial_state = tf.contrib.seq2seq.AttentionWrapperState(
+                cell_state=self.enc_last_state,
+                attention=_zero_state_tensors(self.attn_size, batch_size, tf.float32),
+                time=0,
+                alignments=(),
+                alignment_history=()
+            )
+            # output projection (replacing `OutputProjectionWrapper`)
             output_layer = Dense(self.dec_vocab_size + 2, name='output_projection')
 
             if self.mode == 'training':
