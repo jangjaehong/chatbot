@@ -17,15 +17,14 @@ class DemoConfig:
 
     # Model
     hidden_size = 30
-    num_enc_layer = 3
-    num_dec_layer = 3
     enc_emb_size = 30
     dec_emb_size = 30
+    attn_size = 30
+    cell = tf.nn.rnn_cell.BasicLSTMCell
 
-    cell = tf.nn.rnn_cell.GRUCell
     # Training
     optimizer = tf.train.AdamOptimizer
-    n_epoch = 2000
+    n_epoch = 800
     learning_rate = 0.001
 
     # Tokens
