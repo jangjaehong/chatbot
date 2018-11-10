@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <script type="text/javascript" src="{% static 'medibot/js/libs/jquery-3.3.1.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'medibot/css/user.css' %}">
+    <link rel="stylesheet" href="{% static 'medibot/css/common.css' %}">
+     <script>
+        $(document).ready(function(){
+            $('#btn_cancel').on('click', function(){
+                location.replace("{% url 'accounts:login' %}");
+            });
+
+              $('.placeholder').on('click',function(){
+                $(this).prev().focus();
+            });
+
+            $('input').on('blur',function(){
+                if( $(this).val() != '' ) {
+                    $(this).addClass('on');
+                    $(this).next().addClass('on');
+                }else{
+                   $(this).removeClass('on');
+                    $(this).next().removeClass('on');
+                }
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div class="user_wrap">
+        <div class="header">
+            <div class="tit">Medi-BOT</div>
+            <div class="sub_tit">회원가입</div>
+        </div>
+
+        <div class="contents mt_20 mb_20">
+            <form action="" id="joinFrm" method="post" enctype="multipart/form-data" autocomplete="off">
+            {% csrf_token %}
+            <div class="input_wrap">
+                 {{ signupform.email }}
+                <div class="placeholder">이메일</div>
+            </div>
+            <div class="input_wrap">
+                {{ signupform.username }}
+                <div class="placeholder">이름</div>
+            </div>
+            <div class="input_wrap">
+                {{ signupform.mobile }}
+                <div class="placeholder">휴대폰</div>
+            </div>
+            <div class="input_wrap">
+                {{ signupform.password1 }}
+                <div class="placeholder">패스워드</div>
+            </div>
+            <div class="input_wrap">
+                {{ signupform.password2 }}
+                <div class="placeholder">패스워드 확인</div>
+            </div>
+            </form>
+        </div>
+         <div class="footer">
+            <input id="btn_cancel" type="button" value="취소" />
+            <input id="btn_join" type="submit" value="가입신청" />
+        </div>
+    </div>
+</body>
+</html>

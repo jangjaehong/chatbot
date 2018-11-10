@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load staticfiles %}
+    <script type="text/javascript" src="{% static 'medibot/js/libs/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'medibot/js/libs/ajax_csrf.js' %}"></script>
+    <script type="text/javascript" src="{% static 'medibot/js/libs/d3.js' %}"></script>
+    <script type="text/javascript" src="{% static 'medibot/js/libs/test.js' %}"></script>
+    <style>
+        .plot-container{
+            width:600px;
+            height:600px;
+            position:relative;
+            border:1px solid black;
+            background-color:#222222;
+        }
+        svg.area{
+            box-shadow:0px 0px 20px 0px rgba(0, 0, 0, 0.35), inset 0px 0px 9px rgba(19, 17, 17, 0.87);
+            margin:10px;
+        }
+        .textState{
+            font-size:0.75em
+        }
+        .pie{
+            padding:20px;
+        }
+    </style>
+    <script>
+        var flag = false;
+        var data = [1800.00, 200.00, 122.00, 6.00, 7.60, 7.60, 0.00, 982.00, 0.00, 0.00, 0.0];
+        var dataSet = dataRender(data, flag);
+        var container = "div.plot-container";
+        $(function(){
+            drawCircleChart(dataSet, container);
+        });
+    </script>
+</head>
+<body>
+    <div class="plot-container">
+    </div>
+</body>
+</html>

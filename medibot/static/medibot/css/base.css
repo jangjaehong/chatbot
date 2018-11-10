@@ -1,0 +1,220 @@
+@charset "utf-8";
+body{
+    width:100%;
+    height:100vh;
+    display:flex;
+    padding-top:52px;
+    overflow-x:hidden;
+    overflow-y:auto
+}
+
+/* 최상단 헤더 */
+body > header{
+    width: calc(100% - 20px);
+    padding:10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position:fixed;
+    z-index:9999;
+    top:0;
+    left:0;
+    overflow-x:hidden;
+    background:#333333;
+    box-shadow:0 0 0 4px #333333, 0 6px 4px #222222;
+
+}
+body > header > .logo{
+    position:relative;
+    display:flex;
+    flex-direction:row;
+    justify-content:flex-start;
+    align-items:center;
+}
+body > header > .logo > #ic_arrow{display:none;}
+body > header > .ic_user{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* 좌측 메뉴 영역*/
+nav{
+    width:10%;
+    height:100%;
+    padding-left:10%;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:center;
+    position:fixed;
+    z-index:9999;
+    left:-20%;
+    top:52px;
+}
+nav > .nav-menu{
+    width:calc(100% - 10px);
+    height:auto;
+    padding:10px 0 30px 10px;
+    border-bottom:1px solid #999999
+}
+nav > .nav-menu li{
+    width:calc(100% - 25px);
+    padding:5px 8px 5px 16px;
+}
+nav > .nav-menu li.menu-tit{
+    padding-left:12px;
+    color:#999999;
+}
+
+/* 콘텐츠*/
+section{
+    width:68%;
+    height:calc(98% - 52px);
+    padding:1%;
+    position: absolute;
+    z-index:9998;
+    top: 52px;
+    left:0;
+}
+section > header{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+}
+section > article{
+    width:100%;
+    height:auto;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+}
+
+/* 우측 콘텐츠 */
+aside{
+    width: 28%;
+    height:calc(98% - 72px);
+    padding: 1%;
+    position: fixed;
+    z-index:9998;
+    top: 52px;
+    right:0;
+}
+aside > div.contents_wrap{
+    width:100%;
+    height:100%;
+    position:relative
+}
+aside > div.contents_wrap  > div.contents_menu{
+    width:100%;
+    height:52px;
+}
+aside > div.contents_wrap > div.contents-box{
+    width:100%;
+    height:calc(100% - 62px);
+    min-height:100px;
+    color:#fff;
+    position:absolute;
+    top:62px;
+    left:0;
+    z-index:9997;
+    background-color: #333333;
+    display:none;
+}
+
+aside > div.contents_wrap > div.contents-box > form{
+    width:100%;
+    height:100%;
+}
+/* 유저 박스 */
+.user-item{
+    font-size:1.1em;
+    font-weight:700;
+    color:#999999;
+}
+.user-val{
+    font-size:1.1em;
+    font-weight:bold;
+    padding:0 0 0 8px;
+}
+
+.user-control-box{
+    min-width:250px;
+    width:auto;
+    min-height:100px;
+    height:auto;
+    margin: 10px auto 0;
+    display:none;
+    flex-direction:column;
+    position:absolute;
+    z-index:9999;
+    right:10px;
+    top: 53px;
+    background:#fff;
+    color:#212121;
+    border-radius:3px;
+    box-shadow:3px 3px 3px 3px #222222;
+}
+.user-control-box:before{
+    content: '';
+    position:absolute;
+    border-bottom:10px solid #fff;
+    border-right:8px solid transparent;
+    border-left:8px solid transparent;
+    top:-10px;
+    right:27px;
+}
+.user-control-box > .user-info{
+    padding:10px;
+    display:flex;
+    flex-direction:row;
+    justify-content:flex-start;
+    align-items:center;
+}
+.user-control-box > .user-info > div{padding:5px 10px;}
+.user-control-box > .user-info > .user-item{color: #999999;}
+
+.user-control-box > .control-box{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+.user-control-box .control-box div{
+    width:50%;
+    color:#212121;
+    background:#999999
+}
+.user-control-box .control-box div a{
+    justify-content: center;
+    align-items: center;
+}
+
+/* 채팅방 */
+.floating_btn{
+    width:48px;
+    height:48px;
+    padding:10px;
+    position:fixed;
+    z-index:9999;
+    left:2%;
+    bottom:5%;
+    background:#378AFF;
+    border-radius:48px;
+    box-shadow:3px 3px 3px 3px #222222;
+    cursor:pointer;
+}
+.floating_btn img{
+    width:48px;
+    height:48px;
+}
+
+
+/* 모바일 영역 */
+@media (max-width: 430px){
+
+}
+
+
+

@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'medibot/css/common.css' %}">
+<link rel="stylesheet" href="{% static 'medibot/css/menu.css' %}">
+<script type="text/javascript">
+ $(document).ready(function(){
+    $('#ic_menu').on('click', function(){
+        $('nav').animate({
+            left:0
+        }, 1500);
+    });
+     $('nav').on('click', function(){
+        $('#gnb').animate({
+            left:-250
+        }, 1500);
+    });
+ });
+</script>
+<nav class="menu_wrap">
+    <div class="menu_top">
+        <h4>메디봇</h4>
+        <img id="ic_close" src="" alt="close" />
+    </div>
+    <div id="gnb">
+        <ul>
+            <li><a href="/bmi">BMI(체질량지수) 알아보기</a></li>
+            <li><a href="/whr">WHR(복부비만도) 알아보기</a></li>
+            <li><a href="/energy">기초대사량 알아보기</a></li>
+            <li><a href="/help">도움말</a></li>
+            <li><a href="/help">copyrigth</a></li>
+        </ul>
+    </div>
+</nav>

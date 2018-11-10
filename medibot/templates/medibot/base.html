@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'medibot/css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'medibot/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'medibot/css/jquery-ui-1.12.1.min.css' %}">
+    <script type="text/javascript" src="{% static 'medibot/js/libs/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'medibot/js/libs/jquery-ui-1.12.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'medibot/js/libs/ajax_csrf.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            $('#ic_arrow').hide();
+            $('#ic_menu').on('click',function(){
+                $('#left_menu').css('left','0px');
+                $(this).hide();
+                $('#ic_arrow').show();
+            });
+            $('#ic_arrow').on('click',function(){
+                $('#left_menu').css('left','-100%');
+                $(this).hide();
+                $('#ic_menu').show();
+            });
+            $('.floating_btn').on('click', function(){
+                if( $('#chatFrm').css("display") == "none" ){
+                    $('#chatFrm').show();
+                }else{
+                    $('#chatFrm').hide();
+                }
+            });
+            $('#ic_user').on('click',function(){
+                $('#user-control-box').toggle('slow');
+            });
+        });
+    </script>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+
+    <header>
+         <div class="logo">
+            <div class="ic_menu mr_10">
+                <img id="ic_menu"  src="{% static 'medibot/img/icon/ic_menu.png' %}" alt="menu" >
+                <img id="ic_arrow" src="{% static 'medibot/img/icon/ic_arrow.png' %}" alt="menu">
+            </div>
+            <div class="tit">
+                <a href="{% url 'medibot:index' %}">Medi-BOT</a>
+            </div>
+        </div>
+        <div class="ic_user mr_10" id="ic_user">
+            <div class="mr_10"> {{ user.username }} 님, 환영합니다. </div>
+            <img src="{% static 'medibot/img/icon/ic_user.png' %}" alt="userinfo">
+            <!--상단 계정 컨트롤 -->
+
+        </div>
+    </header>
+    <div id="user-control-box" class="user-control-box">
+        <div class="user-info">
+            <div class="mr_10">
+                <img src="{% static 'medibot/img/icon/ic_user.png' %}" alt="userinfo">
+            </div>
+            <div>
+                <div class="user-item">회원이름</div>
+                <div class="user-val">{{ user.username }}</div>
+                <div class="user-item">로그인시간</div>
+                <div class="user-val">2018-09-16 12:28</div>
+            </div>
+        </div>
+        <div class="control-box">
+            <div><a href="{% url 'medibot:index' %}">마이페이지</a></div>
+            <div style="background-color:#368AFF"><a href="{% url 'accounts:login' %}">로그아웃</a></div>
+        </div>
+    </div>
+
+    <nav>
+        <ul class="nav-menu">
+            <li class="menu-tit">대쉬보드</li>
+        </ul>
+    </nav>
+
+    <section>
+        <header>
+            <div class="sub-tit">대쉬보드</div>
+            {% block subtitle %}
+            {% endblock %}
+            <div class="line"></div>
+        </header>
+        <article>
+            {% block result %}
+            {% endblock %}
+        </article>
+    </section>
+    <aside>
+        {% block input %}
+        {% endblock %}
+    </aside>
+
+
+    <!-- 채팅방 아이콘-->
+    <div class="floating_btn">
+        <img id="go_chat" src="{% static 'medibot/img/icon/ic_message.png' %}" alt="chat_icon">
+    </div>
+    {% include 'medibot/chat.html' %}
+</body>
+</html>

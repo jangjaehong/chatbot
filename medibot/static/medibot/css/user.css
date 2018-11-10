@@ -1,0 +1,124 @@
+body{
+    position:relativeK;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+}
+
+.user_wrap{
+    width:18%;
+    height:auto;
+    min-height:200px;
+    display:flex;
+    flex-direction:column;
+    background-color:white;
+    border-radius:3px;
+    box-shadow:3px 3px 3px 3px #222222;
+}
+
+.user_wrap > div{
+    width: calc(100% - 60px);
+    padding:0 30px;
+    position:relative;
+    display: flex;
+    flex-direction: column;
+}
+.user_wrap > div:last-child{
+    margin:0px;
+}
+
+.user_wrap .header{
+    padding-top:30px;
+    border-radius:3px 0;
+    background:#368AFF;
+    text-align:center;
+    font-weight:bold;
+    color:white;
+}
+
+.user_wrap .header div:first-child{
+    font-size:2em;
+    padding:5px 0;
+
+}
+.user_wrap .header div:last-child{
+    font-size:1.3em;
+    padding:5px 0;
+}
+
+.user_wrap .contents .input_wrap{
+    position:relative;
+    width:100%;
+    height:50px;
+    margin:0 0 20px 0;
+    font-size:1.2em;
+}
+
+.user_wrap .contents .input_wrap > .placeholder, .input_wrap > input {
+    position:absolute;
+    width:100%;
+    bottom:0px;
+}
+
+.user_wrap .contents .input_wrap > .placeholder{
+    z-index:2000;
+    color: #D5D5D5;
+    font-weight:bold;
+    bottom:3px;
+}
+
+.user_wrap .contents .input_wrap > input{
+    z-index:1000;
+}
+.user_wrap .contents .input_wrap > input.on{
+    border-bottom-color:#368AFF
+}
+
+.user_wrap .contents .input_wrap > div.on{
+    font-size:0.8em;
+    bottom:28px;
+    color:#368AFF
+}
+.user_wrap .contents .input_wrap > input:focus + div.placeholder{
+    font-size:0.8em;
+    bottom:28px;
+    color:#368AFF
+}
+
+.user_wrap .footer{
+    display: flex;
+    flex-direction: row;
+    padding-bottom:30px;
+}
+
+.user_wrap .footer > input{
+    width:calc(50% - 1px);
+    padding:10px 0;
+}
+
+.user_wrap .footer > input:first-child{
+    margin:0 1px 0 0;
+}
+.user_wrap .footer > input:last-child{
+    margin:0 0 0 1px;
+}
+
+/* PC */
+@media ( min-width: 1024px ) {
+}
+
+/* tablet */
+@media ( min-width: 421px ) and ( max-width : 1024px ) {
+    .user_wrap{
+        width:70%;
+    }
+}
+
+/* mobile */
+@media ( max-width: 420px ) {
+    .user_wrap{
+        width:80%;
+    }
+}

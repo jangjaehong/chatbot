@@ -1,0 +1,114 @@
+@charset "utf-8";
+
+/* Tag Definition */
+*{line-height:200%;font-style:normal /* em, dfn, var, cite, address */; font-family:"나눔고딕", "NanumGothic" , "돋움", dotum, sans-serif; margin:0; padding:0;}
+/* 전체 선택자 사용시 위 속성 외에는 지정하지 마세요. */
+html{height:100%; background-color: #333333;} /* [IE] 배경색을지정해서화면이뭉개지는문제해결 */
+body {position:relative; color:#fff; font-size:0.75em; word-wrap:break-word; word-break:keep-all;}
+table, pre {font-size:1em;} /* DOCTYPE 없으면 속성 상속 안됨 */
+td {color:#666;}
+a{width:calc(100% - 16px);height:calc(100% - 16px);display:flex;padding:8px;color:#fff}
+a:link {border-radius:3px;; text-decoration:none;}/* cursor: pointer; 안씀.. a태그에 href 없어도 손모양 커서 나오므로  */
+a:visited {color:#fff;}
+a:hover, a:active, a:focus {background-color:#368AFF;color:#fff;text-decoration:none;font-weight:bold} /* a:focus추가 */
+img {margin:0; border:0; padding:0; vertical-align:middle;}
+input{margin:0; padding:0; vertical-align:middle;border:none;outline:none;cursor:pointer;}
+input[type=button]{background:#D5D5D5;padding:10px 0;}
+input[type=submit]{background:#368AFF;color:white;padding:10px 0;width:100%}
+input[type=submit]:hover{font-weight:bold}
+input[type=text], input[type=email], input[type=password], input[type=number]{min-width:100px;border-bottom:1px solid #D5D5D5;padding:8px 0 3px 3px;font-size:0.95em;}
+input[type=number]{text-align:right}
+input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, input[type=number]:focus{border-bottom-color:#368AFF;}
+label{font-weight:bold;}
+ul, li{list-style:none; }
+select{vertical-align:middle;}
+form{width:100%}
+/* WebKit browsers */
+::-webkit-input-placeholder {text-align: left;}
+ /* Mozilla Firefox 4 to 18 */
+:-moz-placeholder {text-align: left;}
+ /* Mozilla Firefox 19+ but I'm not sure about working */
+::-moz-placeholder {text-align: left;}
+/* Internet Explorer 10+ */
+:-ms-input-placeholder {text-align: left;}
+.png24 {tmp:expression(setPng24(this));} /* [IE6] PNG-24 투명 이미지  */
+::-webkit-scrollbar {width: 0px; height:0px; /* remove scrollbar space */background: transparent;  /* optional: just make scrollbar invisible */}
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {background: #FF0000;}
+
+/* 공통 콘텐츠 */
+div.tit{font-size:2em;color:#fff;font-weight:bold}
+div.tit > a{width:100%;height;100%;padding:0;line-height:100%}
+div.sub-tit{font-size:1.7em;color:#fff;font-weight:bold}
+div.sub-tit > span{font-size:0.7em}
+div.sub-val{font-size:1.4em;color:#999999;font-weight:bold}
+
+div.line{z-index:0;width:100%;height:1px;margin:15px 0;border:1px solid #367AAF;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:row;}
+div.line div.line_text{font-size:1em;font-weight:bold;background-color:rgba(51, 51, 51, 0.8);padding:5px;color:#fff}
+
+/*여백*/
+.blank_10{height:10px !important;}
+.blank_20{height:20px !important;}
+.blank_30{height:30px !important;}
+.blank_40{height:40px !important;}
+.blank_50{height:50px !important;}
+
+/*마진*/
+.margin_auto{margin:0 auto !important;}
+
+.mt_5{margin-top:5px !important;}
+.mt_10{margin-top:10px !important;}
+.mt_15{margin-top:15px !important;}
+.mt_20{margin-top:20px !important;}
+.mt_25{margin-top:25px !important;}
+.mt_30{margin-top:30px !important;}
+
+.mr_5{margin-right:5px !important;}
+.mr_10{margin-right:10px !important;}
+.mr_15{margin-right:15px !important;}
+.mr_20{margin-right:20px !important;}
+.mr_25{margin-right:25px !important;}
+.mr_30{margin-right:30px !important;}
+
+.mb_5{margin-bottom:5px !important;}
+.mb_10{margin-bottom:10px !important;}
+.mb_15{margin-bottom:15px !important;}
+.mb_20{margin-bottom:20px !important;}
+.mb_25{margin-bottom:25px !important;}
+.mb_30{margin-bottom:30px !important;}
+
+.ml_5{margin-left:5px !important;}
+.ml_10{margin-left:10px !important;}
+.ml_15{margin-left:15px !important;}
+.ml_20{margin-left:20px !important;}
+.ml_25{margin-left:25px !important;}
+.ml_30{margin-left:30px !important;}
+
+/*패딩*/
+.pt_5{padding-top:5px !important;}
+.pt_10{padding-top:10px !important;}
+.pt_15{padding-top:15px !important;}
+.pt_20{padding-top:20px !important;}
+.pt_25{padding-top:25px !important;}
+.pt_30{padding-top:30px !important;}
+
+.pr_5{padding-right:5px !important;}
+.pr_10{padding-right:10px !important;}
+.pr_15{padding-right:15px !important;}
+.pr_20{padding-right:20px !important;}
+.pr_25{padding-right:25px !important;}
+.pr_30{padding-right:30px !important;}
+
+.pb_5{padding-bottom:5px !important;}
+.pb_10{padding-bottom:10px !important;}
+.pb_15{padding-bottom:15px !important;}
+.pb_20{padding-bottom:20px !important;}
+.pb_25{padding-bottom:25px !important;}
+.pb_30{padding-bottom:30px !important;}
+
+.pl_5{padding-left:5px !important;}
+.pl_10{padding-left:10px !important;}
+.pl_15{padding-left:15px !important}
+.pl_20{padding-left:20px !important;}
+.pl_25{padding-left:25px !important;}
+.pl_30{padding-left:30px !important;}
