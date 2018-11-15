@@ -1,7 +1,8 @@
 import re
+import tensorflow as tf
 from collections import Counter
 import algorithm4.db as db
-
+from konlpy.tag import Mecab
 
 class DataUtil:
 
@@ -45,7 +46,10 @@ class DataUtil:
         return max_seq_len
 
     def tokenizer(self, sentence):
+       # macab = Mecab()
+       #tokens = macab.morphs(sentence)
         tokens = re.findall(r"[\w]+|[^\s\w]", sentence)
+
         return tokens
 
     def build_vocab(self, sentences, is_target=False, max_vocab_size=None):
@@ -61,14 +65,16 @@ class DataUtil:
             max_vocab_size = len(word_counter)
 
         if is_target:
-            vocab['_GO'] = 0
-            vocab['_PAD'] = 1
-            vocab_idx = 2
+
+            vocab['<S>'] = 0
+            vocab['</S>'] = 1
+            vocab['<PAD>'] = 2
+            vocab_idx = 3
             for key, value in word_counter.most_common(max_vocab_size):
                 vocab[key] = vocab_idx
                 vocab_idx += 1
         else:
-            vocab['_PAD'] = 0
+            vocab['<PAD>'] = 0
             vocab_idx = 1
             for key, value in word_counter.most_common(max_vocab_size):
                 vocab[key] = vocab_idx
@@ -87,7 +93,7 @@ class DataUtil:
         current_length = len(tokens)
         pad_length = max_sentence_length - current_length
         if is_target:
-            return [0] + [self.token2idx(token, vocab) for token in tokens] + [1] * pad_length, current_length
+            return [0] + [self.token2idx(token, vocab) for token in tokens] + [2] * pad_length + [1], current_length
         else:
             return [self.token2idx(token, vocab) for token in tokens] + [0] * pad_length, current_length
 
@@ -97,3 +103,11 @@ class DataUtil:
     def idx2sent(self, indices, reverse_vocab):
         return " ".join([self.idx2token(idx, reverse_vocab) for idx in indices])
 
+
+def main(_):
+    datauitl = DataUtil()
+    print(datauitl.dec_vocab)
+
+
+if __name__ == "__main__":
+    tf.app.run()
