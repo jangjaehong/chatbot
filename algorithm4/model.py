@@ -1,38 +1,47 @@
-import matplotlib.pyplot as plt
 # for checkpoint paths
 import os
 # for fancy progress bar
 from tqdm import tqdm
 # TensorFlow
 import tensorflow as tf
-# for output_projection
-import numpy as np
 
 from tensorflow.python.layers.core import Dense
-from tensorflow.python.ops.rnn_cell_impl import _zero_state_tensors
 from algorithm4.util import DataUtil
 
 
 class DemoConfig:
-    # Mode
+    def __init__(self, util):
+        self.util = util
 
-    # Model
-    hidden_size = 100
-    enc_emb_size = 100
-    dec_emb_size = 100
-    cell = tf.nn.rnn_cell.GRUCell
+        # Model
+        self.hidden_size = 100
+        self.embedding_size = 100
+        self.cell = tf.nn.rnn_cell.BasicLSTMCell
 
-    # Training
-    optimizer = tf.train.AdamOptimizer
-    n_epoch = 5000
-    learning_rate = 0.0002
+        # Training
+        self.optimizer = tf.train.AdamOptimizer
+        self.n_epoch = 5000
+        self.learning_rate = 0.0002
 
-    # Tokens
-    start_token = 1  # <S>
-    end_token = 2  # </S>
+        self.enc_vocab = util.enc_vocab
+        self.dec_vocab = util.dec_vocab
 
-    # Checkpoint Path
-    ckpt_dir = './model/'
+        self.enc_reverse_vocab = util.enc_reverse_vocab
+        self.dec_reverse_vocab = util.dec_reverse_vocab
+
+        self.enc_vocab_size = util.enc_vocab_size
+        self.dec_vocab_size = util.dec_vocab_size
+
+        self.enc_sentence_length = util.enc_sentence_length
+        self.dec_sentence_length = util.dec_sentence_length
+
+        # Tokens
+        self.start_token = util.start_token  # start_token = 0
+        self.end_token = util.end_token  # end_token = 1
+        self.unk_token = util.unk_token
+
+        # Checkpoint Path
+        self.ckpt_dir = './model/'
 
 
 class Seq2SeqModel(object):
@@ -40,21 +49,23 @@ class Seq2SeqModel(object):
         assert mode in ['training', 'evaluation', 'inference']
         self.mode = mode
 
-        util = DataUtil()
-        self.datautil = util
-        self.enc_sentence_length = util.enc_sentence_length
-        self.dec_sentence_length = util.dec_sentence_length
-        self.enc_vocab_size = util.enc_vocab_size
-        self.dec_vocab_size = util.dec_vocab_size
-        self.enc_vocab = util.enc_vocab
-        self.dec_vocab = util.dec_vocab
-        self.enc_reverse_vocab = util.enc_reverse_vocab
-        self.dec_reverse_vocab = util.dec_reverse_vocab
+        self.util = config.util
+
+        self.enc_vocab_size = config.enc_vocab_size
+        self.dec_vocab_size = config.dec_vocab_size
+
+        self.enc_vocab = config.enc_vocab
+        self.dec_vocab = config.dec_vocab
+
+        self.enc_reverse_vocab = config.enc_reverse_vocab
+        self.dec_reverse_vocab = config.dec_reverse_vocab
+
+        self.enc_sentence_length = config.enc_sentence_length
+        self.dec_sentence_length = config.dec_sentence_length
 
         # Model
         self.hidden_size = config.hidden_size
-        self.enc_emb_size = config.enc_emb_size
-        self.dec_emb_size = config.dec_emb_size
+        self.embedding_size = config.embedding_size
         self.cell = config.cell
 
         # Training
@@ -63,8 +74,9 @@ class Seq2SeqModel(object):
         self.learning_rate = config.learning_rate
 
         # Tokens
-        self.start_token = config.start_token  # <S>
-        self.end_token = config.end_token  # </S>
+        self.start_token = config.start_token  # start_token = 0
+        self.end_token = config.end_token  # end_token = 1
+        self.unk_token = config.unk_token
 
         # Checkpoint Path
         self.ckpt_dir = config.ckpt_dir
@@ -79,6 +91,8 @@ class Seq2SeqModel(object):
             tf.int32,
             shape=[None, ],
             name='input_sequence_length')
+
+        self.batch_size = tf.shape(self.enc_inputs)[0]
 
         if self.mode == 'training':
             self.dec_inputs = tf.placeholder(
@@ -96,7 +110,7 @@ class Seq2SeqModel(object):
             with tf.device('/cpu:0'):
                 self.enc_embedding = tf.get_variable(
                     name='embedding',
-                    initializer=tf.random_uniform([self.enc_vocab_size + 1, self.enc_emb_size]),
+                    initializer=tf.random_uniform([self.enc_vocab_size + 1, self.embedding_size]),
                     dtype=tf.float32)
 
             # [Batch_size x enc_sent_len x embedding_size]
@@ -120,7 +134,7 @@ class Seq2SeqModel(object):
             with tf.device('/cpu:0'):
                 self.dec_embedding = tf.get_variable(
                     name='embedding',
-                    initializer=tf.random_uniform([self.dec_vocab_size + 3, self.dec_emb_size]),
+                    initializer=tf.random_uniform([self.dec_vocab_size + 3, self.embedding_size]),
                     dtype=tf.float32)
 
             dec_cell = self.cell(self.hidden_size)
@@ -161,8 +175,10 @@ class Seq2SeqModel(object):
                 # logits: [batch_size x max_dec_len x dec_vocab_size+3]
                 logits = tf.identity(train_dec_outputs.rnn_output, name='logits')
 
-                # targets: [batch_size x max_dec_len x dec_vocab_size+3]
-                targets = tf.slice(self.dec_inputs, [0, 0], [-1, max_dec_len], 'targets')
+                # prediction sample for validation
+                # List of training variables
+                # self.training_variables = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+                self.valid_predictions = tf.identity(train_dec_outputs.sample_id, name='valid_preds')
 
                 # masks: [batch_size x max_dec_len]
                 # => ignore outputs after `dec_senquence_length+2` when calculating loss
@@ -172,24 +188,20 @@ class Seq2SeqModel(object):
                 # internal: `tf.nn.sparse_softmax_cross_entropy_with_logits`
                 self.batch_loss = tf.contrib.seq2seq.sequence_loss(
                     logits=logits,
-                    targets=targets,
+                    targets=self.dec_inputs,
                     weights=masks,
+                    average_across_timesteps=True,
+                    average_across_batch=True,
                     name='batch_loss')
 
-                # prediction sample for validation
-                self.valid_predictions = tf.identity(train_dec_outputs.sample_id, name='valid_preds')
-
-                # List of training variables
-                # self.training_variables = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-
             elif self.mode == 'inference':
-                batch_size = tf.shape(self.enc_inputs)[0:1]
-                start_tokens = tf.zeros(batch_size, dtype=tf.int32)
+                start_tokens = tf.ones([self.batch_size], dtype=tf.int32) * self.start_token
+                end_token = self.end_token
 
                 inference_helper = tf.contrib.seq2seq.GreedyEmbeddingHelper(
                     embedding=self.dec_embedding,
                     start_tokens=start_tokens,
-                    end_token=2)
+                    end_token=end_token)
 
                 inference_decoder = tf.contrib.seq2seq.BasicDecoder(
                     cell=dec_cell,
@@ -201,7 +213,7 @@ class Seq2SeqModel(object):
                     inference_decoder,
                     output_time_major=False,
                     impute_finished=True,
-                    maximum_iterations=self.dec_sentence_length)
+                    maximum_iterations=self.dec_sentence_length + 2)
 
                 # [batch_size x dec_sentence_length], tf.int32
                 self.predictions = tf.identity(infer_dec_outputs.sample_id, name='predictions')
@@ -260,7 +272,7 @@ class Seq2SeqModel(object):
                 dec_sentence_lengths = []
 
                 for input_sent in input_batch:
-                    tokens, sent_len = self.datautil.sent2idx(
+                    tokens, sent_len = self.util.sent2idx(
                         sent=input_sent,
                         vocab=self.enc_vocab,
                         max_sentence_length=self.enc_sentence_length)
@@ -268,7 +280,7 @@ class Seq2SeqModel(object):
                     enc_sentence_lengths.append(sent_len)
 
                 for target_sent in target_batch:
-                    tokens, sent_len = self.datautil.sent2idx(
+                    tokens, sent_len = self.util.sent2idx(
                         sent=target_sent,
                         vocab=self.dec_vocab,
                         max_sentence_length=self.dec_sentence_length,
@@ -297,7 +309,7 @@ class Seq2SeqModel(object):
                 for input_batch, target_batch, batch_preds in zip(input_batches, target_batches, all_preds):
                     for input_sent, target_sent, pred in zip(input_batch, target_batch, batch_preds):
                         print(f'\tInput: {input_sent}')
-                        print(f'\tPrediction:', self.datautil.idx2sent(pred, reverse_vocab=self.dec_reverse_vocab))
+                        print(f'\tPrediction:', self.util.idx2sent(pred, reverse_vocab=self.dec_reverse_vocab))
                         print(f'\tTarget:, {target_sent}')
                 print(f'\tepoch loss: {epoch_loss:.2f}\n')
 
@@ -317,7 +329,7 @@ class Seq2SeqModel(object):
         batch_sent_lens = []
 
         for input_sent in input_batch:
-            tokens, sent_len = self.datautil.sent2idx(
+            tokens, sent_len = self.util.sent2idx(
                 sent=input_sent,
                 vocab=self.enc_vocab,
                 max_sentence_length=self.enc_sentence_length)
@@ -333,6 +345,6 @@ class Seq2SeqModel(object):
 
         for input_sent, target_sent, pred in zip(input_batch, target_batch, batch_preds):
             print('Input:', input_sent)
-            print('Prediction:', self.datautil.idx2sent(pred, reverse_vocab=self.dec_reverse_vocab))
+            print('Prediction:', self.util.idx2sent(pred, reverse_vocab=self.dec_reverse_vocab))
             print('Target:', target_sent, '\n')
 
