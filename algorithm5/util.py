@@ -1,6 +1,6 @@
 import re
 from collections import Counter
-import algorithm4.db as db
+import algorithm5.db as db
 
 
 class DataUtil:

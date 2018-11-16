@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from algorithm4.model import DemoConfig
-from algorithm4.model import Seq2SeqModel
-from algorithm4.util import DataUtil
+from algorithm5.model import DemoConfig
+from algorithm5.model import Seq2SeqModel
+from algorithm5.util import DataUtil
 
 
 class ChatTraining(object):
