@@ -97,7 +97,7 @@ class Seq2SeqModel(object):
         if self.mode == 'training':
             self.dec_inputs = tf.placeholder(
                 tf.int32,
-                shape=[None, self.dec_sentence_length],
+                shape=[None, self.dec_sentence_length + 2],
                 name='target_sentences')
 
             self.dec_sequence_length = tf.placeholder(
@@ -110,7 +110,7 @@ class Seq2SeqModel(object):
             with tf.device('/cpu:0'):
                 self.enc_embedding = tf.get_variable(
                     name='embedding',
-                    initializer=tf.random_uniform([self.enc_vocab_size, self.embedding_size]),
+                    initializer=tf.random_uniform([self.enc_vocab_size + 1, self.embedding_size]),
                     dtype=tf.float32)
 
             # [Batch_size x enc_sent_len x embedding_size]
@@ -134,25 +134,25 @@ class Seq2SeqModel(object):
             with tf.device('/cpu:0'):
                 self.dec_embedding = tf.get_variable(
                     name='embedding',
-                    initializer=tf.random_uniform([self.dec_vocab_size, self.embedding_size]),
+                    initializer=tf.random_uniform([self.dec_vocab_size + 3, self.embedding_size]),
                     dtype=tf.float32)
 
             dec_cell = self.cell(self.hidden_size)
             # dec_cell = tf.nn.rnn_cell.DropoutWrapper(dec_cell, output_keep_prob=0.7)
 
             # output projection (replacing `OutputProjectionWrapper`)
-            output_layer = Dense(self.dec_vocab_size, name='output_projection')
+            output_layer = Dense(self.dec_vocab_size + 3, name='output_projection')
 
             if self.mode == 'training':
                 # maxium unrollings in current batch = max(dec_sent_len) + 1(GO symbol)
-                max_dec_len = tf.reduce_max(self.dec_sequence_length, name='max_dec_len')
+                max_dec_len = tf.reduce_max(self.dec_sequence_length + 2, name='max_dec_len')
 
                 dec_emb_inputs = tf.nn.embedding_lookup(
                     self.dec_embedding, self.dec_inputs, name='emb_inputs')
 
                 training_helper = tf.contrib.seq2seq.TrainingHelper(
                     inputs=dec_emb_inputs,
-                    sequence_length=self.dec_sequence_length,
+                    sequence_length=self.dec_sequence_length+2,
                     time_major=False,
                     name='training_helper')
 
@@ -184,11 +184,13 @@ class Seq2SeqModel(object):
                 # => ignore outputs after `dec_senquence_length+2` when calculating loss
                 masks = tf.sequence_mask(self.dec_sequence_length, max_dec_len, dtype=tf.float32, name='masks')
 
+                targets = tf.slice(self.dec_inputs, [0, 0], [-1, max_dec_len], 'targets')
+
                 # Control loss dimensions with `average_across_timesteps` and `average_across_batch`
                 # internal: `tf.nn.sparse_softmax_cross_entropy_with_logits`
                 self.batch_loss = tf.contrib.seq2seq.sequence_loss(
                     logits=logits,
-                    targets=self.dec_inputs,
+                    targets=targets,
                     weights=masks,
                     average_across_timesteps=True,
                     average_across_batch=True,

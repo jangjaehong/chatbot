@@ -98,9 +98,9 @@ class DataUtil:
         current_length = len(tokens)
         pad_length = max_sentence_length - current_length
         if is_target:
-            return [0] + [self.token2idx(token, vocab) for token in tokens] + [1] * pad_length, current_length
+            return [1] + [self.token2idx(token, vocab) for token in tokens] + ([0] * pad_length) + [2], current_length
         else:
-            return [self.token2idx(token, vocab) for token in tokens] + [0] * pad_length, current_length
+            return [self.token2idx(token, vocab) for token in tokens] + ([0] * pad_length), current_length
 
     def idx2token(self, idx, reverse_vocab):
         return reverse_vocab[idx]
