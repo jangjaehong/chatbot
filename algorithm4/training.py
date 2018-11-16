@@ -10,7 +10,7 @@ class ChatTraining(object):
     def __init__(self):
         util = DataUtil()
         self.input_batches, self.target_batches = util.load_data()
-        self.config = DemoConfig()
+        self.config = DemoConfig(util)
 
     def training(self):
         # 트레이닝
