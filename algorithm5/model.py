@@ -10,61 +10,76 @@ import numpy as np
 
 from tensorflow.python.layers.core import Dense
 from tensorflow.python.ops.rnn_cell_impl import _zero_state_tensors
-from algorithm4.util import DataUtil
+from algorithm5.util import DataUtil
 
 
 class DemoConfig:
-    # Mode
 
-    # Model
-    hidden_size = 100
-    enc_emb_size = 100
-    dec_emb_size = 100
-    cell = tf.nn.rnn_cell.GRUCell
+    def __init__(self, util):
+        # Mode
+        self.mode = 'training'
 
-    # Training
-    optimizer = tf.train.AdamOptimizer
-    n_epoch = 5000
-    learning_rate = 0.0002
+        # Model
+        self.hidden_size = 100
+        self.embedding_size = 100
+        self.cell = tf.nn.rnn_cell.BasicLSTMCell
 
-    # Tokens
-    start_token = 1  # <S>
-    end_token = 2  # </S>
+        # Training
+        self.optimizer = tf.train.AdamOptimizer
+        self.n_epoch = 5000
+        self.learning_rate = 0.0002
 
-    # Checkpoint Path
-    ckpt_dir = './model/'
-
-
-class Seq2SeqModel(object):
-    def __init__(self, config, mode='training'):
-        assert mode in ['training', 'evaluation', 'inference']
-        self.mode = mode
-
-        util = DataUtil()
-        self.datautil = util
-        self.enc_sentence_length = util.enc_sentence_length
-        self.dec_sentence_length = util.dec_sentence_length
-        self.enc_vocab_size = util.enc_vocab_size
-        self.dec_vocab_size = util.dec_vocab_size
         self.enc_vocab = util.enc_vocab
         self.dec_vocab = util.dec_vocab
+
         self.enc_reverse_vocab = util.enc_reverse_vocab
         self.dec_reverse_vocab = util.dec_reverse_vocab
 
+        self.enc_vocab_size = util.enc_vocab_size
+        self.dec_vocab_size = util.dec_vocab_size
+
+        self.max_encoder_length = util.max_encoder_len
+        self.max_decoder_length = util.max_decoder_len
+
+        # Tokens
+        self.start_token = util.start_token  # start_token = 0
+        self.end_token = util.end_token  # end_token = 1
+        self.unk_token = util.unk_token
+
+        # Checkpoint Path
+        self.ckpt_dir = './model/'
+
+
+class Seq2SeqModel(object):
+    def __init__(self, config):
+        #assert mode in ['training', 'evaluation', 'inference']
+        self.mode = config.mode
+
         # Model
         self.hidden_size = config.hidden_size
-        self.enc_emb_size = config.enc_emb_size
-        self.dec_emb_size = config.dec_emb_size
+        self.embedding_size = config.embedding_size
         self.cell = config.cell
 
         # Training
         self.optimizer = config.optimizer
         self.n_epoch = config.n_epoch
         self.learning_rate = config.learning_rate
+        self.enc_vocab = config.enc_vocab
+        self.dec_vocab = config.dec_vocab
+
+        self.enc_reverse_vocab = config.enc_reverse_vocab
+        self.dec_reverse_vocab = config.dec_reverse_vocab
+
+        self.enc_vocab_size = config.enc_vocab_size
+        self.dec_vocab_size = config.dec_vocab_size
+
+        self.max_encoder_length = config.max_encoder_len
+        self.max_decoder_length = config.max_decoder_len
 
         # Tokens
-        self.start_token = config.start_token  # <S>
-        self.end_token = config.end_token  # </S>
+        self.start_token = config.start_token  # start_token = 0
+        self.end_token = config.end_token  # end_token = 1
+        self.unk_token = config.unk_token
 
         # Checkpoint Path
         self.ckpt_dir = config.ckpt_dir
@@ -72,38 +87,37 @@ class Seq2SeqModel(object):
     def add_placeholders(self):
         self.enc_inputs = tf.placeholder(
             tf.int32,
-            shape=[None, self.enc_sentence_length],
-            name='input_sentences')
+            shape=[self.max_encoder_length, self.batch_size],
+            name='encoder_inputs')
 
-        self.enc_sequence_length = tf.placeholder(
-            tf.int32,
-            shape=[None, ],
-            name='input_sequence_length')
+        self.enc_inputs_length = tf.placeholder(
+            dtype=tf.int32, shape=(None,), name='encoder_inputs_length')
+
+        self.batch_size = tf.shape(self.enc_inputs)[0]
 
         if self.mode == 'training':
             self.dec_inputs = tf.placeholder(
                 tf.int32,
-                shape=[None, self.dec_sentence_length + 2],
-                name='target_sentences')
+                shape=[self.max_decoder_length, self.batch_size],
+                name='target_inputs')
 
-            self.dec_sequence_length = tf.placeholder(
-                tf.int32,
-                shape=[None, ],
-                name='target_sequence_length')
+            self.dec_inputs_length = tf.placeholder(
+                dtype=tf.int32, shape=(None,), name='decoder_inputs_length')
 
     def add_encoder(self):
         with tf.variable_scope('Encoder') as scope:
             with tf.device('/cpu:0'):
-                self.enc_embedding = tf.get_variable(
+                self.embedding_encoder = tf.get_variable(
                     name='embedding',
-                    initializer=tf.random_uniform([self.enc_vocab_size + 1, self.enc_emb_size]),
+                    initializer=tf.random_uniform([self.enc_vocab_size, self.embedding_size]),
                     dtype=tf.float32)
 
             # [Batch_size x enc_sent_len x embedding_size]
             enc_emb_inputs = tf.nn.embedding_lookup(
-                param=self.enc_embedding,
+                param=self.embedding_encoder,
                 ids=self.enc_inputs,
                 name='emb_inputs')
+
             enc_cell = self.cell(self.hidden_size)
             # enc_cell = tf.nn.rnn_cell.DropoutWrapper(enc_cell, output_keep_prob=0.7)
             # enc_outputs: [batch_size x enc_sent_len x embedding_size]
@@ -111,8 +125,8 @@ class Seq2SeqModel(object):
             self.enc_outputs, self.enc_last_state = tf.nn.dynamic_rnn(
                 cell=enc_cell,
                 inputs=enc_emb_inputs,
-                sequence_length=self.enc_sequence_length,
-                time_major=False,
+                sequence_length=self.enc_inputs_length,
+                time_major=True,
                 dtype=tf.float32)
 
     def add_decoder(self):
@@ -120,25 +134,20 @@ class Seq2SeqModel(object):
             with tf.device('/cpu:0'):
                 self.dec_embedding = tf.get_variable(
                     name='embedding',
-                    initializer=tf.random_uniform([self.dec_vocab_size + 3, self.dec_emb_size]),
+                    initializer=tf.random_uniform([self.dec_vocab_size , self.embedding_size]),
                     dtype=tf.float32)
-
             dec_cell = self.cell(self.hidden_size)
-            # dec_cell = tf.nn.rnn_cell.DropoutWrapper(dec_cell, output_keep_prob=0.7)
-
-            # output projection (replacing `OutputProjectionWrapper`)
-            output_layer = Dense(self.dec_vocab_size + 3, name='output_projection')
-
+            output_layer = Dense(self.dec_vocab_size, name='output_projection')
             if self.mode == 'training':
                 # maxium unrollings in current batch = max(dec_sent_len) + 1(GO symbol)
-                max_dec_len = tf.reduce_max(self.dec_sequence_length + 2, name='max_dec_len')
+                max_dec_len = tf.reduce_max(self.dec_inputs_length, name='max_dec_len')
 
                 dec_emb_inputs = tf.nn.embedding_lookup(
                     self.dec_embedding, self.dec_inputs, name='emb_inputs')
 
                 training_helper = tf.contrib.seq2seq.TrainingHelper(
                     inputs=dec_emb_inputs,
-                    sequence_length=self.dec_sequence_length + 2,
+                    sequence_length=self.dec_inputs_length,
                     time_major=False,
                     name='training_helper')
 
@@ -153,43 +162,40 @@ class Seq2SeqModel(object):
                     output_time_major=False,
                     impute_finished=True,
                     maximum_iterations=max_dec_len)
-
                 # dec_outputs: collections.namedtuple(rnn_outputs, sample_id)
                 # dec_outputs.rnn_output: [batch_size x max(dec_sequence_len) x dec_vocab_size+3], tf.float32
                 # dec_outputs.sample_id [batch_size], tf.int32
 
-                # logits: [batch_size x max_dec_len x dec_vocab_size+3]
-                logits = tf.identity(train_dec_outputs.rnn_output, name='logits')
+                self.logits = tf.identity(train_dec_outputs.rnn_output, name='logits')
 
-                # targets: [batch_size x max_dec_len x dec_vocab_size+3]
-                targets = tf.slice(self.dec_inputs, [0, 0], [-1, max_dec_len], 'targets')
+                # prediction sample for validation
+                self.predictions = tf.identity(train_dec_outputs.sample_id, name='valid_preds')
 
                 # masks: [batch_size x max_dec_len]
                 # => ignore outputs after `dec_senquence_length+2` when calculating loss
-                masks = tf.sequence_mask(self.dec_sequence_length + 2, max_dec_len, dtype=tf.float32, name='masks')
+                masks = tf.sequence_mask(self.dec_inputs_length + 2, max_dec_len, dtype=tf.float32, name='masks')
 
                 # Control loss dimensions with `average_across_timesteps` and `average_across_batch`
                 # internal: `tf.nn.sparse_softmax_cross_entropy_with_logits`
-                self.batch_loss = tf.contrib.seq2seq.sequence_loss(
-                    logits=logits,
-                    targets=targets,
+                self.loss = tf.contrib.seq2seq.sequence_loss(
+                    logits=self.logits,
+                    targets=self.dec_inputs,
                     weights=masks,
+                    average_across_timesteps=True,
+                    average_across_batch=True,
                     name='batch_loss')
-
-                # prediction sample for validation
-                self.valid_predictions = tf.identity(train_dec_outputs.sample_id, name='valid_preds')
 
                 # List of training variables
                 # self.training_variables = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
 
             elif self.mode == 'inference':
-                batch_size = tf.shape(self.enc_inputs)[0:1]
-                start_tokens = tf.zeros(batch_size, dtype=tf.int32)
+                start_tokens = tf.ones([self.batch_size], dtype=tf.int32) * self.start_token
+                end_token = self.end_token
 
                 inference_helper = tf.contrib.seq2seq.GreedyEmbeddingHelper(
                     embedding=self.dec_embedding,
                     start_tokens=start_tokens,
-                    end_token=2)
+                    end_token=end_token)
 
                 inference_decoder = tf.contrib.seq2seq.BasicDecoder(
                     cell=dec_cell,
@@ -201,7 +207,7 @@ class Seq2SeqModel(object):
                     inference_decoder,
                     output_time_major=False,
                     impute_finished=True,
-                    maximum_iterations=self.dec_sentence_length)
+                    maximum_iterations=self.dec_inputs_length)
 
                 # [batch_size x dec_sentence_length], tf.int32
                 self.predictions = tf.identity(infer_dec_outputs.sample_id, name='predictions')
@@ -211,7 +217,7 @@ class Seq2SeqModel(object):
                 # self.training_variables = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
 
     def add_training_op(self):
-        self.training_op = self.optimizer(self.learning_rate, name='training_op').minimize(self.batch_loss)
+        self.training_op = self.optimizer(self.learning_rate, name='training_op').minimize(self.loss)
 
     def save(self, sess, var_list=None, save_path=None):
         print(f'Saving model at {save_path}')
@@ -260,30 +266,30 @@ class Seq2SeqModel(object):
                 dec_sentence_lengths = []
 
                 for input_sent in input_batch:
-                    tokens, sent_len = self.datautil.sent2idx(
+                    tokens, sent_len = DataUtil.sent2idx(
                         sent=input_sent,
                         vocab=self.enc_vocab,
-                        max_sentence_length=self.enc_sentence_length)
+                        max_sentence_length=self.enc_inputs_length)
                     input_batch_tokens.append(tokens)
                     enc_sentence_lengths.append(sent_len)
 
                 for target_sent in target_batch:
-                    tokens, sent_len = self.datautil.sent2idx(
+                    tokens, sent_len = DataUtil.sent2idx(
                         sent=target_sent,
                         vocab=self.dec_vocab,
-                        max_sentence_length=self.dec_sentence_length,
+                        max_sentence_length=self.dec_inputs_length,
                         is_target=True)
                     target_batch_tokens.append(tokens)
                     dec_sentence_lengths.append(sent_len)
                 # Evaluate 3 ops in the graph
                 # => valid_predictions, loss, training_op(optimzier)
                 batch_preds, batch_loss, _ = sess.run(
-                    [self.valid_predictions, self.batch_loss, self.training_op],
+                    [self.predictions, self.loss, self.training_op],
                     feed_dict={
                         self.enc_inputs: input_batch_tokens,
-                        self.enc_sequence_length: enc_sentence_lengths,
+                        self.enc_inputs_length: enc_sentence_lengths,
                         self.dec_inputs: target_batch_tokens,
-                        self.dec_sequence_length: dec_sentence_lengths,
+                        self.dec_inputs_length: dec_sentence_lengths,
                     })
                 # loss_history.append(batch_loss)
                 epoch_loss += batch_loss
@@ -297,7 +303,7 @@ class Seq2SeqModel(object):
                 for input_batch, target_batch, batch_preds in zip(input_batches, target_batches, all_preds):
                     for input_sent, target_sent, pred in zip(input_batch, target_batch, batch_preds):
                         print(f'\tInput: {input_sent}')
-                        print(f'\tPrediction:', self.datautil.idx2sent(pred, reverse_vocab=self.dec_reverse_vocab))
+                        print(f'\tPrediction:', DataUtil.idx2sent(pred, reverse_vocab=self.dec_reverse_vocab))
                         print(f'\tTarget:, {target_sent}')
                 print(f'\tepoch loss: {epoch_loss:.2f}\n')
 
@@ -317,10 +323,10 @@ class Seq2SeqModel(object):
         batch_sent_lens = []
 
         for input_sent in input_batch:
-            tokens, sent_len = self.datautil.sent2idx(
+            tokens, sent_len = DataUtil.sent2idx(
                 sent=input_sent,
                 vocab=self.enc_vocab,
-                max_sentence_length=self.enc_sentence_length)
+                max_sentence_length=self.enc_inputs_length)
             batch_tokens.append(tokens)
             batch_sent_lens.append(sent_len)
 
@@ -328,11 +334,11 @@ class Seq2SeqModel(object):
             self.predictions,
             feed_dict={
                 self.enc_inputs: batch_tokens,
-                self.enc_sequence_length: batch_sent_lens,
+                self.enc_inputs_length: batch_sent_lens,
             })
 
         for input_sent, target_sent, pred in zip(input_batch, target_batch, batch_preds):
             print('Input:', input_sent)
-            print('Prediction:', self.datautil.idx2sent(pred, reverse_vocab=self.dec_reverse_vocab))
+            print('Prediction:', DataUtil.idx2sent(pred, reverse_vocab=self.dec_reverse_vocab))
             print('Target:', target_sent, '\n')
 
