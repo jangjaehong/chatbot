@@ -10,7 +10,7 @@ class SignupForm(UserCreationForm):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'required': 'true', }))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'required': 'true', }))
     gender = forms.ChoiceField(widget=forms.Select(), choices=([(1, '남성'), (2, '여성')]), initial=1, required=True)
-    birth = forms.DateTimeField(initial=datetime.now().strftime("%Y%m%d"), required=False)
+    birth = forms.DateTimeField(required=False)
 
     class Meta:
         model = User

@@ -6,7 +6,7 @@ urlpatterns = [
     url(r'^signup', views.signup, name='join'),
 
     url(r'^login$', views.signin, name='login'),
-    url(r'^logout', views.signout(), name='logout'),
+    url(r'^logout', views.signout, name='logout'),
 
-    url('activate/<str:uidb63>/<str:token>', views.UserActivate)
+    url('activate/<str:uidb63>/<str:token>', views.activate, name='activate')
 ]
