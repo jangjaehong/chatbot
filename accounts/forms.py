@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordResetForm
 from .models import User
-
+from _datetime import datetime
 
 class SignupForm(UserCreationForm):
     username = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'required': 'true', }))
@@ -9,10 +9,12 @@ class SignupForm(UserCreationForm):
     mobile = forms.CharField(widget=forms.TextInput(attrs={'required': 'True', }))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'required': 'true', }))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'required': 'true', }))
+    gender = forms.ChoiceField(widget=forms.Select(), choices=([(1, '남성'), (2, '여성')]), initial=1, required=True)
+    birth = forms.DateTimeField(initial=datetime.now().strftime("%Y%m%d"), required=False)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'mobile', 'password1', 'password2')
+        fields = ('username', 'email', 'mobile', 'password1', 'password2', 'gender', 'birth')
 
     def clean_password2(self):
         # Check that the two password entries match

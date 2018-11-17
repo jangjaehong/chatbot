@@ -31,15 +31,15 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(max_length=255, default="", unique=True)
-    mobile = models.CharField(max_length=13, default="", unique=True)
-    username = models.CharField(max_length=30, default="")
-    gender = models.IntegerField(default=0)
-    birth = models.CharField(max_length=8, default="19000101")
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now=True)
-    is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    email = models.EmailField(max_length=255, default="", unique=True, verbose_name='이메일')
+    mobile = models.CharField(max_length=13, default="", unique=True, verbose_name='핸드폰')
+    username = models.CharField(max_length=30, default="", verbose_name='회원이름')
+    gender = models.IntegerField(default=1, verbose_name='성별', choices=((1, '남성'),(2, '여성')))
+    birth = models.CharField(max_length=8, default="19000101", verbose_name='생년월일')
+    create_at = models.DateTimeField(auto_now_add=True, verbose_name='생성일')
+    update_at = models.DateTimeField(auto_now=True, verbose_name='수정일')
+    is_admin = models.BooleanField(default=False, verbose_name='관리자')
+    is_active = models.BooleanField(default=False, verbose_name='활성화')
 
     objects = UserManager()
 
