@@ -1,7 +1,32 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignupForm, SigninForm
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+from .forms import SignupForm, SigninForm, SearchForm
+from .token import account_activation_token
+from .models import User
+
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_activate = True
+        user.save()
+        login(request, user)
+        messages.success(request, "회원가입을 축하드립니다.")
+        return redirect('medibot:index')
+    else:
+        return HttpResponse("이메일 링크를 확인해주세요.")
+
 
 def signup(request):
     signupform = SignupForm()
@@ -9,18 +34,36 @@ def signup(request):
         signupform = SignupForm(request.POST)
         if signupform.is_valid():
             user = signupform.save(commit=False)
-            user.email = signupform.cleaned_data['email']
-            user.mobile = signupform.cleaned_data['mobile']
-            user.password = signupform.clean_password2()
+            user.is_active = False
             user.save()
 
-            messages.success(request, "회원가입을 축하드립니다.\n 로그인을 하시면 서비스를 이용하실수 있습니다.")
+            current_site = get_current_site(request)
+            message = render_to_string('user/account_activate_email.html', {
+                'user': user,
+                'domain': current_site,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8'),
+                'token': account_activation_token(user)
+            })
+
+            """이메일전송"""
+            mail_subject = 'test'
+            to_email = signupform.cleaned_data.get('email')
+            email = EmailMessage(mail_subject, message, to=[to_email])
+            email.send()
+
+            messages.success(request, "가입시 입력한 이메일로 인증메일이 발송되었습니다.\n"
+                                      "이메일 인증 후 서비스를 이용하실 수 있습니다.")
             return redirect('accounts:login')
         else:
             messages.error(request, "이메일이나 휴대폰번호가 이미 존재합나디.")
             return redirect('accounts:login')
     else:
         return render(request, "user/join.html", {"signupform": signupform,})
+
+def search(request):
+    searchForm = SearchForm()
+    if request.method == "POST":
+        email = request.POST["email"]
 
 
 def signin(request):

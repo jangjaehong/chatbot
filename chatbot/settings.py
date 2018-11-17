@@ -87,6 +87,13 @@ DATABASES = {
         'PORT': '5432', # 포트번호
     }
 }
+#Gmail 연동
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'medichatbot@gmail.com'
+EMAIL_HOST_PASSWORD = 'skwoghd1!'
+EMAIL_USE_TLS = True
 
 
 # Password validation

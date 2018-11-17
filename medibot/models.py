@@ -136,3 +136,8 @@ class FoodList(models.Model):
 
     class Meta:
         verbose_name_plural = "식품영양"
+
+
+
+
+

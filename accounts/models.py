@@ -1,17 +1,17 @@
 from django.db import models
-from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
-
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, mobile, password=None):
+    def create_user(self, username, email, mobile, gender, birth, password=None):
         if not email:
             raise ValueError("이메일 입력해주세요!")
 
         user = self.model(
             email=self.normalize_email(email),
             username=username,
-            mobile=mobile
+            mobile=mobile,
+            gender=gender,
+            birth=birth
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -34,9 +34,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, default="", unique=True)
     mobile = models.CharField(max_length=13, default="", unique=True)
     username = models.CharField(max_length=30, default="")
-    date_joined = models.DateTimeField(default=timezone.now)
+    gender = models.IntegerField(default=0)
+    birth = models.CharField(max_length=8, default="19000101")
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
     is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     objects = UserManager()
 

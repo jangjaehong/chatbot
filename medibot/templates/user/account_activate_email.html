@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+<body>
+    {{ user.username }}님, 아래 링크를 클릭해서 계정을 활성화 해주세요.
+    http://{{ domain }}{% url 'user:activate' uidb64=uid token=token %}
+</body>
+</html>

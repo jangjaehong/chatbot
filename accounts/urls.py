@@ -1,9 +1,12 @@
 from django.conf.urls import url
-from .views import *
+from . import views
 app_name = 'accounts'
 urlpatterns = [
     # 회원인증
-    url(r'^join$', signup, name='join'),
-    url(r'^login$', signin, name='login'),
-    url(r'^logout', signin, name='logout'),
+    url(r'^signup', views.signup, name='join'),
+
+    url(r'^login$', views.signin, name='login'),
+    url(r'^logout', views.signout(), name='logout'),
+
+    url('activate/<str:uidb63>/<str:token>', views.UserActivate)
 ]
