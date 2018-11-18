@@ -1,34 +1,35 @@
 import re
 from collections import Counter
-import algorithm4.db as db
+import algorithm2.db as db
 
 
 class DataUtil:
 
     def __init__(self):
-        _GO = '_GO'
-        EOS = '_EOS'  # also function as PAD
-        UNK = '_UNK'
+        self._GO = '_GO'
+        self.EOS = '_EOS'  # also function as PAD
+        self.PAD = '_PAD'
+        self.extra_tokens = [self._GO, self.EOS, self.PAD]
 
-        extra_tokens = [_GO, EOS, UNK]
-
-        self.start_token = extra_tokens.index(_GO)  # start_token = 0
-        self.end_token = extra_tokens.index(EOS)  # end_token = 1
-        self.unk_token = extra_tokens.index(UNK)
+        self.start_token = self.extra_tokens.index(self._GO)  # start_token = 0
+        self.end_token = self.extra_tokens.index(self.EOS)  # end_token = 1
+        self.pad_token = self.extra_tokens.index(self.PAD)
 
         # Batch_size: 2
-        input_batches, target_batches = self.load_data()
+        self.input_batches, self.target_batches = self.load_data()
 
         all_input_sentences = []
-        for input_batch in input_batches:
+        for input_batch in self.input_batches:
             all_input_sentences.extend(input_batch)
 
         all_target_sentences = []
-        for target_batch in target_batches:
+        for target_batch in self.target_batches:
             all_target_sentences.extend(target_batch)
 
         self.enc_vocab, self.enc_reverse_vocab, self.enc_vocab_size, self.enc_sentence_length = self.build_vocab(all_input_sentences)
         self.dec_vocab, self.dec_reverse_vocab, self.dec_vocab_size,  self.dec_sentence_length = self.build_vocab(all_target_sentences, is_target=True)
+
+        self.batch_size = len(self.input_batches)
 
     def load_data(self):
         contents = db.select_chat_sequence()
@@ -71,14 +72,15 @@ class DataUtil:
             max_sequence_len = self.max_sequence_len(sentences)
 
         if is_target:
-            vocab['_PAD'] = 0
-            vocab['_GO'] = 1
+            vocab[self.PAD] = self.pad_token
+            vocab[self._GO] = self.start_token
+            vocab[self.EOS] = self.end_token
             vocab_idx = 3
             for key, value in word_counter.most_common(max_vocab_size):
                 vocab[key] = vocab_idx
                 vocab_idx += 1
         else:
-            vocab['_PAD'] = 0
+            vocab[self.PAD] = self.pad_token
             vocab_idx = 1
             for key, value in word_counter.most_common(max_vocab_size):
                 vocab[key] = vocab_idx
@@ -97,13 +99,13 @@ class DataUtil:
         current_length = len(tokens)
         pad_length = max_sentence_length - current_length
         if is_target:
-            return [1] + [self.token2idx(token, vocab) for token in tokens] + ([0] * pad_length), current_length
+            return [self.start_token] + [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length) + [self.end_token]
         else:
-            return [self.token2idx(token, vocab) for token in tokens] + ([0] * pad_length), current_length
+            return [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length), current_length
 
     def idx2token(self, idx, reverse_vocab):
         return reverse_vocab[idx]
 
     def idx2sent(self, indices, reverse_vocab):
-        return " ".join([self.idx2token(idx, reverse_vocab) for idx in indices])
+        return [self.idx2token(idx, reverse_vocab) for idx in indices]
 

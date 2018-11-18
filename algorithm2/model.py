@@ -1,92 +1,146 @@
+import matplotlib.pyplot as plt
+# for pretty print
+from pprint import pprint
+# for tokenizer
+import re
+# for word counter in vocabulary dictionary
+from collections import Counter
+# TensorFlow of Course :)
 import tensorflow as tf
-import numpy as np
 
-class seq2seq(object):
+# The paths of RNNCell or rnn functions are too long.
+from tensorflow.contrib.legacy_seq2seq.python.ops import *
+from tensorflow.contrib.rnn.python.ops.core_rnn_cell import *
+from tensorflow.contrib.legacy_seq2seq.python.ops.seq2seq import *
+from tqdm import tqdm
 
-    def __init__(self, multi, hidden_size, num_layers, learning_rate, batch_size,
-                 vocab_size, encoder_size, decoder_size, forward_only):
+from algorithm2.util import DataUtil
 
-        # variables
-        self.source_vocab_size = vocab_size
-        self.target_vocab_size = vocab_size
-        self.batch_size = batch_size
-        self.encoder_size = encoder_size
-        self.decoder_size = decoder_size
-        self.learning_rate = tf.Variable(float(learning_rate), trainable=False)
-        self.global_step = tf.Variable(0, trainable=False)
 
-        # networks
-        W = tf.Variable(tf.random_normal([hidden_size, vocab_size]))
-        b = tf.Variable(tf.random_normal([vocab_size]))
-        output_projection = (W, b)
-        self.encoder_inputs = [tf.placeholder(tf.int32, [batch_size]) for _ in range(encoder_size)]  # 인덱스만 있는 데이터 (원핫 인코딩 미시행)
-        self.decoder_inputs = [tf.placeholder(tf.int32, [batch_size]) for _ in range(decoder_size)]
-        self.targets = [tf.placeholder(tf.int32, [batch_size]) for _ in range(decoder_size)]
-        self.target_weights = [tf.placeholder(tf.float32, [batch_size]) for _ in range(decoder_size)]
+class Config:
+    datautil = DataUtil()
+    input_batches = datautil.input_batches
+    target_batches = datautil.target_batches
 
-        self.saver = tf.train.Saver(tf.global_variables())
+    enc_vocab = datautil.enc_vocab
+    dec_vocab = datautil.dec_vocab
 
-        # models
-        if multi:
-            single_cell = tf.nn.rnn_cell.GRUCell(num_units=hidden_size)
-            cell = tf.nn.rnn_cell.MultiRNNCell([single_cell] * num_layers)
-        else:
-            cell = tf.nn.rnn_cell.GRUCell(num_units=hidden_size)
-            #cell = tf.nn.rnn_cell.LSTMCell(num_units=hidden_size)
-        # 학습
-        if not forward_only:
-            self.outputs, self.states = tf.contrib.legacy_seq2seq.embedding_attention_seq2seq(
-                self.encoder_inputs, self.decoder_inputs, cell,
-                num_encoder_symbols=vocab_size,
-                num_decoder_symbols=vocab_size,
-                embedding_size=hidden_size,
-                output_projection=output_projection,
-                feed_previous=False)
+    enc_reverse_vocab = datautil.enc_reverse_vocab
+    dec_reverse_vocab = datautil.dec_reverse_vocab
 
-            self.logits = [tf.matmul(output, output_projection[0]) + output_projection[1] for output in self.outputs]
-            loss_list = []
-            for logit, target, target_weight in zip(self.logits, self.targets, self.target_weights):
-                crossentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logit, labels=target)
-                loss_list.append(crossentropy * target_weight)
-            self.cost = tf.add_n(loss_list)
-            self.loss = tf.reduce_mean(self.cost)
-            self.train_op = tf.train.AdamOptimizer(learning_rate).minimize(self.loss, global_step=self.global_step)
-        else: #추론
-            self.outputs, self.states = tf.contrib.legacy_seq2seq.embedding_attention_seq2seq(
-                self.encoder_inputs, self.decoder_inputs, cell,
-                num_encoder_symbols=vocab_size,
-                num_decoder_symbols=vocab_size,
-                embedding_size=hidden_size,
-                output_projection=output_projection,
-                feed_previous=True)
-            self.logits = [tf.matmul(output, output_projection[0]) + output_projection[1] for output in self.outputs]
+    enc_vocab_size = datautil.enc_vocab_size
+    dec_vocab_size = datautil.dec_vocab_size
 
-    def step(self, session, encoderinputs, decoderinputs, targets, targetweights, forward_only):
-        input_feed = {}
-        for l in range(len(self.encoder_inputs)):
-            input_feed[self.encoder_inputs[l].name] = encoderinputs[l]
-        for l in range(len(self.decoder_inputs)):
-            input_feed[self.decoder_inputs[l].name] = decoderinputs[l]
-            input_feed[self.targets[l].name] = targets[l]
-            input_feed[self.target_weights[l].name] = targetweights[l]
-        #학습
-        if not forward_only:
-            print("not forward_only")
-            output_feed = [self.train_op, self.loss]
-        #추론
-        else:
-            print("forward_only")
-            output_feed = []
-            for l in range(len(self.decoder_inputs)):
-                output_feed.append(self.logits[l])
+    enc_sentence_length = datautil.enc_sentence_length
+    dec_sentence_length = datautil.dec_sentence_length
 
-        output = session.run(output_feed, input_feed)
-        # 학습
-        if not forward_only:
-            print("not forward_only")
-            return output[1] # loss
-        # 추론
-        else:
-            print("forward_only")
-            return output[0:] # outputs
+    batch_size = datautil.batch_size
+    embedding_size = enc_emb_size = dec_emb_size = 100
+    hidden_size = 100
+    n_epoch = 2000
+    learning_rate = 0.0001
 
+
+class Seq2Seq:
+    config = Config()
+    tf.reset_default_graph()
+
+    enc_inputs = tf.placeholder(
+        tf.int32,
+        shape=[None, config.enc_sentence_length],
+        name='input_sentences')
+
+    sequence_lengths = tf.placeholder(
+        tf.int32,
+        shape=[None],
+        name='sentences_length')
+
+    dec_inputs = tf.placeholder(
+        tf.int32,
+        shape=[None, config.dec_sentence_length + 2],
+        name='output_sentences')
+
+    # batch_major => time_major
+    enc_inputs_t = tf.transpose(enc_inputs, [1, 0])
+    dec_inputs_t = tf.transpose(dec_inputs, [1, 0])
+
+    cell = tf.nn.rnn_cell.BasicRNNCell(config.hidden_size)
+
+    with tf.variable_scope("embedding_attention_seq2seq"):
+        # dec_outputs: [dec_sent_len+1 x batch_size x hidden_size]
+        dec_outputs, dec_last_state = embedding_attention_seq2seq(
+            encoder_inputs=tf.unstack(enc_inputs_t),
+            decoder_inputs=tf.unstack(dec_inputs_t),
+            cell=cell,
+            num_encoder_symbols=config.enc_vocab_size + 1,
+            num_decoder_symbols=config.dec_vocab_size + 3,
+            embedding_size=config.embedding_size,
+            feed_previous=True)
+
+    # predictions: [batch_size x dec_sentence_lengths+1]
+    predictions = tf.transpose(tf.argmax(tf.stack(dec_outputs), axis=-1), [1, 0])
+
+    # labels & logits: [dec_sentence_length+1 x batch_size x dec_vocab_size+2]
+    labels = tf.one_hot(dec_inputs_t, config.dec_vocab_size + 3)
+    logits = tf.stack(dec_outputs)
+
+    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
+        labels=labels, logits=logits))
+
+    # training_op = tf.train.AdamOptimizer(learning_rate=0.0001).minimize(loss)
+    training_op = tf.train.RMSPropOptimizer(learning_rate=config.learning_rate).minimize(loss)
+
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+        loss_history = []
+        for epoch in tqdm(range(config.n_epoch)):
+            all_preds = []
+            epoch_loss = 0
+            for input_batch, target_batch in zip(config.input_batches, config.target_batches):
+                input_token_indices = []
+                target_token_indices = []
+                sentence_lengths = []
+
+                for input_sent in input_batch:
+                    input_sent, sent_len = config.datautil.sent2idx(input_sent,
+                                                                    vocab=config.enc_vocab,
+                                                                    max_sentence_length=config.enc_sentence_length)
+                    input_token_indices.append(input_sent)
+                    sentence_lengths.append(sent_len)
+
+                for target_sent in target_batch:
+                    target_token_indices.append(
+                        config.datautil.sent2idx(target_sent,
+                                                 vocab=config.dec_vocab,
+                                                 max_sentence_length=config.dec_sentence_length,
+                                                 is_target=True))
+
+                # Evaluate three operations in the graph
+                # => predictions, loss, training_op(optimzier)
+                batch_preds, batch_loss, _ = sess.run(
+                    [predictions, loss, training_op],
+                    feed_dict={
+                        enc_inputs: input_token_indices,
+                        sequence_lengths: sentence_lengths,
+                        dec_inputs: target_token_indices
+                    })
+                loss_history.append(batch_loss)
+                epoch_loss += batch_loss
+                all_preds.append(batch_preds)
+
+            # Logging every 400 epochs
+            if epoch % 50 == 0:
+                print('Train Epoch =========', epoch)
+                for input_batch, target_batch, batch_preds in zip(config.input_batches, config.target_batches, all_preds):
+                    for input_sent, target_sent, pred in zip(input_batch, target_batch, batch_preds):
+                        print('\t', input_sent)
+                        print('\t => ', config.datautil.idx2sent(pred, reverse_vocab=config.dec_reverse_vocab))
+                        print('\tCorrent answer:', target_sent)
+                print('\tepoch loss: {:.2f}\n'.format(epoch_loss))
+
+        plt.figure(figsize=(20, 10))
+        plt.scatter(range(config.n_epoch * config.batch_size), loss_history)
+        plt.title('Learning Curve')
+        plt.xlabel('Global step')
+        plt.ylabel('Loss')
+        plt.show()
