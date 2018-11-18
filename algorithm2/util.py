@@ -29,8 +29,6 @@ class DataUtil:
         self.enc_vocab, self.enc_reverse_vocab, self.enc_vocab_size, self.enc_sentence_length = self.build_vocab(all_input_sentences)
         self.dec_vocab, self.dec_reverse_vocab, self.dec_vocab_size,  self.dec_sentence_length = self.build_vocab(all_target_sentences, is_target=True)
 
-        self.batch_size = len(self.input_batches)
-
     def load_data(self):
         contents = db.select_chat_sequence()
         question = []
@@ -94,12 +92,14 @@ class DataUtil:
     def token2idx(self, word, vocab):
         return vocab[word]
 
-    def sent2idx(self, sent, vocab, max_sentence_length, is_target=False):
+    def sent2idx(self, sent, vocab, max_sentence_length, is_dec=False, is_target=False):
         tokens = self.tokenizer(sent)
         current_length = len(tokens)
         pad_length = max_sentence_length - current_length
-        if is_target:
-            return [self.start_token] + [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length) + [self.end_token]
+        if is_dec:
+            return [self.start_token] + [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length), current_length
+        elif is_target:
+            return [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length) + [self.end_token]
         else:
             return [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length), current_length
 
@@ -108,4 +108,6 @@ class DataUtil:
 
     def idx2sent(self, indices, reverse_vocab):
         return [self.idx2token(idx, reverse_vocab) for idx in indices]
+
+dataUtil = DataUtil()
 
