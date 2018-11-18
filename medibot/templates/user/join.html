@@ -39,7 +39,7 @@
         </div>
 
         <div class="contents mt_20 mb_20">
-            <form action="" id="joinFrm" method="post" enctype="multipart/form-data" autocomplete="off">
+        <form action="" id="joinFrm" method="post" enctype="multipart/form-data" autocomplete="off">
             {% csrf_token %}
             <div class="input_wrap">
                  {{ signupform.email }}
@@ -49,14 +49,14 @@
                 {{ signupform.username }}
                 <div class="placeholder">이름</div>
             </div>
-            <div class="input_wrap">
-                {{ signupform.gender }}
-                <div class="placeholder">성별</div>
-            </div>
-            <div class="input_wrap">
-                {{ signupform.birth }}
-                <div class="placeholder">생년월일(ex 19000101)</div>
-            </div>
+            <!--<div class="input_wrap">-->
+                <!--{{ signupform.gender }}-->
+                <!--<div class="placeholder">성별</div>-->
+            <!--</div>-->
+            <!--<div class="input_wrap">-->
+                <!--{{ signupform.birth }}-->
+                <!--<div class="placeholder">생년월일(ex 19000101)</div>-->
+            <!--</div>-->
             <div class="input_wrap">
                 {{ signupform.mobile }}
                 <div class="placeholder">휴대폰</div>
@@ -69,12 +69,13 @@
                 {{ signupform.password2 }}
                 <div class="placeholder">패스워드 확인</div>
             </div>
-            </form>
+            <div class="footer">
+                <input id="btn_cancel" type="button" value="취소" />
+                <input id="btn_join" type="submit" value="가입신청" />
+            </div>
+        </form>
         </div>
-         <div class="footer">
-            <input id="btn_cancel" type="button" value="취소" />
-            <input id="btn_join" type="submit" value="가입신청" />
-        </div>
+
     </div>
 </body>
 </html>

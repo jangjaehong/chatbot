@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
+
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, mobile, gender, birth, password=None):
+    def create_user(self, username, email, mobile, password=None):
         if not email:
             raise ValueError("이메일 입력해주세요!")
 
@@ -10,21 +11,18 @@ class UserManager(BaseUserManager):
             email=self.normalize_email(email),
             username=username,
             mobile=mobile,
-            gender=gender,
-            birth=birth
+
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, mobile, gender, birth, password=None):
+    def create_superuser(self, username, email, mobile, password=None):
         user = self.create_user(
             email=email,
             username=username,
             mobile=mobile,
-            password=password,
-            gender=gender,
-            birth=birth
+            password=password
         )
         user.is_admin = True
         user.is_active = True
@@ -36,8 +34,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, default="", unique=True, verbose_name='이메일')
     mobile = models.CharField(max_length=13, default="", unique=True, verbose_name='핸드폰')
     username = models.CharField(max_length=30, default="", verbose_name='회원이름')
-    gender = models.IntegerField(default=1, verbose_name='성별', choices=((1, '남성'),(2, '여성')))
-    birth = models.CharField(max_length=8, default="19000101", verbose_name='생년월일')
+   # gender = models.IntegerField(verbose_name='성별', default=1, choices=((1, '남성'),(2, '여성')))
+   # birth = models.CharField(max_length=8, default='19000101', verbose_name='생년월일')
     create_at = models.DateTimeField(auto_now_add=True, verbose_name='생성일')
     update_at = models.DateTimeField(auto_now=True, verbose_name='수정일')
     is_admin = models.BooleanField(default=False, verbose_name='관리자')

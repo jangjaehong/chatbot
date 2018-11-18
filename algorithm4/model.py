@@ -20,8 +20,8 @@ class DemoConfig:
 
         # Training
         self.optimizer = tf.train.AdamOptimizer
-        self.n_epoch = 5000
-        self.learning_rate = 0.0002
+        self.n_epoch = 800
+        self.learning_rate = 0.001
 
         self.enc_vocab = util.enc_vocab
         self.dec_vocab = util.dec_vocab
@@ -152,7 +152,7 @@ class Seq2SeqModel(object):
 
                 training_helper = tf.contrib.seq2seq.TrainingHelper(
                     inputs=dec_emb_inputs,
-                    sequence_length=self.dec_sequence_length+2,
+                    sequence_length=self.dec_sequence_length+1,
                     time_major=False,
                     name='training_helper')
 
@@ -182,7 +182,7 @@ class Seq2SeqModel(object):
 
                 # masks: [batch_size x max_dec_len]
                 # => ignore outputs after `dec_senquence_length+2` when calculating loss
-                masks = tf.sequence_mask(self.dec_sequence_length, max_dec_len, dtype=tf.float32, name='masks')
+                masks = tf.sequence_mask(self.dec_sequence_length + 1, max_dec_len, dtype=tf.float32, name='masks')
 
                 targets = tf.slice(self.dec_inputs, [0, 0], [-1, max_dec_len], 'targets')
 
@@ -215,7 +215,7 @@ class Seq2SeqModel(object):
                     inference_decoder,
                     output_time_major=False,
                     impute_finished=True,
-                    maximum_iterations=self.dec_sequence_length)
+                    maximum_iterations=self.dec_sentence_length + 1)
 
                 # [batch_size x dec_sentence_length], tf.int32
                 self.predictions = tf.identity(infer_dec_outputs.sample_id, name='predictions')

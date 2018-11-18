@@ -42,7 +42,6 @@ INSTALLED_APPS = [
 
 ]
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -52,6 +51,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+#
+# SECURE_SSL_REDIRECT = True,
+# SESSION_COOKIE_SECURE = True,
+# CSRF_COOKIE_SECURE = True,
 
 ROOT_URLCONF = 'chatbot.urls'
 

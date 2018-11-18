@@ -73,7 +73,6 @@ class DataUtil:
         if is_target:
             vocab['_PAD'] = 0
             vocab['_GO'] = 1
-            vocab['_EOS'] = 2
             vocab_idx = 3
             for key, value in word_counter.most_common(max_vocab_size):
                 vocab[key] = vocab_idx
@@ -98,7 +97,7 @@ class DataUtil:
         current_length = len(tokens)
         pad_length = max_sentence_length - current_length
         if is_target:
-            return [1] + [self.token2idx(token, vocab) for token in tokens] + ([0] * pad_length) + [2], current_length
+            return [1] + [self.token2idx(token, vocab) for token in tokens] + ([0] * pad_length), current_length
         else:
             return [self.token2idx(token, vocab) for token in tokens] + ([0] * pad_length), current_length
 

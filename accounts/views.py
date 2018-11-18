@@ -33,24 +33,25 @@ def signup(request):
     if request.method == "POST":
         signupform = SignupForm(request.POST)
         if signupform.is_valid():
-            user = signupform.save(commit=False)
-            user.is_active = False
-            user.save()
-
-            current_site = get_current_site(request)
-            message = render_to_string('user/account_activate_email.html', {
-                'user': user,
-                'domain': current_site,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8'),
-                'token': account_activation_token(user)
-            })
-
-            """이메일전송"""
-            mail_subject = 'test'
-            to_email = signupform.cleaned_data.get('email')
-            email = EmailMessage(mail_subject, message, to=[to_email])
-            email.send()
-
+            new_user = User.objects.create_user(signupform.cleaned_data)
+            #user = signupform.save(commit=False)
+            #user.is_active = False
+            new_user.save()
+            #
+            # current_site = get_current_site(request)
+            # message = render_to_string('user/account_activate_email.html', {
+            #     'user': user,
+            #     'domain': current_site,
+            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8'),
+            #     'token': account_activation_token(user)
+            # })
+            #
+            # """이메일전송"""
+            # mail_subject = 'test'
+            # to_email = signupform.cleaned_data.get('email')
+            # email = EmailMessage(mail_subject, message, to=[to_email])
+            # email.send()
+            #
             messages.success(request, "가입시 입력한 이메일로 인증메일이 발송되었습니다.\n"
                                       "이메일 인증 후 서비스를 이용하실 수 있습니다.")
             return redirect('accounts:login')
@@ -60,14 +61,16 @@ def signup(request):
     else:
         return render(request, "user/join.html", {"signupform": signupform,})
 
+
 def search(request):
     searchForm = SearchForm()
     if request.method == "POST":
         email = request.POST["email"]
+    else:
+        return render(request, "user/search.html", {"searchForm": searchForm, })
 
 
 def signin(request):
-
     # 로그인 기본 폼 로드
     request.session.flush()
     signinform = SigninForm()

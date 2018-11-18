@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordResetForm
 from .models import User
-from _datetime import datetime
+
 
 class SignupForm(UserCreationForm):
     username = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'required': 'true', }))
@@ -23,6 +23,7 @@ class SignupForm(UserCreationForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("패스워드를 다시 확인해주시기 바랍니다.")
         return password2
+
 
 class SearchForm(UserChangeForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'required': 'True', }))
