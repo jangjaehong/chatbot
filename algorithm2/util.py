@@ -107,7 +107,7 @@ class DataUtil:
         return reverse_vocab[idx]
 
     def idx2sent(self, indices, reverse_vocab):
-        return [self.idx2token(idx, reverse_vocab) for idx in indices]
+        return " ".join([self.idx2token(idx, reverse_vocab) for idx in indices])
 
 dataUtil = DataUtil()
 

@@ -239,14 +239,14 @@ class Seq2Seq:
                 inference_decoder = tf.contrib.seq2seq.BasicDecoder(
                     cell=dec_cell,
                     helper=inference_helper,
-                    initial_state=self.enc_last_state,
+                    initial_state=initial_state,
                     output_layer=output_layer)
 
                 infer_dec_outputs, infer_dec_last_state, infer_dec_output_length = tf.contrib.seq2seq.dynamic_decode(
                     inference_decoder,
                     output_time_major=False,
                     impute_finished=True,
-                    maximum_iterations=500)
+                    maximum_iterations=self.dec_sentence_length)
 
                 # [batch_size x dec_sentence_length], tf.int32
                 self.predictions = tf.identity(infer_dec_outputs.sample_id, name='predictions')
@@ -368,7 +368,10 @@ class Seq2Seq:
         batch_sent_lens = []
 
         for input_sent in input_batch:
-            tokens, sent_len = self.util.sent2idx(input_sent)
+            tokens, sent_len = self.util.sent2idx(
+                sent=input_sent,
+                vocab=self.enc_vocab,
+                max_sentence_length=self.enc_sentence_length)
             batch_tokens.append(tokens)
             batch_sent_lens.append(sent_len)
 
@@ -389,20 +392,20 @@ def main(_):
     input_batches, target_batches = util.load_data()
     config = Config()
 
-    # 트레이닝
-    tf.reset_default_graph()
-    with tf.Session() as sess:
-        model = Seq2Seq(mode="training")
-        model.build()
-        data = (input_batches, target_batches)
-        loss_history = model.train(sess, data, from_scratch=True, save_path=model.ckpt_dir + f'epoch_{model.n_epoch}')
-
-    plt.figure(figsize=(20, 10))
-    plt.scatter(range(model.n_epoch), loss_history)
-    plt.title('Learning Curve')
-    plt.xlabel('Global step')
-    plt.ylabel('Loss')
-    plt.show()
+    # #트레이닝
+    # tf.reset_default_graph()
+    # with tf.Session() as sess:
+    #     model = Seq2Seq(mode="training")
+    #     model.build()
+    #     data = (input_batches, target_batches)
+    #     loss_history = model.train(sess, data, from_scratch=True, save_path=model.ckpt_dir + f'epoch_{model.n_epoch}')
+    #
+    # plt.figure(figsize=(20, 10))
+    # plt.scatter(range(model.n_epoch), loss_history)
+    # plt.title('Learning Curve')
+    # plt.xlabel('Global step')
+    # plt.ylabel('Loss')
+    # plt.show()
 
     tf.reset_default_graph()
     with tf.Session() as sess:
@@ -410,7 +413,7 @@ def main(_):
         model.build()
         for input_batch, target_batch in zip(input_batches, target_batches):
             data = (input_batch, target_batch)
-            model.inference(sess, data, load_ckpt=model.ckpt_dir + f'epoch_{model.n_epoch}_attention')
+            model.inference(sess, data, load_ckpt=model.ckpt_dir + f'epoch_{model.n_epoch}')
 
 if __name__ == "__main__":
     tf.app.run()
