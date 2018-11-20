@@ -26,6 +26,8 @@ class SignupForm(UserCreationForm):
 
 
 class SearchForm(UserChangeForm):
+    username = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'required': 'true', }))
+    mobile = forms.CharField(widget=forms.TextInput(attrs={'required': 'True', }))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'required': 'True', }))
 
 
