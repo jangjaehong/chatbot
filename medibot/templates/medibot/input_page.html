@@ -205,15 +205,6 @@ $(document).ready(function(){
         $('#histFrm').submit();
     });
 
-    // 입력창 메뉴 이벤트
-    $('#content-menu li').on('click',function(){
-        var targetId = $(this).attr('id').replace('content','');
-        $('#content-menu li').removeClass('on');
-        $(this).addClass('on')
-        if(targetId != 1) $('.hist-wrap').hide();
-        $('.result-box, .hist-box, .contents-box').hide()
-        $('#result-box' + targetId + ', #content-box'  + targetId + ', #hist-box'  + targetId).show();
-    });
     // 결과창 메뉴 이벤트
     $('#hist-menu li').on('click',function(){
         var gubun = $(this).attr('id').replace('hist','');
@@ -225,14 +216,7 @@ $(document).ready(function(){
     });
 });
 </script>
- <!-- 입력창 메뉴 -->
-<!--<div class="contents_menu">-->
-    <!--<ul id="content-menu" class="row_menu">-->
-        <!--<li id="content1" class="on">일일체크</li>-->
-        <!--<li id="content2">식단체크</li>-->
-    <!--</ul>-->
-<!--</div>-->
-<!-- 일일체크 -->
+
 <div class="contents-box" id="content-box1">
     <form action="" id="physicalFrm" name="physicalFrm" method="post"  enctype="multipart/form-data">
     {% csrf_token %}
