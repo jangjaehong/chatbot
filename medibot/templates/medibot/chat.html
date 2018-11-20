@@ -52,7 +52,7 @@ $(document).ready(function(){
             addMessage('{{ report.speaker }}','{{ report.username }}','{{ report.contents }}');
         {% endfor %}
     {% else %}
-        addMessage('com','Medi-BOT','안녕하세요!!! 저는 메디봇이라고 해요~ '도움말'이라고 입력하시면 사용법을 알려드릴게요');
+        addMessage('com','Medi-BOT',"안녕하세요!!! 저는 메디봇이라고 해요~ '도움말'이라고 입력하시면 사용법을 알려드릴게요");
     {% endif %}
 
     $('#chat-close').on('click',function(){
