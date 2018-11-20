@@ -284,112 +284,113 @@ $(document).ready(function(){
 {% block input %}
 <!-- 입력창 -->
 <div class="contents_wrap">
-    <!-- 입력창 메뉴 -->
-    <div class="contents_menu">
-        <ul id="content-menu" class="row_menu">
-            <li id="content1" class="on">일일체크</li>
-            <li id="content2">식단체크</li>
-        </ul>
-    </div>
-    <!-- 일일체크 -->
-    <div class="contents-box" id="content-box1">
-        <form action="" id="physicalFrm" name="physicalFrm" method="post"  enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="input-box">
-            <table class="tb-base">
-                <colgroup>
-                    <col width="20%">
-                    <col width="80%">
-                </colgroup>
-                <tr>
-                    <th><label for="gender1">성별 : </label></th>
-                    <td>
-                        <input type="radio" id="gender1" name="gender" value="1" checked="checked">남
-                        <input type="radio" id="gender2" name="gender" value="2">여
-                    </td>
-                </tr>
-                <tr>
-                    <th><label for="age">나이 : </label></th>
-                    <td><input type="number" id="age" name="age" max="110" placeholder="나이를 입력해주세요" value="{{ physical_report.age }}" > 세</td>
-                </tr>
-                <tr>
-                   <th><label for="stature">신장 : </label></th>
-                    <td><input id="stature" name="stature" type="number" step="any" min="130.0" max="250.0" placeholder="키를 입력해주세요" value="{{ physical_report.stature }}"/> cm</td>
-                </tr>
-                <tr>
-                    <th><label for="weight">체중 : </label></th>
-                    <td><input id="weight" name="weight"  type="number" step="any" min="30.0" max="200.0" placeholder="몸무게를 입력해주세요." value="{{ physical_report.weight }}"/> kg</td>
-                </tr>
-                <tr>
-                    <th><label for="waist">허리 둘레 : </label></th>
-                    <td><input type="number" id="waist" name="waist" title="허리 둘레" size="3"  placeholder="허리 둘레를 입력해주세요.(1인치=2.5cm)" value="{{ physical_report.waist }}"> cm</td>
-                </tr>
-                <tr>
-                    <th><label for="hip">엉덩이둘레 : </label></th>
-                    <td><input type="number" id="hip" name="hip" title="엉덩이 둘레" size="3" placeholder="엉덩이 둘레를 입력해주세요.(1인치=2.5cm)" value="{{ physical_report.hip }}"> cm</td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div class="btn_wrap">
-                            <input type="button" id="reset-btn1" name="reset" class="reset-btn" value="초기화" />
-                        </div>
-                        <div class="btn_wrap">
-                            <input type="button" id="measure-btn1" name="measure" class="measure-btn" value="측정" />
-                        </div>
-                        <div class="btn_wrap">
-                            <input type="button" id="hist-btn1" name="hist" class="hist-btn" value="기록보기" />
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </form>
-    </div>
-    <!-- 식단체크 -->
-    <div class="contents-box" id="content-box2">
-        <form action="" id="foodFrm" name="foodFrm" method="post"  enctype="multipart/form-data">
-            <input type="hidden" id="term2" name="term" value="7" />
-            <input type="hidden" name="type" value="1" />
-            {% csrf_token %}
-            <div class="input-box">
-                <input class="searchText" id="searchText" name="searchText" type="text" autocomplete="on" placeholder="음식을 검색해주세요" value=""/>
-                <input type="hidden" id="fcount" name="fcount" value="0" />
-                <table class="tb-food" id="tb-food">
-                    <thead>
-                        <tr>
-                            <th>선택음식</th>
-                            <th>1회 제공량</th>
-                            <th>섭취량</th>
-                            <th>분량</th>
-                            <th>삭제</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sel_food_list">
-                        <tr id="info_ment" class="info_ment">
-                            <td colspan="5" height="150" align="center">
-                                음식을 검색 후 선택하시면 추가됩니다.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="btn_wrap">
-                    <input type="button" id="reset-btn2" name="reset" class="reset-btn" value="초기화" />
-                </div>
-                <div class="btn_wrap">
-                    <input type="button" id="measure-btn2" name="measure" class="measure-btn" value="측정" />
-                </div>
-                <div class="btn_wrap">
-                    <input type="button" id="hist-btn2" name="hist" class="hist-btn" value="기록보기" />
-                </div>
-            </div>
-        </form>
-    </div>
-    <!-- 기록보기 -->
-    <form action="" id="histFrm" name="physicalFrm" method="post"  enctype="multipart/form-data">
-        <input type="hidden" id="hist-term" name="term" value="7" />
-        <input type="hidden" id="hist-type" name="type" value="1" />
-        <input type="hidden" id="hist-gubun" name="gubun" value="1" />
-    </form>
+    {% include 'medibot/chat.html' %}
+    <!--&lt;!&ndash; 입력창 메뉴 &ndash;&gt;-->
+    <!--<div class="contents_menu">-->
+        <!--<ul id="content-menu" class="row_menu">-->
+            <!--<li id="content1" class="on">일일체크</li>-->
+            <!--<li id="content2">식단체크</li>-->
+        <!--</ul>-->
+    <!--</div>-->
+    <!--&lt;!&ndash; 일일체크 &ndash;&gt;-->
+    <!--<div class="contents-box" id="content-box1">-->
+        <!--<form action="" id="physicalFrm" name="physicalFrm" method="post"  enctype="multipart/form-data">-->
+        <!--{% csrf_token %}-->
+        <!--<div class="input-box">-->
+            <!--<table class="tb-base">-->
+                <!--<colgroup>-->
+                    <!--<col width="20%">-->
+                    <!--<col width="80%">-->
+                <!--</colgroup>-->
+                <!--<tr>-->
+                    <!--<th><label for="gender1">성별 : </label></th>-->
+                    <!--<td>-->
+                        <!--<input type="radio" id="gender1" name="gender" value="1" checked="checked">남-->
+                        <!--<input type="radio" id="gender2" name="gender" value="2">여-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<th><label for="age">나이 : </label></th>-->
+                    <!--<td><input type="number" id="age" name="age" max="110" placeholder="나이를 입력해주세요" value="{{ physical_report.age }}" > 세</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                   <!--<th><label for="stature">신장 : </label></th>-->
+                    <!--<td><input id="stature" name="stature" type="number" step="any" min="130.0" max="250.0" placeholder="키를 입력해주세요" value="{{ physical_report.stature }}"/> cm</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<th><label for="weight">체중 : </label></th>-->
+                    <!--<td><input id="weight" name="weight"  type="number" step="any" min="30.0" max="200.0" placeholder="몸무게를 입력해주세요." value="{{ physical_report.weight }}"/> kg</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<th><label for="waist">허리 둘레 : </label></th>-->
+                    <!--<td><input type="number" id="waist" name="waist" title="허리 둘레" size="3"  placeholder="허리 둘레를 입력해주세요.(1인치=2.5cm)" value="{{ physical_report.waist }}"> cm</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<th><label for="hip">엉덩이둘레 : </label></th>-->
+                    <!--<td><input type="number" id="hip" name="hip" title="엉덩이 둘레" size="3" placeholder="엉덩이 둘레를 입력해주세요.(1인치=2.5cm)" value="{{ physical_report.hip }}"> cm</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td colspan="2">-->
+                        <!--<div class="btn_wrap">-->
+                            <!--<input type="button" id="reset-btn1" name="reset" class="reset-btn" value="초기화" />-->
+                        <!--</div>-->
+                        <!--<div class="btn_wrap">-->
+                            <!--<input type="button" id="measure-btn1" name="measure" class="measure-btn" value="측정" />-->
+                        <!--</div>-->
+                        <!--<div class="btn_wrap">-->
+                            <!--<input type="button" id="hist-btn1" name="hist" class="hist-btn" value="기록보기" />-->
+                        <!--</div>-->
+                    <!--</td>-->
+                <!--</tr>-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</form>-->
+    <!--</div>-->
+    <!--&lt;!&ndash; 식단체크 &ndash;&gt;-->
+    <!--<div class="contents-box" id="content-box2">-->
+        <!--<form action="" id="foodFrm" name="foodFrm" method="post"  enctype="multipart/form-data">-->
+            <!--<input type="hidden" id="term2" name="term" value="7" />-->
+            <!--<input type="hidden" name="type" value="1" />-->
+            <!--{% csrf_token %}-->
+            <!--<div class="input-box">-->
+                <!--<input class="searchText" id="searchText" name="searchText" type="text" autocomplete="on" placeholder="음식을 검색해주세요" value=""/>-->
+                <!--<input type="hidden" id="fcount" name="fcount" value="0" />-->
+                <!--<table class="tb-food" id="tb-food">-->
+                    <!--<thead>-->
+                        <!--<tr>-->
+                            <!--<th>선택음식</th>-->
+                            <!--<th>1회 제공량</th>-->
+                            <!--<th>섭취량</th>-->
+                            <!--<th>분량</th>-->
+                            <!--<th>삭제</th>-->
+                        <!--</tr>-->
+                    <!--</thead>-->
+                    <!--<tbody id="sel_food_list">-->
+                        <!--<tr id="info_ment" class="info_ment">-->
+                            <!--<td colspan="5" height="150" align="center">-->
+                                <!--음식을 검색 후 선택하시면 추가됩니다.-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                    <!--</tbody>-->
+                <!--</table>-->
+                <!--<div class="btn_wrap">-->
+                    <!--<input type="button" id="reset-btn2" name="reset" class="reset-btn" value="초기화" />-->
+                <!--</div>-->
+                <!--<div class="btn_wrap">-->
+                    <!--<input type="button" id="measure-btn2" name="measure" class="measure-btn" value="측정" />-->
+                <!--</div>-->
+                <!--<div class="btn_wrap">-->
+                    <!--<input type="button" id="hist-btn2" name="hist" class="hist-btn" value="기록보기" />-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</form>-->
+    <!--</div>-->
+    <!--&lt;!&ndash; 기록보기 &ndash;&gt;-->
+    <!--<form action="" id="histFrm" name="physicalFrm" method="post"  enctype="multipart/form-data">-->
+        <!--<input type="hidden" id="hist-term" name="term" value="7" />-->
+        <!--<input type="hidden" id="hist-type" name="type" value="1" />-->
+        <!--<input type="hidden" id="hist-gubun" name="gubun" value="1" />-->
+    <!--</form>-->
 </div>
 {% endblock input %}
 
