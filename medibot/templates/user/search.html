@@ -39,18 +39,22 @@
         </div>
 
         <div class="contents mt_20 mb_20">
-            <div class="sub_tit">ID Search</div>
+            <div class="sub_tit">아이디 조회</div>
             <form action="" id="joinFrm1" method="post" enctype="multipart/form-data" autocomplete="off">
                 {% csrf_token %}
                 <div class="input_wrap">
-                     {{ searchForm.email }}
-                    <div class="placeholder">이메일</div>
+                     {{ searchForm.username }}
+                    <div class="placeholder">이름</div>
+                </div>
+                <div class="input_wrap">
+                     {{ searchForm.mobile }}
+                    <div class="placeholder">이름</div>
                 </div>
             </form>
         </div>
 
         <div class="contents mt_20 mb_20">
-            <div class="sub_tit">Search</div>
+            <div class="sub_tit">패스워드 조회</div>
             <form action="" id="joinFrm2" method="post" enctype="multipart/form-data" autocomplete="off">
                 {% csrf_token %}
                 <div class="input_wrap">
