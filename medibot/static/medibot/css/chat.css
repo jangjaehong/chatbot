@@ -1,10 +1,10 @@
-#chatFrm{
+.chatFrm{
     display:none;
     width:auto;
 }
-#chat-wrap{
+.chat-wrap{
     width:500px;
-    height:800px;
+    height:100%;
     position:absolute;
     z-index:9999;
     left:140px;
@@ -15,44 +15,42 @@
     font-size:1.2em;
 }
 /* 타이틀바 */
-#chat-header{
+.chat-header{
     width:calc(100% - 30px);
-    height:32px;
     display:flex;
-    padding:10px 15px;
+    padding:15px 15px;
     flex-direction:row;
     background:#368AFF;
     color:white;
     border-radius:3px 3px 0 0;
     position:relative;
 }
-#chat-header .tit{
+.chat-header .tit{
     line-height:200%;
     padding:0;
 }
-#chat-header .close{
-    width:32px;
-    height:32px;
+.chat-header .close{
+    padding:100px;
     position:absolute;
     right:5px;
     font-weight:bold;
     color:white;
     text-align:center;
 }
-#chat-header .close:hover{
+.chat-header .close:hover{
     color:#BDBDBD;
 }
 /* 채팅영역 */
-#chat-box{
+.chat-box{
     width:100%;
-    height:calc(100% - 52px); /* 헤더의 크기를 제외*/
+    height:calc(100% - 100px); /* 헤더의 크기를 제외*/
     display:flex;
     flex-direction:column;
     position:relative;
 }
 
 /* 채팅내용창 */
-#chat-box .sentence{
+.chat-box .sentence{
     width:calc(100% - 30px);
     height:calc(100% - 80px);
     background:#fff;
@@ -62,56 +60,56 @@
 }
 
 /* 말풍선 공통 */
-#chat-box .sentence .msg-box{
+.chat-box .sentence .msg-box{
     width:100%;
     height:auto;
     position:relative;
     display:flex;
     flex-direction:row;
 }
-#chat-box .sentence .msg-box .profile-wrap{
+.chat-box .sentence .msg-box .profile-wrap{
     display:flex;
     align-items:flex-start;
     justify-content:center;
     margin-right:5px;
 }
-#chat-box .sentence .msg-box .content-wrap{
+.chat-box .sentence .msg-box .content-wrap{
     display:flex;
     flex-direction:column;
     color:#111111
 }
-#chat-box .sentence .msg-box .content-wrap .name{
+.chat-box .sentence .msg-box .content-wrap .name{
     padding:5px;
     font-weight:bold;
 }
-#chat-box .sentence .msg-box .content-wrap .content{
+.chat-box .sentence .msg-box .content-wrap .content{
     border-radius:5px;
     box-shadow:2px 2px 2px 2px #999;
     padding:5px;
 }
 /* 사용자 말풍선 */
-#chat-box .sentence .user{
+.chat-box .sentence .user{
     flex-direction:row-reverse;
 }
-#chat-box .sentence .user .profile-wrap{
+.chat-box .sentence .user .profile-wrap{
     margin-right:0px;
     margin-left:10px;
 }
-#chat-box .sentence .user .content-wrap .name{
+.chat-box .sentence .user .content-wrap .name{
     display:none;
 }
-#chat-box .sentence .user .content-wrap .content{
+.chat-box .sentence .user .content-wrap .content{
     background:yellow;
 }
 
 /* 봇 말풍선 */
-#chat-box .sentence .com .content-wrap .content{
+.chat-box .sentence .com .content-wrap .content{
     background:#fff;
 }
 
 
 /* 입력창 */
-#chat-box .input-wrap{
+.chat-box .input-wrap{
     width:100%;
     height:80px;
     position:relative;
@@ -121,7 +119,7 @@
     border-radius: 0 0 3px 3px;
     background:#fff;
 }
-#chat-box .input-wrap textarea{
+.chat-box .input-wrap textarea{
     width:calc(100% - 72px);
     height:60px;
     padding:8px;
@@ -131,7 +129,7 @@
     font-size:1.2em;
     border-radius: 0 0 0 3px;
 }
-#chat-box .input-wrap .ic_wrap{
+.chat-box .input-wrap .ic_wrap{
     display:flex;
     align-items:flex-start;
     justify-content:center;

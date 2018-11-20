@@ -103,6 +103,7 @@ class DataUtil:
         else:
             return [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length), current_length
 
+
     def idx2token(self, idx, reverse_vocab):
         return reverse_vocab[idx]
 
