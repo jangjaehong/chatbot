@@ -1,7 +1,7 @@
 import tensorflow as tf
 from algorithm.model import Seq2Seq
 
-def _get_answer(self, question_msg):
+def _get_answer(question_msg):
     tf.reset_default_graph()
     with tf.Session() as sess:
         model = Seq2Seq(mode='inference')

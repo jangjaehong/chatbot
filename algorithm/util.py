@@ -1,7 +1,7 @@
 import re
 from collections import Counter
 import algorithm.db as db
-
+import numpy as np
 
 class DataUtil:
 
@@ -111,4 +111,4 @@ class DataUtil:
         return " ".join([self.idx2token(idx, reverse_vocab) for idx in indices])
 
 dataUtil = DataUtil()
-
+print(np.array(dataUtil.load_data()))

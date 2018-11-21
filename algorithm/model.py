@@ -134,7 +134,6 @@ class Seq2Seq:
                 init = tf.contrib.layers.xavier_initializer()
                 self.enc_embedding = \
                     tf.get_variable('embeeding',
-                                    #shape=[self.enc_vocab_size + 1, self.enc_emb_size],
                                     initializer=tf.random_uniform([self.enc_vocab_size + 1, self.enc_emb_size]),
                                     dtype=tf.float32)
             # sentence -> vetor
@@ -164,7 +163,6 @@ class Seq2Seq:
                 init = tf.contrib.layers.xavier_initializer()
                 self.dec_embedding = \
                     tf.get_variable('embeeding',
-                                    #shape=[self.dec_vocab_size + 1, self.dec_emb_size],
                                     initializer=tf.random_uniform([self.dec_vocab_size + 3, self.dec_emb_size]),
                                     dtype=tf.float32)
 
@@ -400,34 +398,3 @@ class Seq2Seq:
         return sess.run(self.predict, feed_dict={
             self.enc_inputs: batch_tokens,
             self.enc_inputs_length: batch_sent_lens})
-
-def main(_):
-    util = DataUtil()
-    input_batches, target_batches = util.load_data()
-    config = Config()
-
-    # #트레이닝
-    tf.reset_default_graph()
-    with tf.Session() as sess:
-        model = Seq2Seq(mode="training")
-        model.build()
-        data = (input_batches, target_batches)
-        loss_history = model.train(sess, data, from_scratch=True, save_path=model.ckpt_dir + f'epoch_{model.n_epoch}')
-
-    plt.figure(figsize=(20, 10))
-    plt.scatter(range(model.n_epoch), loss_history)
-    plt.title('Learning Curve')
-    plt.xlabel('Global step')
-    plt.ylabel('Loss')
-    plt.show()
-
-    tf.reset_default_graph()
-    with tf.Session() as sess:
-        model = Seq2Seq(mode='inference')
-        model.build()
-        for input_batch, target_batch in zip(input_batches, target_batches):
-            data = (input_batch, target_batch)
-            model.inference(sess, data, load_ckpt=model.ckpt_dir + f'epoch_{model.n_epoch}')
-
-if __name__ == "__main__":
-    tf.app.run()
