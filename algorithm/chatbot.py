@@ -15,4 +15,4 @@ def _get_answer(question_msg):
     return predict
 
 
-
+_get_answer("일일 체크")
