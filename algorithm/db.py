@@ -29,7 +29,7 @@ def select_chat_vocab():
     rows = None
     with connect() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT * FROM medibot_chatvocab")
+            cur.execute("SELECT * FROM medibot_vocabdict")
             rows = cur.fetchall()
     print("어휘 사전 데이터를 읽어옵니다...")
     return rows
@@ -44,18 +44,19 @@ def select_chat_report():
     return rows
 
 
-def delete_in_chat_vocab(vocab_dic):
+def delete_and_insert_vocab_list(vocab_dic):
     with connect() as conn:
         with conn.cursor() as cur:
-            sql = "delete from medibot_chatvocab "
+            sql = "delete from medibot_vocabdict "
             cur.execute(sql)
 
             sql = '''
-                INSERT INTO medibot_chatvocab (vocab, morpheme)
-                SELECT  unnest(%(vocab)s),
+                INSERT INTO medibot_vocabdict (idx, vocab, morpheme)
+                SELECT  unnest(%(idx)s),
+                        unnest(%(vocab)s),
                         unnest(%(morpheme)s)
             '''
-
+            idx = [r['idx'] for r in vocab_dic]
             vocab = [r['vocab'] for r in vocab_dic]
             morpheme = [r['morpheme'] for r in vocab_dic]
             cur.execute(sql, locals())
