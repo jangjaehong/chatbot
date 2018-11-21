@@ -18,7 +18,8 @@ def test(request):
 def index(request):
     if request.user.is_authenticated:
         chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-        physical_report = PhysicalReport.objects.filter(uid=request.user.pk).latest('pub_date')
+        physical_report = PhysicalReport.objects.filter(uid=request.user.pk).order_by('pub_date')[:1]
+
         return render(request, 'medibot/index.html', {"chatreport": chatreport, "physical_report": physical_report})
     else:
         return redirect(reverse('accounts:login'))

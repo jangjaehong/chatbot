@@ -25,9 +25,9 @@ class Config:
     enc_sentence_length = datautil.enc_sentence_length
     dec_sentence_length = target_sentence_length = datautil.dec_sentence_length
 
-    embedding_size = enc_emb_size = dec_emb_size = 100
-    hidden_size = 100
-    attn_size = 100
+    embedding_size = enc_emb_size = dec_emb_size = 300
+    hidden_size = 300
+    attn_size = 300
     n_epoch = 2000
     learning_rate = 0.0001
 
@@ -65,12 +65,12 @@ class Seq2Seq:
         self.enc_output_dim = self.enc_vocab_size
         self.dec_output_dim = self.dec_vocab_size
         # RNN Cell hidden layer size
-        self.hidden_size = 100
+        self.hidden_size = config.hidden_size
         # Cell depth
         self.num_layer = 3
         # embedding vector
-        self.embedding_size = self.enc_emb_size = self.dec_emb_size = 100
-        self.attn_size= config.attn_size
+        self.embedding_size = self.enc_emb_size = self.dec_emb_size = config.embedding_size
+        self.attn_size = config.attn_size
         # train
         self.n_epoch = 2000
         self.learning_rate = 0.0001
@@ -108,7 +108,7 @@ class Seq2Seq:
 
             self.target_inputs = tf.placeholder(
                 tf.int32,
-                shape=[None, self.dec_sentence_length + 1],
+                shape=[None, self.target_sentence_length + 1],
                 name='output_sentences')
 
             # decoder_inputs_length_train: [batch_size]
@@ -393,19 +393,19 @@ def main(_):
     config = Config()
 
     # #트레이닝
-    # tf.reset_default_graph()
-    # with tf.Session() as sess:
-    #     model = Seq2Seq(mode="training")
-    #     model.build()
-    #     data = (input_batches, target_batches)
-    #     loss_history = model.train(sess, data, from_scratch=True, save_path=model.ckpt_dir + f'epoch_{model.n_epoch}')
-    #
-    # plt.figure(figsize=(20, 10))
-    # plt.scatter(range(model.n_epoch), loss_history)
-    # plt.title('Learning Curve')
-    # plt.xlabel('Global step')
-    # plt.ylabel('Loss')
-    # plt.show()
+    tf.reset_default_graph()
+    with tf.Session() as sess:
+        model = Seq2Seq(mode="training")
+        model.build()
+        data = (input_batches, target_batches)
+        loss_history = model.train(sess, data, from_scratch=True, save_path=model.ckpt_dir + f'epoch_{model.n_epoch}')
+
+    plt.figure(figsize=(20, 10))
+    plt.scatter(range(model.n_epoch), loss_history)
+    plt.title('Learning Curve')
+    plt.xlabel('Global step')
+    plt.ylabel('Loss')
+    plt.show()
 
     tf.reset_default_graph()
     with tf.Session() as sess:
