@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
-from .models import *
 from django.utils import timezone
-import algorithm.chatbot as chatbot
 
 import math
 import datetime
 import json
 
+from .models import *
+import algorithm.chatbot as chatbot
 
 def test(request):
     return render(request, 'medibot/test.html')
@@ -31,11 +31,13 @@ def ajaxpost(request):
                 #사용자 입력 대화 저장
                 msg = request.POST['msg']
                 uid = request.user.pk
-                #ChatReport(uid=uid, speaker='user', username=request.user.username, contents=msg, pub_date=timezone.now()).save()
+                ChatReport(uid=uid, speaker='user', username=request.user.username, contents=msg, pub_date=timezone.now()).save()
 
                 #사용자 입력 대화를 통한 컴퓨터의 답변 찾기
+
                 reply = chatbot._get_answer(msg)
-                #ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=reply, pub_date=timezone.now()).save()
+                print(reply)
+                ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=reply, pub_date=timezone.now()).save()
 
                 # 호출한 곳으로 리턴, json은 꼭 이렇게
                 context = [{'message': reply, 'name': 'Medi-BOT'}]

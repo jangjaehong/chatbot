@@ -18,7 +18,7 @@ class ChatTraining(object):
             model.build()
             data = (self.input_batches, self.target_batches)
             loss_history = model.train(sess, data, from_scratch=True,
-                                       save_path=model.ckpt_dir + f'epoch_{model.n_epoch}')
+                                       save_path=model.ckpt_dir + f'/chat_model_{model.n_epoch}.ckpt')
 
         plt.figure(figsize=(20, 10))
         plt.scatter(range(model.n_epoch), loss_history)
@@ -34,7 +34,7 @@ class ChatTraining(object):
             model.build()
             for input_batch, target_batch in zip(self.input_batches, self.target_batches):
                 data = (input_batch, target_batch)
-                model.inference(sess, data, load_ckpt=model.ckpt_dir + f'epoch_{model.n_epoch}')
+                model.inference(sess, data, load_ckpt=model.ckpt_dir + f'/chat_model_{model.n_epoch}.ckpt')
 
 
 def main(_):

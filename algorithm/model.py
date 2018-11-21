@@ -34,7 +34,7 @@ class Config:
     start_token = datautil.start_token
     end_token = datautil.end_token
 
-    ckpt_dir = './model/'
+    ckpt_dir = './algorithm/model'
 
 
 class Seq2Seq:
@@ -268,8 +268,10 @@ class Seq2Seq:
     def restore(self, sess, var_list=None, ckpt_path=None):
         if hasattr(self, 'training_variables'):
             var_list = self.training_variables
-        restorer = tf.train.Saver(var_list)
-        restorer.restore(sess, ckpt_path)
+        print("Model restored from file: %s" % ckpt_path)
+        self.restorer = tf.train.Saver(var_list)
+        self.restorer.restore(sess, ckpt_path)
+
         print('Restore Finished!')
 
     def summary(self):
@@ -358,7 +360,6 @@ class Seq2Seq:
         return loss_history
 
     def inference(self, sess, data, load_ckpt):
-
         self.restore(sess, ckpt_path=load_ckpt)
 
         input_batch, target_batch = data
@@ -387,8 +388,7 @@ class Seq2Seq:
             print('Prediction:', self.util.idx2sent(pred, reverse_vocab=self.dec_reverse_vocab))
             print('Target:', target_sent, '\n')
 
-    def prediction(self, sess, input_seq, load_ckpt):
-        self.restore(sess, ckpt_path=load_ckpt)
+    def prediction(self, sess, input_seq):
 
         batch_tokens, batch_sent_lens = self.util.sent2idx(
             sent=input_seq,
