@@ -103,12 +103,8 @@ class DataUtil:
         else:
             return [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length), current_length
 
-
     def idx2token(self, idx, reverse_vocab):
         return reverse_vocab[idx]
 
     def idx2sent(self, indices, reverse_vocab):
         return " ".join([self.idx2token(idx, reverse_vocab) for idx in indices])
-
-dataUtil = DataUtil()
-print(np.array(dataUtil.load_data()))

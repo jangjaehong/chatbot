@@ -268,8 +268,8 @@ class Seq2Seq:
     def restore(self, sess, var_list=None, ckpt_path=None):
         if hasattr(self, 'training_variables'):
             var_list = self.training_variables
-        self.restorer = tf.train.Saver(var_list)
-        self.restorer.restore(sess, ckpt_path)
+        restorer = tf.train.Saver(var_list)
+        restorer.restore(sess, ckpt_path)
         print('Restore Finished!')
 
     def summary(self):
@@ -396,5 +396,5 @@ class Seq2Seq:
             max_sentence_length=self.enc_sentence_length)
 
         return sess.run(self.predict, feed_dict={
-            self.enc_inputs: batch_tokens,
-            self.enc_inputs_length: batch_sent_lens})
+            self.enc_inputs: [batch_tokens],
+            self.enc_inputs_length: [batch_sent_lens]})
