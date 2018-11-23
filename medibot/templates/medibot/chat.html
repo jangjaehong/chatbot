@@ -83,8 +83,9 @@ function move_chat_scroll(){
     $('#sentence').animate({scrollTop : scrollPosition}, 300);
 };
 
-function view_btn_controller(){
+function view_btn_controller(flag){
     $('#btn-controller-wrap').animate({bottom:150});
+    check_buttons_event(flag);
 }
 
 function cancel_event(){
@@ -99,7 +100,7 @@ function check_buttons_event(flag){
 
 }
 
-function hist_hutton_event(flag){{
+function hist_hutton_event(flag){
     $('.result-wrap').hide();
     $('.hist-wrap').show();
 
@@ -115,6 +116,7 @@ function hist_hutton_event(flag){{
     $('#histFrm').submit();
 }
 </script>
+<!-- chatting -->
 <form action="" method="post" name="chatFrm" id="chatFrm">
     {% csrf_token %}
     <input type="hidden" id="msg" name="msg" value=""/>
