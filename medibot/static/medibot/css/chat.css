@@ -137,3 +137,17 @@
     background:#368AFF;
     border-radius:3px;
 }
+
+.btn-controller-wrap{
+    width:calc(100% - 20px);
+    padding:10px;
+    position:absolute;
+    bottom:0px;
+}
+
+.btn-controller-wrap input{
+    width:100%;
+}
+.btn-controller-wrap .check_btn{
+    display:none;
+}

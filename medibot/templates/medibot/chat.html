@@ -73,6 +73,8 @@ function addMessage(sender, name, message){
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
     move_chat_scroll();
+
+
 };
 
 function move_chat_scroll(){
@@ -80,6 +82,38 @@ function move_chat_scroll(){
     var scrollPosition = sentence_last_child.offset().top;
     $('#sentence').animate({scrollTop : scrollPosition}, 300);
 };
+
+function view_btn_controller(){
+    $('#btn-controller-wrap').animate({bottom:150});
+}
+
+function cancel_event(){
+    $('#btn-controller-wrap').animate({bottom:0});
+}
+
+function check_buttons_event(flag){
+    if(flag == 1)
+        $('#content-box1').show();
+    if(flag == 2)
+        $('#content-box2').show();
+
+}
+
+function hist_hutton_event(flag){{
+    $('.result-wrap').hide();
+    $('.hist-wrap').show();
+
+    $('#hist-box' + flag).empty();
+    $('#hist-box' + flag).show();
+
+    if(flag == 1){
+        $('.hist-menu').show();
+    }else{
+        $('.hist-menu').hide();
+    }
+    $('#hist-type').val(flag);
+    $('#histFrm').submit();
+}
 </script>
 <form action="" method="post" name="chatFrm" id="chatFrm">
     {% csrf_token %}
@@ -98,10 +132,17 @@ function move_chat_scroll(){
                 </div>
             </div>
         </div>
-        <div>
-            <div><input type="button"></div>
-            <div><input type="button"></div>
-            <div><input type="button" id="day-cancel" value=""></div>
+        <div id="btn-controller-wrap" class="btn-controller-wrap">
+            <div><input type="button" class="check_btn" value="측정하기" onclick="check_buttons_event(1)"></div>
+            <div><input type="button" class="check_btn" value="측정하기" onclick="check_buttons_event(2)"></div>
+            <div><input type="button" id="btn_day_history" value="기록보기" onclick="check_buttons_event(3)"></div>
+            <div><input type="button" id="btn_day-cancel"  value="취소"  onclick="cancel_event()"></div>
         </div>
     </div>
+</form>
+<!-- 기록보기 -->
+<form action="" id="histFrm" name="physicalFrm" method="post"  enctype="multipart/form-data">
+    <input type="hidden" id="hist-term" name="term" value="7" />
+    <input type="hidden" id="hist-type" name="type" value="1" />
+    <input type="hidden" id="hist-gubun" name="gubun" value="1" />
 </form>

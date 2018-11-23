@@ -33,13 +33,11 @@ def ajaxpost(request):
                 uid = request.user.pk
                 ChatReport(uid=uid, speaker='user', username=request.user.username, contents=msg, pub_date=timezone.now()).save()
 
-                #사용자 입력 대화를 통한 컴퓨터의 답변 찾기
-
+                # 사용자 질의문에 대한 챗봇의 답변
                 reply = chatbot._get_answer(msg)
-                print(reply)
                 ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=reply, pub_date=timezone.now()).save()
 
-                # 호출한 곳으로 리턴, json은 꼭 이렇게
+                # 답변 반환
                 context = [{'message': reply, 'name': 'Medi-BOT'}]
                 return HttpResponse(json.dumps(context), content_type="application/json")
         return render(request)

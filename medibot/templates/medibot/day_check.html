@@ -1,0 +1,201 @@
+{% load staticfiles %}
+<script>
+function funcInit(){
+    // 최초 초기화
+    $('.result-box').hide();
+    $('#result-box1').show();
+
+    {% if physical_report %}
+        $("input:radio[name ='gender']:input[value='{{ physical_report.gender }}']").attr("checked", true);
+        // 결과데이터
+        var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
+        var value = [{{ physical_report.bmi }}, {{ physical_report.whr }}, {{ physical_report.energy }}];
+        var state = [ '{{ physical_report.bmi_state }}', '{{ physical_report.whr_state }}', '{{ physical_report.energy_state}}' ];
+        var age = {{ physical_report.age }};
+        var gender = {{ physical_report.gender }};
+        makeBullet(category, value, state, age, gender);
+    {% endif %}
+}
+
+function makeBullet(category, value, state, age, gender){
+    $('#measure_date').html('최근 측정 날짜 : {{ physical_report.pub_date }}');
+    for(var i = 0; i < 3; i++){
+        var container = $("#empty-result-container").clone().show().attr("id","");
+        container.find(".title").html(category[i])
+        container.find(".text-info").html("<p>" + category[i] + ": " + value[i] + "로 " + state[i] + "입니다.</p>");
+        container.find(".container").addClass("bullet-container").addClass("bullet-container" + (i + 1));
+        $('#result-box1').append(container);
+    }
+    drawBulletBMI(value[0], "div.bullet-container1");
+    drawBulletWHR(value[1], gender, age, "div.bullet-container2");
+    drawBulletEnergy(value[2], gender, age, "div.bullet-container3");
+}
+
+$(document).ready(function(){
+    funcInit();
+
+    // 일일체크
+    $('#physicalFrm').submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url:"/physical",
+            dataType: 'json',
+            data: $('#physicalFrm').serialize(),
+            beforeSend: function(){
+                //유저 메세지 표시
+            },
+            success: function(response){
+                // 결과데이터
+                var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
+                var value = [response.bmi,  response.whr, response.energy];
+                var state = [response.bmi_state, response.whr_state, response.energy_state];
+                var age = response.age;
+                var gender = response.gender;
+                // 결과 표시
+                makeBullet(category, value, state, age, gender);
+            },
+            error: function(request, status, error) {
+               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+        return false;
+    });
+
+    // 기록보기
+    $('#histFrm').submit(function(e){
+        var gubun = $('#hist-gubun').val();
+        var type = $('#hist-type').val();
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url:"/hist",
+            dataType: 'json',
+            data: $('#histFrm').serialize(),
+            beforeSend: function(){
+                //유저 메세지 표시
+            },
+            success: function(data){
+                if(data.length == 0){
+                    if(type == "1")
+                        alert("기록이 없습니다. 먼저 일일체크 측정을 해보시기 바랍니다.");
+                    if(type == "2")
+                        alert("기록이 없습니다. 먼저 식단체크 측정을 해보시기 바랍니다.");
+                }else{
+                    var resultBox = $('#empty-result-container').clone().show().attr("id","");
+                    resultBox.find('.title').remove();
+                    resultBox.find('.text-info').remove();
+                    resultBox.find('.container').addClass('hist-container').addClass('hist-container' + type);
+                    if(type == 1){
+                        $('#hist-box1').append(resultBox);
+                        if(gubun == 1) {
+                            drawCurveBMI(data, 'div.hist-container' + type);
+                        }
+                        else if(gubun == 2){
+                            drawCurveWHR(data, 'div.hist-container' + type, data[data.length-1].gender);
+                        }
+                        else if(gubun == 3){
+                            drawCurveEnergy(data, 'div.hist-container' + type, data[data.length-1].gender, data[data.length-1].age);
+                        }
+                    }
+                    if(type == 2){
+                        $('#hist-box2').append(resultBox);
+                        drawCurveChart(data, 'div.hist-container' + type);
+                    }
+                }
+            },
+            error: function(request, status, error) {
+               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    });
+
+    $('input[name=reset]').on('click',function(){
+        var gubun = $(this).attr("id").replace('reset-btn','');
+        if(gubun == 1){
+            $('#physicalFrm input[type=number]').val('');
+        }else if(gubun == 2){
+            $("#sel_food_list").html(table_base_info);
+            $("#fcount").val(0);
+        }
+    });
+
+    $('input[name=measure]').on('click',function(){
+        $('.result-wrap').show();
+        $('.hist-wrap').hide();
+        $('.result-box').hide();
+
+        var gubun = $(this).attr("id").replace('measure-btn','');
+        $('#result-box' + gubun).empty();
+        $('#result-box' + gubun).show();
+
+
+        if(gubun == 1){
+            $('#physicalFrm').submit();
+        }else{
+            $('#foodFrm').submit();
+        }
+    });
+
+    // 결과창 메뉴 이벤트
+    $('#hist-menu li').on('click',function(){
+        var gubun = $(this).attr('id').replace('hist','');
+        $('#hist-menu li').removeClass('on');
+        $(this).addClass('on')
+
+        $('#hist-gubun').val(gubun);
+        $('#histFrm').submit();
+    });
+});
+</script>
+
+<div class="contents-box" id="content-box1">
+    <form action="" id="physicalFrm" name="physicalFrm" method="post"  enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="input-box">
+        <table class="tb-base">
+            <colgroup>
+                <col width="20%">
+                <col width="80%">
+            </colgroup>
+            <tr>
+                <th><label for="gender1">성별 : </label></th>
+                <td>
+                    <input type="radio" id="gender1" name="gender" value="1" checked="checked">남
+                    <input type="radio" id="gender2" name="gender" value="2">여
+                </td>
+            </tr>
+            <tr>
+                <th><label for="age">나이 : </label></th>
+                <td><input type="number" id="age" name="age" max="110" placeholder="나이를 입력해주세요" value="{{ physical_report.age }}" > 세</td>
+            </tr>
+            <tr>
+               <th><label for="stature">신장 : </label></th>
+                <td><input id="stature" name="stature" type="number" step="any" min="130.0" max="250.0" placeholder="키를 입력해주세요" value="{{ physical_report.stature }}"/> cm</td>
+            </tr>
+            <tr>
+                <th><label for="weight">체중 : </label></th>
+                <td><input id="weight" name="weight"  type="number" step="any" min="30.0" max="200.0" placeholder="몸무게를 입력해주세요." value="{{ physical_report.weight }}"/> kg</td>
+            </tr>
+            <tr>
+                <th><label for="waist">허리 둘레 : </label></th>
+                <td><input type="number" id="waist" name="waist" title="허리 둘레" size="3"  placeholder="허리 둘레를 입력해주세요.(1인치=2.5cm)" value="{{ physical_report.waist }}"> cm</td>
+            </tr>
+            <tr>
+                <th><label for="hip">엉덩이둘레 : </label></th>
+                <td><input type="number" id="hip" name="hip" title="엉덩이 둘레" size="3" placeholder="엉덩이 둘레를 입력해주세요.(1인치=2.5cm)" value="{{ physical_report.hip }}"> cm</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="btn_wrap">
+                        <input type="button" id="reset-btn1" name="reset" class="reset-btn" value="초기화" />
+                    </div>
+                    <div class="btn_wrap">
+                        <input type="button" id="measure-btn1" name="measure" class="measure-btn" value="측정" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
+</div>
