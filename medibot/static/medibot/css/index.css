@@ -67,8 +67,8 @@ ul.row_menu li:last-child{border-right:1px solid #555555;}
 
 .result-wrap > .result-box{width:calc(70% - 80px);height:auto;position:absolute;left:30%px;margin:0 10px;box-shadow:3px 3px 3px 3px #222222;padding:20px;position:relative;display:none;float:left}
 .result-wrap > #result-box1{top:10px}
-.result-wrap > #result-box1{top:298px}
-.result-wrap > #result-box1{top:586px}
+.result-wrap > #result-box2{top:298px}
+.result-wrap > #result-box2{top:586px}
 
 .result-wrap > .result-box > .result-container{width:100%;height:100%;position:relative}
 .result-wrap > .result-box > .result-container > .title{font-size: 1.2em;font-weight: bold;}
