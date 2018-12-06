@@ -46,7 +46,7 @@ function bulletDefaultSettings(){
     }
 }
 
-function drawBulletBMI(value, container){
+function drawBulletBMI(value, state, container){
     var config = bulletDefaultSettings();
     config.minValue = 0;
     config.maxValue = 40.0;
@@ -102,7 +102,7 @@ function drawBulletEnergy(value, state,  gender, age, container){
             config.range = [1023.9, 1252.5, 1481.1, 3000.0, 4000.0];
         }
     }
-    var bullet = loadBullet(container, value, config);
+    var bullet = loadBullet(container, value, state, config);
 }
 function loadBullet(container, value, state, config){
      if(config == null) config = bulletDefaultSettings();
