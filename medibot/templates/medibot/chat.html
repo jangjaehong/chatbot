@@ -68,8 +68,9 @@ function hist_hutton_event(flag){
 }
 /* 일일체크 */
 function check_buttons_event(flag){
+
     cancel_event();
-    if(flag == 1)
+    if(flag == 1){
         // 일일체크
         $('#physicalFrm').submit(function(e){
             e.preventDefault();
@@ -98,8 +99,10 @@ function check_buttons_event(flag){
             });
             return false;
         });
-    if(flag == 2)
+    }
+    if(flag == 2){
         $('#content-box2').show();
+    }
 }
 
 $(document).ready(function(){
