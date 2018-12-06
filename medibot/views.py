@@ -49,9 +49,9 @@ def physical_update(request):
                     PhysicalReport(uid=uid, age=age, gender=gender,
                                    stature=stature, weight=weight,
                                    waist=waist, hip=hip, pub_date=timezone.now()).save()
-
                 physical_info = PhysicalReport.objects.filter(uid=request.user.pk)
-                return render(request, 'medibot/index.html', {"result": 1, "physical_report": physical_info})
+                context = [{'result': 1, "physical_report": physical_info}]
+                return HttpResponse(json.dumps(context), content_type="application/json")
         return render(request)
     else:
         return redirect(reverse('accounts:login'))
