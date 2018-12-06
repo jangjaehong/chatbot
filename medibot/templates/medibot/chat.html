@@ -29,11 +29,6 @@ function addMessage(sender, name, message){
     }else{
         speechBubble += '<div class="profile-wrap"><img src="' + com_img + '"/></div>';
     }
-    <!--var findText = message.replace(/(\s*)/g,"").indexOf("fn");-->
-    <!--if(findText != -1)-->
-        <!--var textScript = message.replace(/(\s*)/g,"").substring(findText-1, message.length);-->
-        <!--alert(textScript);-->
-
     speechBubble += '<div class="content-wrap">';
     speechBubble += '<div class="name">' + name + '</div>';
     speechBubble += '<div class="content">' + message + '</div>';
