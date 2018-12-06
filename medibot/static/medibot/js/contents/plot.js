@@ -53,9 +53,9 @@ function drawBulletBMI(value, container){
     config.rectColor = ["#FF0000", "#FF5E00", "#FFBB00", "#FFE400", "#ABF200","#BDBDBD"];
     config.range = [18.5, 23.0, 25.0, 30.0, 35.0, 40.0];
     config.ylabel = "체질량지수(BMI)";
-    var bullet = loadBullet(container, value, config);
+    var bullet = loadBullet(container, value, state, config);
 }
-function drawBulletWHR(value, gender, age, container){
+function drawBulletWHR(value, state, gender, age, container){
     var config = bulletDefaultSettings();
     config.gender = gender;
     config.age = age;
@@ -70,9 +70,9 @@ function drawBulletWHR(value, gender, age, container){
     }
     config.standard = (gender == 1 ? 1 : 0.86);
     config.ylabel = "복부비만도(WHR)"
-    var bullet = loadBullet(container, value, config);
+    var bullet = loadBullet(container, value, state, config);
 }
-function drawBulletEnergy(value,  gender, age, container){
+function drawBulletEnergy(value, state,  gender, age, container){
     var config = bulletDefaultSettings();
     config.gender = gender;
     config.age = age;
@@ -104,7 +104,7 @@ function drawBulletEnergy(value,  gender, age, container){
     }
     var bullet = loadBullet(container, value, config);
 }
-function loadBullet(container, value, config){
+function loadBullet(container, value, state, config){
      if(config == null) config = bulletDefaultSettings();
 
     var containerRect = d3.select(container).node().getBoundingClientRect();
@@ -170,7 +170,7 @@ function loadBullet(container, value, config){
     tooltip.select(".text1")
         .text("나의 수치 : " + value)
     tooltip.select(".text2")
-        .text("상태 :" + "어떤지")
+        .text("상태 :" + state)
 
 }
 
