@@ -73,7 +73,7 @@ function check_buttons_event(flag){
     if(flag == 1){
         /* 일일체크 */
         addMessage('com','Medi-BOT','체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.');
-        $('#measureFrm').submit(function(e){
+        $('#measureFrm').submit(function(){
 
             alert("측정을 위한 ajax 통신 시작");
             $.ajax({
@@ -252,7 +252,7 @@ $(document).ready(function(){
     </div>
 </form>
 
-<form action="" method="post" name="measureFrm" id="measureFrm" enctype="multipart/form-data">
+<form action="" id="measureFrm" name="measureFrm" method="post" enctype="multipart/form-data">
     <input type="hidden" name="gender" value="{{ physical_report.gender }}">
     <input type="hidden" name="age" value="{{ physical_report.age }}" >
     <input type="hidden" name="stature" value="{{ physical_report.stature }}"/>
