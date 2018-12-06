@@ -36,7 +36,7 @@ def physical_update(request):
                 waist = float(request.POST['waist'])
                 hip = float(request.POST['hip'])
                 # 정보 업데이트
-                pi = PhysicalReport.objects.get(uid=request.user.pk)
+                pi = PhysicalReport.objects.filter(uid=request.user.pk)
                 if not pi:
                     pi.age = age
                     pi.gender = gender
@@ -50,7 +50,7 @@ def physical_update(request):
                                    stature=stature, weight=weight,
                                    waist=waist, hip=hip, pub_date=timezone.now()).save()
 
-                physical_info = PhysicalReport.objects.get(uid=request.user.pk)
+                physical_info = PhysicalReport.objects.filter(uid=request.user.pk)
                 return render(request, 'medibot/index.html', {"result": 1, "physical_report": physical_info})
         return render(request)
     else:
