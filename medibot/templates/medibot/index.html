@@ -31,13 +31,11 @@ $(document).ready(function(){
                 //유저 메세지 표시
             },
             success: function(response){
-                if(response.result == "1"){
-                    alert("신체정보 수정을 완료했습니다");
-                    $('.tb-base .update-text').hide();
-                    $('.tb-base .normal-text').show();
-                    $(this).hide();
-                    $('#btnUpdateMode').show();
-                }
+                alert("신체정보 수정을 완료했습니다");
+                $('.tb-base .update-text').hide();
+                $('.tb-base .normal-text').show();
+                $(this).hide();
+                $('#btnUpdateMode').show();
             },
             error: function(request, status, error) {
                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
