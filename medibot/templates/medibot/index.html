@@ -20,8 +20,8 @@ $(document).ready(function(){
         $('.tb-base .normal-text').hide();
     });
 
-    $('#btnNormalMode').on('click',function(){
-         e.preventDefault();
+    $('#btnNormalMode').on('click',function(e){
+        //e.preventDefault();
         $.ajax({
             type: 'POST',
             url:"/physical_update",
