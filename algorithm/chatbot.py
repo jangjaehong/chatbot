@@ -11,7 +11,7 @@ def _get_answer(question_msg):
     with tf.Session() as sess:
         model = Seq2Seq(mode='inference')
         model.build()
-        model.restore(sess, ckpt_path=ckpt_dir + f'/chat_model_{model.n_epoch}.ckpt')
+        model.restore(sess, ckpt_path=f'./algorithm/model/chat_model_{model.n_epoch}.ckpt')
         predict = model.prediction(sess, question_msg)
 
     answer = datautil.idx2sent_pad_removce(predict[0], vocab)

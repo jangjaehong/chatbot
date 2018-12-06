@@ -34,8 +34,8 @@ class Config:
     start_token = datautil.start_token
     end_token = datautil.end_token
 
-    ckpt_dir = './algorithm/model'
-
+    #ckpt_dir = './algorithm/model'
+    ckpt_dir = './model'
 
 class Seq2Seq:
     def __init__(self, mode):

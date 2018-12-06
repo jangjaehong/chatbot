@@ -35,10 +35,17 @@ def ajaxpost(request):
 
                 # 사용자 질의문에 대한 챗봇의 답변
                 reply = chatbot._get_answer(msg)
-                ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=reply, pub_date=timezone.now()).save()
+                funcIdx = reply.rfind('fn')
+                if funcIdx:
+                    answer = reply[:funcIdx]
+                    func = reply[funcIdx+4:].strip()
+                else:
+                    answer = reply
+                    func = ""
 
+                ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
                 # 답변 반환
-                context = [{'message': reply, 'name': 'Medi-BOT'}]
+                context = [{'message': answer, 'func': func, 'name': 'Medi-BOT'}]
                 return HttpResponse(json.dumps(context), content_type="application/json")
         return render(request)
     else:

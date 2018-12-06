@@ -39,8 +39,8 @@ class ChatTraining(object):
 
 def main(_):
     chat = ChatTraining()
-    #chat.training()
-    chat.inference()
+    chat.training()
+    #chat.inference()
 
 if __name__ == "__main__":
     tf.app.run()

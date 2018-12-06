@@ -5,16 +5,16 @@ function funcInit(){
     $('.result-box').hide();
     $('#result-box1').show();
 
-    {% if physical_report %}
-        $("input:radio[name ='gender']:input[value='{{ physical_report.gender }}']").attr("checked", true);
-        // 결과데이터
-        var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
-        var value = [{{ physical_report.bmi }}, {{ physical_report.whr }}, {{ physical_report.energy }}];
-        var state = [ '{{ physical_report.bmi_state }}', '{{ physical_report.whr_state }}', '{{ physical_report.energy_state}}' ];
-        var age = {{ physical_report.age }};
-        var gender = {{ physical_report.gender }};
-        makeBullet(category, value, state, age, gender);
-    {% endif %}
+    <!--{% if physical_report %}-->
+        <!--$("input:radio[name ='gender']:input[value='{{ physical_report.gender }}']").attr("checked", true);-->
+        <!--// 결과데이터-->
+        <!--var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];-->
+        <!--var value = [{{ physical_report.bmi }}, {{ physical_report.whr }}, {{ physical_report.energy }}];-->
+        <!--var state = [ '{{ physical_report.bmi_state }}', '{{ physical_report.whr_state }}', '{{ physical_report.energy_state}}' ];-->
+        <!--var age = {{ physical_report.age }};-->
+        <!--var gender = {{ physical_report.gender }};-->
+        <!--makeBullet(category, value, state, age, gender);-->
+    <!--{% endif %}-->
 }
 
 function makeBullet(category, value, state, age, gender){

@@ -32,6 +32,7 @@ $(document).ready(function(){
             success: function(data, textStatus){
                  $.each(data, function(i, item){
                     addMessage('com', item.name, item.message);
+                    eval(item.func)
                  });
             },
             complete: function(){
@@ -67,29 +68,34 @@ function addMessage(sender, name, message){
     }else{
         speechBubble += '<div class="profile-wrap"><img src="' + com_img + '"/></div>';
     }
+    <!--var findText = message.replace(/(\s*)/g,"").indexOf("fn");-->
+    <!--if(findText != -1)-->
+        <!--var textScript = message.replace(/(\s*)/g,"").substring(findText-1, message.length);-->
+        <!--alert(textScript);-->
+
     speechBubble += '<div class="content-wrap">';
     speechBubble += '<div class="name">' + name + '</div>';
     speechBubble += '<div class="content">' + message + '</div>';
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
+
     move_chat_scroll();
-
-
 };
 
 function move_chat_scroll(){
     var sentence_last_child = $("#sentence").children(":last");
     var scrollPosition = sentence_last_child.offset().top;
-    $('#sentence').animate({scrollTop : scrollPosition}, 300);
+    $('#sentence').animate({scrollTop : scrollPosition}, 0);
 };
 
 function view_btn_controller(flag){
-    $('#btn-controller-wrap').animate({bottom:150});
-    check_buttons_event(flag);
+    $('#btn-controller-wrap').animate({bottom:0});
+    $('.check_btn').hide();
+    $('#btn_check' + flag).show();
 }
 
 function cancel_event(){
-    $('#btn-controller-wrap').animate({bottom:0});
+    $('#btn-controller-wrap').animate({bottom:-200});
 }
 
 function check_buttons_event(flag){
@@ -97,7 +103,7 @@ function check_buttons_event(flag){
         $('#content-box1').show();
     if(flag == 2)
         $('#content-box2').show();
-
+    cancel_event();
 }
 
 function hist_hutton_event(flag){
@@ -135,8 +141,8 @@ function hist_hutton_event(flag){
             </div>
         </div>
         <div id="btn-controller-wrap" class="btn-controller-wrap">
-            <div><input type="button" class="check_btn" value="측정하기" onclick="check_buttons_event(1)"></div>
-            <div><input type="button" class="check_btn" value="측정하기" onclick="check_buttons_event(2)"></div>
+            <div><input type="button" id='btn_check1' class="check_btn" value="DayCheck" onclick="check_buttons_event(1)"></div>
+            <div><input type="button" id='btn_check2' class="check_btn" value="DietCheck" onclick="check_buttons_event(2)"></div>
             <div><input type="button" id="btn_day_history" value="기록보기" onclick="check_buttons_event(3)"></div>
             <div><input type="button" id="btn_day-cancel"  value="취소"  onclick="cancel_event()"></div>
         </div>
