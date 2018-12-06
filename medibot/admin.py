@@ -24,7 +24,7 @@ class MeasureAdmin(admin.ModelAdmin):
 
 class IntakeFoodAdmin(admin.ModelAdmin):
     list_display = ('uid', 'foodlist', 'energy', 'gram', 'kcal', 'carbohydrate', 'protein', 'fat',
-                    'sugars', 'salt', 'cholesterol', 'saturatedfat', 'transfat', '', 'pub_date')
+                    'sugars', 'salt', 'cholesterol', 'saturatedfat', 'transfat', 'pub_date')
 
 
 admin.site.register(ChatReport, ChatReportAdmin)
