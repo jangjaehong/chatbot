@@ -171,7 +171,6 @@ function loadBullet(container, value, state, config){
         .text("나의 수치 : " + value)
     tooltip.select(".text2")
         .text("상태 :" + state)
-
 }
 
 //꺽은선 그래프
