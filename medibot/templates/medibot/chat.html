@@ -1,11 +1,7 @@
 {% load staticfiles %}
 <script>
-function funcInit(){
-    // 최초 초기화
-    $('.result-box').hide();
-    $('#result-box1').show();
-}
 
+/* 그래프 호출 */
 function makeBullet(category, value, state, age, gender){
     $('#measure_date').html('최근 측정 날짜 : {{ physical_report.pub_date }}');
     for(var i = 0; i < 3; i++){
@@ -19,6 +15,7 @@ function makeBullet(category, value, state, age, gender){
     drawBulletWHR(value[1], state[1], gender, age, "div.bullet-container2");
     drawBulletEnergy(value[2], state[2], gender, age, "div.bullet-container3");
 }
+/* 메세지 채팅창에 추가 */
 function addMessage(sender, name, message){
     var user_img = "{% static 'medibot/img/icon/ic_user.png' %}";
     var com_img = "{% static 'medibot/img/icon/ic_com.png' %}";
@@ -37,23 +34,23 @@ function addMessage(sender, name, message){
 
     move_chat_scroll();
 };
-
+/* 채팅창 맨아래로 */
 function move_chat_scroll(){
     var sentence_last_child = $("#sentence").children(":last");
     var scrollPosition = sentence_last_child.offset().top;
     $('#sentence').animate({scrollTop : scrollPosition}, 0);
 };
-
+/* 채팅에 따른 버튼 보여주기 */
 function view_btn_controller(flag){
     $('#btn-controller-wrap').animate({bottom:0});
     $('.check_btn').hide();
     $('#btn_check' + flag).show();
 }
-
+/* 버튼 취소 */
 function cancel_event(){
     $('#btn-controller-wrap').animate({bottom:-200});
 }
-
+/* 기록 보기 */
 function hist_hutton_event(flag){
     $('.result-wrap').hide();
     $('.hist-wrap').show();
@@ -69,9 +66,9 @@ function hist_hutton_event(flag){
     $('#hist-type').val(flag);
     $('#histFrm').submit();
 }
-
-
+/* 일일체크 */
 function check_buttons_event(flag){
+    cancel_event();
     if(flag == 1)
         // 일일체크
         $('#physicalFrm').submit(function(e){
@@ -103,11 +100,12 @@ function check_buttons_event(flag){
         });
     if(flag == 2)
         $('#content-box2').show();
-
-    cancel_event();
 }
 
 $(document).ready(function(){
+    $('.result-box').hide();
+    $('#result-box1').show();
+    /* 채팅 초기화 */
     {% if chatreport %}
         {% for report in chatreport %}
             addMessage('{{ report.speaker }}','{{ report.username }}','{{ report.contents }}');
@@ -118,7 +116,7 @@ $(document).ready(function(){
     $('#chat-close').on('click',function(){
         $('#chatFrm').css('display','none');
     })
-
+    /* 채팅 입력 */
      $('#chatFrm').submit(function(e){
         /* 새로 고침 방지 */
         e.preventDefault();
@@ -213,34 +211,6 @@ $(document).ready(function(){
                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
-    });
-
-    $('input[name=reset]').on('click',function(){
-        var gubun = $(this).attr("id").replace('reset-btn','');
-        if(gubun == 1){
-            $('#physicalFrm input[type=number]').val('');
-        }else if(gubun == 2){
-            $("#sel_food_list").html(table_base_info);
-            $("#fcount").val(0);
-        }
-    });
-
-    $('input[name=measure]').on('click',function(){
-        $('.result-wrap').show();
-        $('.hist-wrap').hide();
-        $('.result-box').hide();
-
-        var gubun = $(this).attr("id").replace('measure-btn','');
-        $('#result-box' + gubun).empty();
-        $('#result-box' + gubun).show();
-
-
-        if(gubun == 1){
-            $('#physicalFrm').submit();
-        }else{
-            $('#foodFrm').submit();
-        }
-        $('.contents-box').hide();
     });
 
     // 결과창 메뉴 이벤트
