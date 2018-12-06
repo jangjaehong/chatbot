@@ -37,7 +37,7 @@ def physical_update(request):
                 hip = float(request.POST['hip'])
                 # 정보 업데이트
                 pi = PhysicalReport.objects.filter(uid=request.user.pk)
-                if not pi:
+                if pi:
                     pi.age = age
                     pi.gender = gender
                     pi.stature = stature
