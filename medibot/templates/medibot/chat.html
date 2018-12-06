@@ -71,10 +71,11 @@ function hist_hutton_event(flag){
 function check_buttons_event(flag){
     cancel_event();
     if(flag == 1){
-    /* 일일체크 */
-        addMessage('com','Medi-BOT',"체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.");
+        /* 일일체크 */
+        addMessage('com','Medi-BOT','체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.');
         $('#measureFrm').submit(function(e){
             //e.preventDefault();
+            alert("측정을 위한 ajax 통신 시작");
             $.ajax({
                 type: 'POST',
                 url:"/day_measure",
