@@ -14,6 +14,8 @@
 <script>
 $(document).ready(function(){
     $('#btnUpdateMode').on('click',function(){
+        $(this).hide();
+        $('#btnNormalMode').show();
         $('.tb-base .update-text').show();
         $('.tb-base .normal-text').hide();
     });
@@ -31,6 +33,8 @@ $(document).ready(function(){
             success: function(response){
                 $('.tb-base .update-text').hide();
                 $('.tb-base .normal-text').show();
+                $(this).hide();
+                $('#btnUpdateMode').show();
             },
             error: function(request, status, error) {
                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
