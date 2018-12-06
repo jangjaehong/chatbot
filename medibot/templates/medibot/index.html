@@ -14,8 +14,8 @@
 <script>
 $(document).ready(function(){
     $('#btnUpdateMode').on('click',function(){
-        $('.tb-base .update-text').hide();
-        $('.tb-base .normal-text').show();
+        $('.tb-base .update-text').show();
+        $('.tb-base .normal-text').hide();
     });
 
     $('#btnNormalMode').on('click',function(){
@@ -29,8 +29,8 @@ $(document).ready(function(){
                 //유저 메세지 표시
             },
             success: function(response){
-                $('.tb-base .update-text').show();
-                $('.tb-base .normal-text').hide();
+                $('.tb-base .update-text').hide();
+                $('.tb-base .normal-text').show();
             },
             error: function(request, status, error) {
                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
