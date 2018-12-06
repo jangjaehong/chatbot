@@ -38,6 +38,7 @@ function addMessage(sender, name, message){
 function move_chat_scroll(){
     var sentence_last_child = $("#sentence").children(":last");
     var scrollPosition = sentence_last_child.offset().top;
+    alert(scrollPosition);
     $('#sentence').animate({scrollTop : scrollPosition}, 0);
 };
 /* 채팅에 따른 버튼 보여주기 */
@@ -68,10 +69,10 @@ function hist_hutton_event(flag){
 }
 /* 일일체크 */
 function check_buttons_event(flag){
-
     cancel_event();
     if(flag == 1){
         // 일일체크
+        addMessage('com','Medi-BOT',"체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.");
         $('#physicalFrm').submit(function(e){
             e.preventDefault();
             $.ajax({
@@ -81,7 +82,6 @@ function check_buttons_event(flag){
                 data: $('#physicalFrm').serialize(),
                 beforeSend: function(){
                     //유저 메세지 표시
-                    addMessage('com','Medi-BOT',"체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.");
                 },
                 success: function(response){
                     // 결과데이터
