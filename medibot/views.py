@@ -207,12 +207,8 @@ def dayMeasure(request):
                 whr_result, whr_state = calc.whr(gender, waist, hip)
                 energy_result, energy_state = calc.energy(gender, age, stature, weight)
                 # 기록 DB 저장
-                PhysicalReport(uid=uid, age=age, gender=gender,
-                               stature=stature, weight=weight,
-                               waist=waist, hip=hip,
-                               bmi=bmi_result, bmi_state=bmi_state,
-                               whr=whr_result, whr_state=whr_state,
-                               energy=energy_result, energy_state=energy_state, pub_date=timezone.now()).save()
+                MeasureReport(uid=uid, bmi=bmi_result, bmi_state=bmi_state, whr=whr_result, whr_state=whr_state,
+                              energy=energy_result, energy_state=energy_state, pub_date=timezone.now()).save()
                 # 리턴값
                 context = {'bmi': bmi_result, 'bmi_state': bmi_state,
                            'whr': whr_result, 'whr_state': whr_state,
