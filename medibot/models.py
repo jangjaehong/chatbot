@@ -45,6 +45,15 @@ class PhysicalReport(models.Model):
     weight = models.FloatField(null=False, default=0.0)
     waist = models.FloatField(null=False, default=0.0)
     hip = models.FloatField(null=False, default=0.0)
+    pub_date = models.DateTimeField('등록일', default=timezone.now)
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name_plural = "신체정보"
+
+
+class MeasureReport(models.Model):
+    uid = models.IntegerField(null=False, default=0)
     bmi = models.FloatField(null=False, default=0.0)
     bmi_state = models.CharField(max_length=10, null=False, default='')
     whr = models.FloatField(null=False, default=0.0)
@@ -55,7 +64,7 @@ class PhysicalReport(models.Model):
     objects = models.Manager()
 
     class Meta:
-        verbose_name_plural = "일일체크"
+        verbose_name_plural = "측정기록"
 
 
 class IntakeFoodReport(models.Model):
