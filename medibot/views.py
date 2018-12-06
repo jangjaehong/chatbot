@@ -106,11 +106,54 @@ class Calc:
 
     def energy(self, gender, age, stature, weight):
         energy_result = 0.0
+        energy_state = '?'
         if gender == 1:
             energy_result = (66.47 + (13.75 * weight) + (5 * stature) - (6.76 * age))
+            if age >=20 or age <= 29:
+                if energy_result >= 1359.8 or energy_result < 1728:
+                    energy_state = 'low'
+                elif energy_result >= 1728 or energy_result <= 2096.2:
+                    energy_state = 'normal'
+                elif energy_result > 2096.2:
+                    energy_result = 'height'
+            if age >= 30 or age <= 49:
+                if energy_result >= 1367.4 or energy_result < 1669.5:
+                    energy_state = 'low'
+                elif energy_result >= 1669.5 or energy_result <= 1971.6:
+                    energy_state = 'normal'
+                elif energy_result > 1971.6:
+                    energy_state = 'height'
+            if age >= 50:
+                if energy_result >= 1178.5 or energy_result < 1493.8:
+                    energy_state = 'low'
+                elif energy_result >= 1493.8 or energy_result <= 1809.1:
+                    energy_state = 'normal'
+                elif energy_result > 1809.1:
+                    energy_state = 'height'
         else:
             energy_result = (65.51 + (9.56 * weight) + (1.85 * stature) - (4.68 * age))
-        return energy_result
+            if age >=20 or age <= 29:
+                if energy_result >= 1078.5 or energy_result < 1311.5:
+                    energy_state = 'low'
+                elif energy_result >= 1311.5 or energy_result <= 1544.5:
+                    energy_state = 'normal'
+                elif energy_result > 1544.5:
+                    energy_result = 'height'
+            if age >= 30 or age <= 49:
+                if energy_result >= 1090.9 or energy_result < 1316.8:
+                    energy_state = 'low'
+                elif energy_result >= 1316.8 or energy_result <= 1542.7:
+                    energy_state = 'normal'
+                elif energy_result > 1542.7:
+                    energy_state = 'height'
+            if age >= 50:
+                if energy_result >= 1023.9 or energy_result < 1252.5:
+                    energy_state = 'low'
+                elif energy_result >= 1252.5 or energy_result <= 1481.1:
+                    energy_state = 'normal'
+                elif energy_result > 1481.1:
+                    energy_state = 'height'
+        return energy_result, energy_state
 
 
 def physical(request):
@@ -129,18 +172,18 @@ def physical(request):
                 calc = Calc()
                 bmi_result, bmi_state = calc.bmi(stature, weight)
                 whr_result, whr_state = calc.whr(gender, waist, hip)
-                energy = calc.energy(gender, age, stature, weight)
+                energy_result, energy_state = calc.energy(gender, age, stature, weight)
                 # 기록 DB 저장
                 PhysicalReport(uid=uid, age=age, gender=gender,
                                stature=stature, weight=weight,
                                waist=waist, hip=hip,
                                bmi=bmi_result, bmi_state=bmi_state,
                                whr=whr_result, whr_state=whr_state,
-                               energy=energy, energy_state="", pub_date=timezone.now()).save()
+                               energy=energy_result, energy_state=energy_state, pub_date=timezone.now()).save()
                 # 리턴값
                 context = {'bmi': bmi_result, 'bmi_state': bmi_state,
                            'whr': whr_result, 'whr_state': whr_state,
-                           'energy': energy, 'energy_state': "평균",
+                           'energy': energy_result, 'energy_state': energy_state,
                            'age': age, 'gender': gender}
                 return HttpResponse(json.dumps(context), content_type="application/json")
         else:
