@@ -17,8 +17,7 @@ def test(request):
 def index(request):
     if request.user.is_authenticated:
         chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-        physical_report = PhysicalReport.objects.filter(uid=request.user.pk).order_by('pub_date')[:1]
-
+        physical_report = PhysicalReport.objects.get(uid=request.user.pk)
         return render(request, 'medibot/index.html', {"chatreport": chatreport, "physical_report": physical_report})
     else:
         return redirect(reverse('accounts:login'))
@@ -50,8 +49,9 @@ def physical_update(request):
                                    stature=stature, weight=weight,
                                    waist=waist, hip=hip, pub_date=timezone.now()).save()
                 physical_info = PhysicalReport.objects.get(uid=request.user.pk)
-                context = [{'result': 1, "physical_report": physical_info}]
-                return HttpResponse(json.dumps(context), content_type="application/json")
+                return render(request, 'medibot/index.html', {"result": 1, "physical_report": physical_info})
+                #context = [{'result': 1, "physical_report": physical_info}]
+                #return HttpResponse(json.dumps(context), content_type="application/json")
         return render(request)
     else:
         return redirect(reverse('accounts:login'))
