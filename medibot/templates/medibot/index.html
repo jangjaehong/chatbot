@@ -83,8 +83,10 @@ $(document).ready(function(){
                         <input type="radio" id="gender2" name="gender" value="2">여
                     </td>
                     <td class="normal-text">
-                        {% if physical_report.gender==1 %}남
-                        {% else %}여
+                        {% if physical_report.gender == "1" %}
+                            남
+                        {% else %}
+                            여
                         {% endif %}
                     </td>
                 </tr>
