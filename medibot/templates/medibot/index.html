@@ -82,7 +82,11 @@ $(document).ready(function(){
                         <input type="radio" id="gender1" name="gender" value="1" checked="checked">남
                         <input type="radio" id="gender2" name="gender" value="2">여
                     </td>
-                    <td class="normal-text">{{ physical_report.gender }}</td>
+                    <td class="normal-text">
+                        {% if physical_report.gender==1 %}남
+                        {% else %}여
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <th><label for="age">나이 : </label></th>
