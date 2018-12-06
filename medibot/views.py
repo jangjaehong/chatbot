@@ -189,10 +189,11 @@ class Calc:
         return energy_result, energy_state
 
 
-def dayMeasure(request):
+def day_measure(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
+                print("측정시작")
                 uid = request.user.pk
                 age = int(request.POST['age'])
                 gender = int(request.POST['gender'])

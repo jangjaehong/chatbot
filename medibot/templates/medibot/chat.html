@@ -38,7 +38,7 @@ function addMessage(sender, name, message){
 function move_chat_scroll(){
     var sentence_last_child = $("#sentence").children(":last");
     var scrollPosition = sentence_last_child.offset().top;
-    alert(scrollPosition);
+    //alert(scrollPosition);
     $('#sentence').animate({scrollTop : scrollPosition}, 0);
 };
 /* 채팅에 따른 버튼 보여주기 */
@@ -74,7 +74,7 @@ function check_buttons_event(flag){
     if(flag == 1){
         // 일일체크
         addMessage('com','Medi-BOT',"체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.");
-        $('#physicalFrm').submit(function(e){
+        $('#measureFrm').submit(function(e){
             e.preventDefault();
             $.ajax({
                 type: 'POST',
@@ -254,8 +254,18 @@ $(document).ready(function(){
         </div>
     </div>
 </form>
+
+<form action="" method="post" name="measureFrm" id="measureFrm" enctype="multipart/form-data">
+    <input type="hidden" name="gender" value="2">여
+    <input type="hidden" name="age" value="{{ physical_report.age }}" >
+    <input type="hidden" name="stature" value="{{ physical_report.stature }}"/>
+    <input type="hidden" name="weight" value="{{ physical_report.weight }}"/>
+    <input type="hidden" name="waist" value="{{ physical_report.waist }}">
+    <input type="hidden" name="hip" value="{{ physical_report.hip }}">
+</form>
+
 <!-- 기록보기 -->
-<form action="" id="histFrm" name="physicalFrm" method="post"  enctype="multipart/form-data">
+<form action="" id="histFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
     <input type="hidden" id="hist-term" name="term" value="7" />
     <input type="hidden" id="hist-type" name="type" value="1" />
     <input type="hidden" id="hist-gubun" name="gubun" value="1" />
