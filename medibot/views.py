@@ -43,7 +43,8 @@ def physical_update(request):
                 pi.waist = waist
                 pi.hip = hip
                 pi.save()
-            return render(request, 'medibot/index.html', {"result": 1})
+                physical_info = PhysicalReport.objects.get(uid=request.user.pk)
+                return render(request, 'medibot/index.html', {"result": 1, "physical_report": physical_info})
         return render(request)
     else:
         return redirect(reverse('accounts:login'))
