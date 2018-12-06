@@ -71,7 +71,7 @@ nav > .nav-menu li.menu-tit{
 
 /* 콘텐츠*/
 section{
-   width: 70%;
+   width: 75%;
     height: calc(100% - 42px);
     position: relative;
 }
@@ -88,7 +88,7 @@ section > article{
 
 /* 우측 콘텐츠 */
 aside{
-    width: 28%;
+    width: 25%;
     height:calc(98% - 72px);
     padding: 1%;
     position: fixed;
