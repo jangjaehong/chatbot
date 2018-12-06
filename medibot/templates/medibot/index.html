@@ -65,10 +65,8 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
-
-<!-- 측정결과 표시 -->
-<div class="result-wrap">
-    <div class="physical-box">
+<!-- 유저 정보 -->
+<div class="physical-box">
         <form action="" id="physicalFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <table class="tb-base">
@@ -126,6 +124,8 @@ $(document).ready(function(){
             </table>
         </form>
     </div>
+<!-- 측정결과 표시 -->
+<div class="result-wrap">
     <!-- 일일체크 측정결과 표시 -->
     <div class="result-box" id="result-box1">
         <div class="pub_date" id="measure_date"></div>
