@@ -73,32 +73,7 @@ function check_buttons_event(flag){
     if(flag == 1){
         /* 일일체크 */
         addMessage('com','Medi-BOT','체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.');
-        $('#measureFrm').submit(function(){
-            alert("측정을 위한 ajax 통신 시작");
-            $.ajax({
-                type: 'POST',
-                url:"/day_measure",
-                dataType: 'json',
-                data: $('#measureFrm').serialize(),
-                beforeSend: function(){
-                    //유저 메세지 표시
-                },
-                success: function(response){
-                    // 결과데이터
-                    var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
-                    var value = [response.bmi,  response.whr, response.energy];
-                    var state = [response.bmi_state, response.whr_state, response.energy_state];
-                    var age = response.age;
-                    var gender = response.gender;
-                    // 결과 표시
-                    makeBullet(category, value, state, age, gender);
-                },
-                error: function(request, status, error) {
-                   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-                }
-            });
-            return false;
-        });
+        $('#measureFrm').submit();
     }
     if(flag == 2){
         $('#content-box2').show();
@@ -165,6 +140,33 @@ $(document).ready(function(){
         });
         return false;
     });
+    $('#measureFrm').submit(function(){
+        alert("측정을 위한 ajax 통신 시작");
+        $.ajax({
+            type: 'POST',
+            url:"/day_measure",
+            dataType: 'json',
+            data: $('#measureFrm').serialize(),
+            beforeSend: function(){
+                //유저 메세지 표시
+            },
+            success: function(response){
+                // 결과데이터
+                var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
+                var value = [response.bmi,  response.whr, response.energy];
+                var state = [response.bmi_state, response.whr_state, response.energy_state];
+                var age = response.age;
+                var gender = response.gender;
+                // 결과 표시
+                makeBullet(category, value, state, age, gender);
+            },
+            error: function(request, status, error) {
+               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+        return false;
+    });
+
     // 기록보기
     $('#histFrm').submit(function(e){
         var gubun = $('#hist-gubun').val();
