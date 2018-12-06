@@ -54,6 +54,23 @@ function cancel_event(){
     $('#btn-controller-wrap').animate({bottom:-200});
 }
 
+function hist_hutton_event(flag){
+    $('.result-wrap').hide();
+    $('.hist-wrap').show();
+
+    $('#hist-box' + flag).empty();
+    $('#hist-box' + flag).show();
+
+    if(flag == 1){
+        $('.hist-menu').show();
+    }else{
+        $('.hist-menu').hide();
+    }
+    $('#hist-type').val(flag);
+    $('#histFrm').submit();
+}
+
+
 function check_buttons_event(flag){
     if(flag == 1)
         // 일일체크
@@ -66,6 +83,7 @@ function check_buttons_event(flag){
                 data: $('#physicalFrm').serialize(),
                 beforeSend: function(){
                     //유저 메세지 표시
+                    addMessage('com','Medi-BOT',"체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.");
                 },
                 success: function(response){
                     // 결과데이터
@@ -85,25 +103,9 @@ function check_buttons_event(flag){
         });
     if(flag == 2)
         $('#content-box2').show();
+
     cancel_event();
 }
-
-function hist_hutton_event(flag){
-    $('.result-wrap').hide();
-    $('.hist-wrap').show();
-
-    $('#hist-box' + flag).empty();
-    $('#hist-box' + flag).show();
-
-    if(flag == 1){
-        $('.hist-menu').show();
-    }else{
-        $('.hist-menu').hide();
-    }
-    $('#hist-type').val(flag);
-    $('#histFrm').submit();
-}
-
 
 $(document).ready(function(){
     {% if chatreport %}
