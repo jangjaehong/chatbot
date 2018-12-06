@@ -62,10 +62,10 @@ ul.row_menu li:last-child{border-right:1px solid #555555;}
 .result-wrap > .physical-box .tb-base .update-text,
 .result-wrap > .physical-box .tb-base .btn-physical-up{display:none}
 .result-wrap > .physical-box .tb-base th{text-align:left}
-.result-wrap > .physical-box .tb-base td input[type=number]{width:85%;padding:0 10px 0 0;margin-bottom:10px;background:transparent;border-bottom:1px solid #555555;font-weight:bold;font-size:1.1em;color:#fff}
+.result-wrap > .physical-box .tb-base td input[type=number]{width:85%;padding:0 10px 0 0;margin-bottom:10px;background:transparent;border-bottom:1px solid #555555;font-weight:bold;font-size:1.1em;color:#333333}
 .result-wrap > .physical-box .tb-base td input[type=number]:focus{border-bottom-color:#368AFF;}
 
-.result-wrap > .result-box{width:calc(30% - 80px);height:auto;position:absolute;left:30%;margin:0 10px;box-shadow:3px 3px 3px 3px #222222;padding:20px;position:relative;display:none;float:left}
+.result-wrap > .result-box{width:calc(30% - 80px);height:200px;margin:0 10px;box-shadow:3px 3px 3px 3px #222222;padding:5px;position:absolute;left:30%;}
 .result-wrap #result-box1{top:10px}
 .result-wrap #result-box2{top:298px}
 .result-wrap #result-box2{top:586px}
