@@ -19,10 +19,26 @@ $(document).ready(function(){
     });
 
     $('#btnNormalMode').on('click',function(){
+         e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url:"/physical_update",
+            dataType: 'json',
+            data: $('#physicalFrm').serialize(),
+            beforeSend: function(){
+                //유저 메세지 표시
+            },
+            success: function(response){
+                $('.tb-base .update-text').show();
+                $('.tb-base .normal-text').hide();
+            },
+            error: function(request, status, error) {
+               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+        return false;
 
 
-        $('.tb-base .update-text').show();
-        $('.tb-base .normal-text').hide();
     });
 }
 </script>
@@ -127,7 +143,6 @@ $(document).ready(function(){
 <!-- 입력창 -->
 <div class="contents_wrap">
     {% include 'medibot/chat.html' %}
-    {% include 'medibot/day_check.html' %}
     {% include 'medibot/diet_check.html' %}
 </div>
 {% endblock input %}

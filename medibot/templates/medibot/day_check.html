@@ -39,7 +39,7 @@ $(document).ready(function(){
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url:"/physical",
+            url:"/dayMeasure",
             dataType: 'json',
             data: $('#physicalFrm').serialize(),
             beforeSend: function(){

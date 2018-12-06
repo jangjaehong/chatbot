@@ -45,7 +45,7 @@ class PhysicalReport(models.Model):
     weight = models.FloatField(null=False, default=0.0)
     waist = models.FloatField(null=False, default=0.0)
     hip = models.FloatField(null=False, default=0.0)
-    pub_date = models.DateTimeField('등록일', default=timezone.now)
+    pub_date = models.DateTimeField('등록일', default='1900-01-01')
     objects = models.Manager()
 
     class Meta:

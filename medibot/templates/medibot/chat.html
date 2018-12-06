@@ -1,5 +1,115 @@
 {% load staticfiles %}
 <script>
+function funcInit(){
+    // 최초 초기화
+    $('.result-box').hide();
+    $('#result-box1').show();
+}
+
+function makeBullet(category, value, state, age, gender){
+    $('#measure_date').html('최근 측정 날짜 : {{ physical_report.pub_date }}');
+    for(var i = 0; i < 3; i++){
+        var container = $("#empty-result-container").clone().show().attr("id","");
+        container.find(".title").html(category[i])
+        container.find(".text-info").html("<p>" + category[i] + ": " + value[i] + "로 " + state[i] + "입니다.</p>");
+        container.find(".container").addClass("bullet-container").addClass("bullet-container" + (i + 1));
+        $('#result-box1').append(container);
+    }
+    drawBulletBMI(value[0], state[0], "div.bullet-container1");
+    drawBulletWHR(value[1], state[1], gender, age, "div.bullet-container2");
+    drawBulletEnergy(value[2], state[2], gender, age, "div.bullet-container3");
+}
+function addMessage(sender, name, message){
+    var user_img = "{% static 'medibot/img/icon/ic_user.png' %}";
+    var com_img = "{% static 'medibot/img/icon/ic_com.png' %}";
+
+    var speechBubble = '<div class="msg-box ' + sender + ' mb_15">';
+    if( sender == 'user'){
+        speechBubble += '<div class="profile-wrap"><img src="' + user_img + '"/></div>';
+    }else{
+        speechBubble += '<div class="profile-wrap"><img src="' + com_img + '"/></div>';
+    }
+    <!--var findText = message.replace(/(\s*)/g,"").indexOf("fn");-->
+    <!--if(findText != -1)-->
+        <!--var textScript = message.replace(/(\s*)/g,"").substring(findText-1, message.length);-->
+        <!--alert(textScript);-->
+
+    speechBubble += '<div class="content-wrap">';
+    speechBubble += '<div class="name">' + name + '</div>';
+    speechBubble += '<div class="content">' + message + '</div>';
+    speechBubble += '</div>';
+    $('#sentence').append(speechBubble);
+
+    move_chat_scroll();
+};
+
+function move_chat_scroll(){
+    var sentence_last_child = $("#sentence").children(":last");
+    var scrollPosition = sentence_last_child.offset().top;
+    $('#sentence').animate({scrollTop : scrollPosition}, 0);
+};
+
+function view_btn_controller(flag){
+    $('#btn-controller-wrap').animate({bottom:0});
+    $('.check_btn').hide();
+    $('#btn_check' + flag).show();
+}
+
+function cancel_event(){
+    $('#btn-controller-wrap').animate({bottom:-200});
+}
+
+function check_buttons_event(flag){
+    if(flag == 1)
+        // 일일체크
+        $('#physicalFrm').submit(function(e){
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url:"/dayMeasure",
+                dataType: 'json',
+                data: $('#physicalFrm').serialize(),
+                beforeSend: function(){
+                    //유저 메세지 표시
+                },
+                success: function(response){
+                    // 결과데이터
+                    var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
+                    var value = [response.bmi,  response.whr, response.energy];
+                    var state = [response.bmi_state, response.whr_state, response.energy_state];
+                    var age = response.age;
+                    var gender = response.gender;
+                    // 결과 표시
+                    makeBullet(category, value, state, age, gender);
+                },
+                error: function(request, status, error) {
+                   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+            return false;
+        });
+    if(flag == 2)
+        $('#content-box2').show();
+    cancel_event();
+}
+
+function hist_hutton_event(flag){
+    $('.result-wrap').hide();
+    $('.hist-wrap').show();
+
+    $('#hist-box' + flag).empty();
+    $('#hist-box' + flag).show();
+
+    if(flag == 1){
+        $('.hist-menu').show();
+    }else{
+        $('.hist-menu').hide();
+    }
+    $('#hist-type').val(flag);
+    $('#histFrm').submit();
+}
+
+
 $(document).ready(function(){
     {% if chatreport %}
         {% for report in chatreport %}
@@ -59,70 +169,93 @@ $(document).ready(function(){
             return false;
         }
     });
+
+    // 기록보기
+    $('#histFrm').submit(function(e){
+        var gubun = $('#hist-gubun').val();
+        var type = $('#hist-type').val();
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url:"/hist",
+            dataType: 'json',
+            data: $('#histFrm').serialize(),
+            beforeSend: function(){
+                //유저 메세지 표시
+            },
+            success: function(data){
+                if(data.length == 0){
+                    if(type == "1")
+                        alert("기록이 없습니다. 먼저 일일체크 측정을 해보시기 바랍니다.");
+                    if(type == "2")
+                        alert("기록이 없습니다. 먼저 식단체크 측정을 해보시기 바랍니다.");
+                }else{
+                    var resultBox = $('#empty-result-container').clone().show().attr("id","");
+                    resultBox.find('.title').remove();
+                    resultBox.find('.text-info').remove();
+                    resultBox.find('.container').addClass('hist-container').addClass('hist-container' + type);
+                    if(type == 1){
+                        $('#hist-box1').append(resultBox);
+                        if(gubun == 1) {
+                            drawCurveBMI(data, 'div.hist-container' + type);
+                        }
+                        else if(gubun == 2){
+                            drawCurveWHR(data, 'div.hist-container' + type, data[data.length-1].gender);
+                        }
+                        else if(gubun == 3){
+                            drawCurveEnergy(data, 'div.hist-container' + type, data[data.length-1].gender, data[data.length-1].age);
+                        }
+                    }
+                    if(type == 2){
+                        $('#hist-box2').append(resultBox);
+                        drawCurveChart(data, 'div.hist-container' + type);
+                    }
+                }
+            },
+            error: function(request, status, error) {
+               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    });
+
+    $('input[name=reset]').on('click',function(){
+        var gubun = $(this).attr("id").replace('reset-btn','');
+        if(gubun == 1){
+            $('#physicalFrm input[type=number]').val('');
+        }else if(gubun == 2){
+            $("#sel_food_list").html(table_base_info);
+            $("#fcount").val(0);
+        }
+    });
+
+    $('input[name=measure]').on('click',function(){
+        $('.result-wrap').show();
+        $('.hist-wrap').hide();
+        $('.result-box').hide();
+
+        var gubun = $(this).attr("id").replace('measure-btn','');
+        $('#result-box' + gubun).empty();
+        $('#result-box' + gubun).show();
+
+
+        if(gubun == 1){
+            $('#physicalFrm').submit();
+        }else{
+            $('#foodFrm').submit();
+        }
+        $('.contents-box').hide();
+    });
+
+    // 결과창 메뉴 이벤트
+    $('#hist-menu li').on('click',function(){
+        var gubun = $(this).attr('id').replace('hist','');
+        $('#hist-menu li').removeClass('on');
+        $(this).addClass('on')
+
+        $('#hist-gubun').val(gubun);
+        $('#histFrm').submit();
+    });
 });
-function addMessage(sender, name, message){
-    var user_img = "{% static 'medibot/img/icon/ic_user.png' %}";
-    var com_img = "{% static 'medibot/img/icon/ic_com.png' %}";
-
-    var speechBubble = '<div class="msg-box ' + sender + ' mb_15">';
-    if( sender == 'user'){
-        speechBubble += '<div class="profile-wrap"><img src="' + user_img + '"/></div>';
-    }else{
-        speechBubble += '<div class="profile-wrap"><img src="' + com_img + '"/></div>';
-    }
-    <!--var findText = message.replace(/(\s*)/g,"").indexOf("fn");-->
-    <!--if(findText != -1)-->
-        <!--var textScript = message.replace(/(\s*)/g,"").substring(findText-1, message.length);-->
-        <!--alert(textScript);-->
-
-    speechBubble += '<div class="content-wrap">';
-    speechBubble += '<div class="name">' + name + '</div>';
-    speechBubble += '<div class="content">' + message + '</div>';
-    speechBubble += '</div>';
-    $('#sentence').append(speechBubble);
-
-    move_chat_scroll();
-};
-
-function move_chat_scroll(){
-    var sentence_last_child = $("#sentence").children(":last");
-    var scrollPosition = sentence_last_child.offset().top;
-    $('#sentence').animate({scrollTop : scrollPosition}, 0);
-};
-
-function view_btn_controller(flag){
-    $('#btn-controller-wrap').animate({bottom:0});
-    $('.check_btn').hide();
-    $('#btn_check' + flag).show();
-}
-
-function cancel_event(){
-    $('#btn-controller-wrap').animate({bottom:-200});
-}
-
-function check_buttons_event(flag){
-    if(flag == 1)
-        $('#content-box1').show();
-    if(flag == 2)
-        $('#content-box2').show();
-    cancel_event();
-}
-
-function hist_hutton_event(flag){
-    $('.result-wrap').hide();
-    $('.hist-wrap').show();
-
-    $('#hist-box' + flag).empty();
-    $('#hist-box' + flag).show();
-
-    if(flag == 1){
-        $('.hist-menu').show();
-    }else{
-        $('.hist-menu').hide();
-    }
-    $('#hist-type').val(flag);
-    $('#histFrm').submit();
-}
 </script>
 <!-- chatting -->
 <form action="" method="post" name="chatFrm" id="chatFrm">

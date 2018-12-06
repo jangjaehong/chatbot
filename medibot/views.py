@@ -24,31 +24,26 @@ def index(request):
         return redirect(reverse('accounts:login'))
 
 
-def physical_info(request):
+def physical_update(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
-                uid = request.user.pk
                 age = int(request.POST['age'])
                 gender = int(request.POST['gender'])
                 stature = float(request.POST['stature'])
                 weight = float(request.POST['weight'])
                 waist = float(request.POST['waist'])
                 hip = float(request.POST['hip'])
-
-                # bmi 계산
-                calc = Calc()
-                bmi_result, bmi_state = calc.bmi(stature, weight)
-                whr_result, whr_state = calc.whr(gender, waist, hip)
-                energy_result, energy_state = calc.energy(gender, age, stature, weight)
-                # 기록 DB 저장
-                PhysicalReport(uid=uid, age=age, gender=gender,
-                               stature=stature, weight=weight,
-                               waist=waist, hip=hip,
-                               bmi=bmi_result, bmi_state=bmi_state,
-                               whr=whr_result, whr_state=whr_state,
-                               energy=energy_result, energy_state=energy_state, pub_date=timezone.now()).save()
-            #return HttpResponse(json.dumps(context), content_type="application/json")
+                # 정보 업데이트
+                pi = PhysicalReport.objects.get(uid=request.user.pk)
+                pi.age = age
+                pi.gender = gender
+                pi.stature = stature
+                pi.weight = weight
+                pi.waist = waist
+                pi.hip = hip
+                pi.save()
+            return render(request, 'medibot/index.html', {"result": 1})
         return render(request)
     else:
         return redirect(reverse('accounts:login'))
@@ -186,7 +181,7 @@ class Calc:
         return energy_result, energy_state
 
 
-def physical(request):
+def dayMeasure(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
