@@ -21,27 +21,29 @@ $(document).ready(function(){
     });
 
     $('#btnNormalMode').on('click',function(e){
-        //e.preventDefault();
-        $.ajax({
-            type: 'POST',
-            url:"/physical_update",
-            dataType: 'text',
-            data: $('#physicalFrm').serialize(),
-            beforeSend: function(){
-                //유저 메세지 표시
-            },
-            success: function(response){
-                alert("신체정보 수정을 완료했습니다");
-                $('.tb-base .update-text').hide();
-                $('.tb-base .normal-text').show();
-                $(this).hide();
-                $('#btnUpdateMode').show();
-            },
-            error: function(request, status, error) {
-               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-            }
+        $('#physicalFrm').submit(function(){
+            //e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url:"/physical_update",
+                dataType: 'text',
+                data: $('#physicalFrm').serialize(),
+                beforeSend: function(){
+                    //유저 메세지 표시
+                },
+                success: function(response){
+                    alert("신체정보 수정을 완료했습니다");
+                    $('.tb-base .update-text').hide();
+                    $('.tb-base .normal-text').show();
+                    $(this).hide();
+                    $('#btnUpdateMode').show();
+                },
+                error: function(request, status, error) {
+                   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+            return false;
         });
-        return false;
     });
 })
 </script>
