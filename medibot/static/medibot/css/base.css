@@ -1,8 +1,8 @@
 @charset "utf-8";
 body{
-    width: calc(100% - 72px);
-    height: calc(100% - 40px);
-    padding: 52px 20px 20px 20px;
+    width: 100%;
+    height: calc(100% - 52px);
+    padding-top:52px;
     display:flex;
     overflow-x:hidden;
     overflow-y:hidden;
