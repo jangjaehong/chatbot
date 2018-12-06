@@ -69,13 +69,12 @@ function hist_hutton_event(flag){
 }
 /* 일일체크 */
 function check_buttons_event(flag){
-    alert(flag);
     cancel_event();
     if(flag == 1){
-        // 일일체크
+    /* 일일체크 */
         addMessage('com','Medi-BOT',"체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.");
         $('#measureFrm').submit(function(e){
-            e.preventDefault();
+            //e.preventDefault();
             $.ajax({
                 type: 'POST',
                 url:"/day_measure",
@@ -117,9 +116,22 @@ $(document).ready(function(){
     {% else %}
         addMessage('com','Medi-BOT',"안녕하세요!!! 저는 메디봇이라고 해요~ '도움말'이라고 입력하시면 사용법을 알려드릴게요");
     {% endif %}
-    $('#chat-close').on('click',function(){
-        $('#chatFrm').css('display','none');
-    })
+
+    /* 입력 버튼 이벤트 */
+    $('#input_message').on('keydown', function(e){
+        if(e.keyCode == 13){
+            if(e.shiftKey == true){
+                var tmp = $('#input_message').val();
+                tmp = tmp + "\n";
+                $('#input_message').val(tmp)
+            }else{
+                $('#chatFrm').submit();
+                move_chat_scroll();
+            }
+
+            return false;
+        }
+    });
     /* 채팅 입력 */
      $('#chatFrm').submit(function(e){
         /* 새로 고침 방지 */
@@ -153,22 +165,6 @@ $(document).ready(function(){
         });
         return false;
     });
-    /* 입력 버튼 이벤트 */
-    $('#input_message').on('keydown', function(e){
-        if(e.keyCode == 13){
-            if(e.shiftKey == true){
-                var tmp = $('#input_message').val();
-                tmp = tmp + "\n";
-                $('#input_message').val(tmp)
-            }else{
-                $('#chatFrm').submit();
-                move_chat_scroll();
-            }
-
-            return false;
-        }
-    });
-
     // 기록보기
     $('#histFrm').submit(function(e){
         var gubun = $('#hist-gubun').val();
@@ -256,7 +252,7 @@ $(document).ready(function(){
 </form>
 
 <form action="" method="post" name="measureFrm" id="measureFrm" enctype="multipart/form-data">
-    <input type="hidden" name="gender" value="2">여
+    <input type="hidden" name="gender" value="{{ physical_report.gender }}">
     <input type="hidden" name="age" value="{{ physical_report.age }}" >
     <input type="hidden" name="stature" value="{{ physical_report.stature }}"/>
     <input type="hidden" name="weight" value="{{ physical_report.weight }}"/>
