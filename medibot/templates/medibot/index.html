@@ -25,7 +25,7 @@ $(document).ready(function(){
         $.ajax({
             type: 'POST',
             url:"/physical_update",
-            dataType: 'json',
+            dataType: 'text',
             data: $('#physicalFrm').serialize(),
             beforeSend: function(){
                 //유저 메세지 표시
