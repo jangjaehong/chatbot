@@ -8,7 +8,8 @@ urlpatterns = [
     url(r'^ajaxpost$', views.ajaxpost, name='ajaxpost'),
     # 추가 기능
     url(r'^autocomplete', views.autocomplete, name='autocomplete'),
-    url(r'^physical', views.physical, name='physical'),
+    url(r'^physical_update', views.physical_update, name='physical_update'),
+    url(r'^day_measure', views.dayMeasure, name='day_measure'),
     url(r'^diet', views.diet, name='diet'),
     url(r'^hist', views.hist, name='hist'),
     # url(r'^bmi$', views.bmi, name='bmi'),
