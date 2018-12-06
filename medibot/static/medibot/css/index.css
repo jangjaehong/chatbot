@@ -56,7 +56,7 @@ ul.row_menu li:last-child{border-right:1px solid #555555;}
 .result-wrap{width:100%;height:100%;position:relative;top:0;left:0;z-index:1000;background:#333333}
 
 /* 유저 신체 정보 테이블 */
-.result-wrap > .physical-box{width:calc(18% - 40px);height:calc(100% - 40px);box-shadow:3px 3px 3px 3px #222222;padding:20px;background:#333333;position:absolute;}
+.result-wrap > .physical-box{width:calc(18% - 40px);height:calc(100% - 46px);box-shadow:3px 3px 3px 3px #222222;padding:20px;background:#333333;position:absolute;}
 .result-wrap > .physical-box .tb-base{width:100%;height:100%;color:#000}
 .result-wrap > .physical-box .tb-base th, .tb-base td{padding:5px;color:#fff}
 .result-wrap > .physical-box .tb-base .update-text,
@@ -66,9 +66,9 @@ ul.row_menu li:last-child{border-right:1px solid #555555;}
 .result-wrap > .physical-box .tb-base td input[type=number]:focus{border-bottom-color:#368AFF;}
 
 .result-wrap > .result-box{width:calc(28% - 10px);height:200px;margin:0 0 0 10px;box-shadow:3px 3px 3px 3px #222222;padding:5px;position:absolute;background:#333333}
-.result-wrap #result-box1{top:0px:left:18%;}
-.result-wrap #result-box2{top:220px;left:46%;}
-.result-wrap #result-box3{top:440px;left:74%}
+.result-wrap #result-box1{top:0px;left:18%;}
+.result-wrap #result-box2{top:0px;left:46%;}
+.result-wrap #result-box3{top:0px;left:74%}
 
 .result-wrap > .result-box > .result-container{width:100%;height:100%;position:relative}
 .result-wrap > .result-box > .result-container > .title{font-size: 1.2em;font-weight: bold;}
