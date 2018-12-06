@@ -28,6 +28,7 @@ def physical_update(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
+                uid=request.user.pk
                 age = int(request.POST['age'])
                 gender = int(request.POST['gender'])
                 stature = float(request.POST['stature'])
@@ -36,13 +37,19 @@ def physical_update(request):
                 hip = float(request.POST['hip'])
                 # 정보 업데이트
                 pi = PhysicalReport.objects.get(uid=request.user.pk)
-                pi.age = age
-                pi.gender = gender
-                pi.stature = stature
-                pi.weight = weight
-                pi.waist = waist
-                pi.hip = hip
-                pi.save()
+                if not pi:
+                    pi.age = age
+                    pi.gender = gender
+                    pi.stature = stature
+                    pi.weight = weight
+                    pi.waist = waist
+                    pi.hip = hip
+                    pi.save()
+                else:
+                    PhysicalReport(uid=uid, age=age, gender=gender,
+                                   stature=stature, weight=weight,
+                                   waist=waist, hip=hip, pub_date=timezone.now()).save()
+
                 physical_info = PhysicalReport.objects.get(uid=request.user.pk)
                 return render(request, 'medibot/index.html', {"result": 1, "physical_report": physical_info})
         return render(request)
