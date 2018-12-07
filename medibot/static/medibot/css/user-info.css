@@ -14,16 +14,16 @@
     flex-direction:row;
     justify-content:flex-start;
     align-items:center;
-    border-bottom:3px double #333333
+    border-bottom:1px solid #333333
 }
-.user-box .logo a{padding:4px 0 8px 0;font-size:2em;font-weight:bold;color:#000;}
+.user-box .logo a{padding:10px 0;font-size:2em;font-weight:bold;color:#000;}
 .user-box .logo a:hover{background:#fff;}
 .user-box .logo .ic_menu{display:none;}
 
 /* 유저정보 Box */
 .user-box .user-info{
     width:100%;
-    padding:8px 0;
+    padding:10px 0;
     color:#000;
     font-weight:bold;
     font-size:1.1em;
