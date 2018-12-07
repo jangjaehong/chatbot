@@ -7,7 +7,7 @@
     justify-content:flex-start;
     align-items:center;
     background:#fff;
-    border:1px solid #333333;
+    border-bottom:1px solid #333333;
 }
 .logo .tit{font-size:2em;font-weight:bold;color:#333333}
 .logo a:hover{background:#fff;}
