@@ -4,6 +4,7 @@ $(document).ready(function(){
     $('#result-box1').show();
     $('#result-box2').show();
     $('#result-box3').show();
+    $('#result-box4').show();
 
     // 측정하기
     $('#measureFrm').submit(function(){
@@ -136,11 +137,11 @@ function makeBullet(category, value, state, age, gender){
 <div class="result-wrap">
     <!-- 일일체크 측정결과 표시 -->
     <!--<div class="pub_date" id="measure_date"></div>-->
-    <div class="result-box" id="result-box1"></div>
-    <div class="result-box" id="result-box2"></div>
-    <div class="result-box" id="result-box3"></div>
+    <div class="result-box" id="result-box1">최근 '체질량지수'를 측정한 결과가 없습니다.</div>
+    <div class="result-box" id="result-box2">최근 '복부비만도'를 측정한 결과가 없습니다.</div>
+    <div class="result-box" id="result-box3">최근 '기초대사량'을 측정한 결과가 없습니다.</div>
     <!-- 식단체크 측정결과 표시 -->
-    <div class="result-box" id="result-box4"></div>
+    <div class="result-box" id="result-box4">최근 '섭취영양'을 측정한 결과가 없습니다.</div>
 </div>
 
 <!-- 기록확인을 위한 데이터 공간 -->

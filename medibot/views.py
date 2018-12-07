@@ -27,7 +27,7 @@ def physical_update(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
-                uid=request.user.pk
+                uid = request.user.pk
                 age = int(request.POST['age'])
                 gender = int(request.POST['gender'])
                 stature = float(request.POST['stature'])
