@@ -57,9 +57,15 @@ $(document).ready(function(){
     </div>
 </div>
 
-
-
 <div class="physical-box">
+    <div class="physical-box-header">
+        <div class="tit">
+            신체정보
+        </div>
+        <div class="btn_wrap">
+            <input type="button" id="btnUpdateMode" name="btnUpdateMode" class="btn-normal-mode" value="수정모드" />
+        </div>
+    </div>
     <form action="" id="physicalFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table class="tb-base">
@@ -109,7 +115,6 @@ $(document).ready(function(){
             <tr>
                 <td colspan="2">
                     <div class="btn_wrap">
-                        <input type="button" id="btnUpdateMode" name="btnUpdateMode" class="btn-normal-mode" value="수정모드" />
                         <input type="button" id="btnNormalMode" name="btnNormalMode" class="btn-physical-up" value="정보수정" />
                     </div>
                 </td>
