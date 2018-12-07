@@ -9,7 +9,11 @@
     padding:12px 0 12px 12px;
     background:#fff;
     color:#000;
+    font-size:2em;
+    font-weight:bold;
 }
+
+
 .logo > .ic_menu{display:none;}
 
 /* 유저정보 Box */
