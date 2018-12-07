@@ -1,6 +1,15 @@
 /* 대쉬보드 */
 .manage-header{
     width:100%;
+    padding:8px 0;
+}
+.manage-header .title{
+    font-size:1.5em;
+    color:#fff
+}
+.manage-header .explain{
+    font-size:1.2em;
+    color:#fff
 }
 
 .result-wrap{width:100%;height:100%;position:relative;}
