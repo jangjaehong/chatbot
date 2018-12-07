@@ -11,17 +11,17 @@
 /* 타이틀바 */
 .chat-header{
     width:calc(100% - 10px);
-    display:flex;
     padding:8px 0 8px 10px;
+    position:relative;
+    display:flex;
     flex-direction:row;
     background:#368AFF;
-    color:white;
-    border-radius:3px 3px 0 0;
-    position:relative;
+
 }
 .chat-header .tit{
-    line-height:200%;
-    padding:0;
+    color:#fff;
+    font-size:1.2em;
+    font-weight:bold;
 }
 .chat-header .close{
     padding:100px;
