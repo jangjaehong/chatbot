@@ -49,7 +49,7 @@
     <!-- 유저 정보 -->
     <div class="user-info-wrap">
         {% block userspace %}
-        {% enduserspace %}
+        {% endblock %}
     </div>
 
     <header style="display:none">
@@ -90,17 +90,17 @@
     <section>
         <header>
             {% block dashboard_head %}
-            {% enddashboard_head %}
+            {% endblock %}
         </header>
         <article>
             {% block dashboard_contents %}
-            {% enddashboard_contents %}
+            {% endblock %}
         </article>
     </section>
     <!-- 채팅창 -->
     <aside>
         {% block chatbot %}
-        {% endchatbot %}
+        {% endblock %}
     </aside>
 </body>
 </html>
