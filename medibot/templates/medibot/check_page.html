@@ -1,0 +1,36 @@
+<!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
+<div id="empty-result-container" class="result-container" style="display:none">
+    <div class="title"></div>
+    <div class="text-info"></div>
+    <div class="container">
+        <div id="tooltip" class="hidden">
+            <p class="text1"></p>
+            <p class="text2"></p>
+        </div>
+    </div>
+</div>
+<!-- 측정결과 표시 -->
+<div class="result-wrap">
+    <!-- 일일체크 측정결과 표시 -->
+    <div class="result-box" id="result-box1">
+        <div class="pub_date" id="measure_date"></div>
+    </div>
+    <div class="result-box" id="result-box2"></div>
+    <div class="result-box" id="result-box3"></div>
+    <!-- 식단체크 측정결과 표시 -->
+    <div class="result-box" id="result-box4"></div>
+</div>
+
+<!-- 기록결과 표시 -->
+<div class="hist-wrap">
+    <!-- 기록표시 구분 메뉴 -->
+    <div class="hist-menu">
+        <ul id="hist-menu" class="row_menu">
+            <li id="hist1">체질량지수(BMI)</li>
+            <li id="hist2">복부비만도(WHR)</li>
+            <li id="hist3">기초대사량(kcal)</li>
+        </ul>
+    </div>
+    <div class="hist-box" id="hist-box1"></div>
+    <div class="hist-box" id="hist-box2"></div>
+</div>

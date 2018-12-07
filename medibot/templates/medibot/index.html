@@ -49,114 +49,16 @@ $(document).ready(function(){
 </script>
 {% endblock head %}
 
-{% block subtitle %}
-{{ user.username }}님의 오늘은?
-{% endblock subtitle %}
+{% block userspace %}
 
-{% block result %}
-<!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
-<div id="empty-result-container" class="result-container" style="display:none">
-    <div class="title"></div>
-    <div class="text-info"></div>
-    <div class="container">
-        <div id="tooltip" class="hidden">
-            <p class="text1"></p>
-            <p class="text2"></p>
-        </div>
-    </div>
-</div>
-{% block userbox %}
-<div class="physical-box">
-        <form action="" id="physicalFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <table class="tb-base">
-                <colgroup>
-                    <col width="25%">
-                    <col width="75%">
-                </colgroup>
-                <tr>
-                    <th><label for="gender1">성별 : </label></th>
-                    <td class="update-text">
-                        <input type="radio" id="gender1" name="gender" value="1" checked="checked">남
-                        <input type="radio" id="gender2" name="gender" value="2">여
-                    </td>
-                    <td class="normal-text">
-                        {% if physical_report.gender == 1 %}
-                            남
-                        {% else %}
-                            여
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th><label for="age">나이 : </label></th>
-                    <td class="update-text"><input id="age" name="age" max="110" type="number" placeholder="나이" value="{{ physical_report.age }}" > 세</td>
-                    <td class="normal-text">{{ physical_report.age }} 세</td>
-                </tr>
-                <tr>
-                    <th><label for="stature">신장 : </label></th>
-                    <td class="update-text"><input id="stature" name="stature" type="number" step="any" min="130.0" max="250.0" placeholder="키" value="{{ physical_report.stature }}"/> cm</td>
-                    <td class="normal-text">{{ physical_report.stature }} cm</td>
-                </tr>
-                <tr>
-                    <th><label for="weight">체중 : </label></th>
-                    <td class="update-text"><input id="weight" name="weight"  type="number" step="any" min="30.0" max="200.0" placeholder="몸무게" value="{{ physical_report.weight }}"/> kg</td>
-                    <td class="normal-text">{{ physical_report.weight }} kg</td>
-                </tr>
-                <tr>
-                    <th><label for="waist">허리 둘레 : </label></th>
-                    <td class="update-text"><input type="number" id="waist" name="waist" title="허리 둘레" size="3"  placeholder="허리 둘레(1인치=2.5cm)" value="{{ physical_report.waist }}"> cm</td>
-                    <td class="normal-text">{{ physical_report.waist }} cm</td>
-                </tr>
-                <tr>
-                    <th><label for="hip">엉덩이둘레 : </label></th>
-                    <td class="update-text"><input type="number" id="hip" name="hip" title="엉덩이 둘레" size="3" placeholder="엉덩이 둘레(1인치=2.5cm)" value="{{ physical_report.hip }}"> cm</td>
-                    <td class="normal-text">{{ physical_report.hip }} cm</td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div class="btn_wrap">
-                            <input type="button" id="btnUpdateMode" name="btnUpdateMode" class="btn-normal-mode" value="수정모드" />
-                            <input type="button" id="btnNormalMode" name="btnNormalMode" class="btn-physical-up" value="정보수정" />
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
-{% enduserbox %}
-<!-- 측정결과 표시 -->
-<div class="result-wrap">
-    <!-- 일일체크 측정결과 표시 -->
-    <div class="result-box" id="result-box1">
-        <div class="pub_date" id="measure_date"></div>
-    </div>
-    <div class="result-box" id="result-box2"></div>
-    <div class="result-box" id="result-box3"></div>
-    <!-- 식단체크 측정결과 표시 -->
-    <div class="result-box" id="result-box4"></div>
-</div>
+{% endblock userspace %}
 
-<!-- 기록결과 표시 -->
-<div class="hist-wrap">
-    <!-- 기록표시 구분 메뉴 -->
-    <div class="hist-menu">
-        <ul id="hist-menu" class="row_menu">
-            <li id="hist1">체질량지수(BMI)</li>
-            <li id="hist2">복부비만도(WHR)</li>
-            <li id="hist3">기초대사량(kcal)</li>
-        </ul>
-    </div>
-    <div class="hist-box" id="hist-box1"></div>
-    <div class="hist-box" id="hist-box2"></div>
-</div>
-{% endblock result %}
 
-{% block input %}
-<!-- 입력창 -->
-<div class="contents_wrap">
-    {% include 'medibot/chat.html' %}
-</div>
-{% endblock input %}
+{% block dashboard_contents %}
+
+{% endblock dashboard_contents %}
+
+{% block chatbot %}
+{% endblock chatbot %}
 
 
