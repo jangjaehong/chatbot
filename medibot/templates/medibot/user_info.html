@@ -65,6 +65,7 @@ $(document).ready(function(){
         </div>
         <div class="btn_wrap">
             <input type="button" id="btnUpdateMode" name="btnUpdateMode" class="btn-normal-mode" value="수정모드" />
+            <input type="button" id="btnNormalMode" name="btnNormalMode" class="btn-physical-up" value="정보수정" />
         </div>
     </div>
     <form action="" id="physicalFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
@@ -112,13 +113,6 @@ $(document).ready(function(){
                 <th><label for="hip">엉덩이둘레 : </label></th>
                 <td class="update-text"><input type="number" id="hip" name="hip" title="엉덩이 둘레" size="3" placeholder="엉덩이 둘레(1인치=2.5cm)" value="{{ physical_report.hip }}"> cm</td>
                 <td class="normal-text">{{ physical_report.hip }} cm</td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="btn_wrap">
-                        <input type="button" id="btnNormalMode" name="btnNormalMode" class="btn-physical-up" value="정보수정" />
-                    </div>
-                </td>
             </tr>
         </table>
     </form>
