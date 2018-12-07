@@ -16,7 +16,6 @@ def test(request):
 # 화면이나 데이터 렌더링 하는 공간
 def index(request):
     if request.user.is_authenticated:
-
         chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
         physical_report = PhysicalReport.objects.get(uid=request.user.pk)
         return render(request, 'medibot/index.html', {"chatreport": chatreport, "physical_report": physical_report})
