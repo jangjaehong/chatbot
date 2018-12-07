@@ -61,7 +61,7 @@ $(document).ready(function(){
     <div class="physical-box-header">
         <div class="tit-wrap">
             <p class="tit">신체정보</p>
-            <p class="update">수정일 : {{ physical_report.pub_date }}</p>
+            <p class="update">수정일 : {{ physical_report.pub_date|date:"Y-m-d" }}</p>
         </div>
         <div class="btn_wrap">
             <input type="button" id="btnUpdateMode" name="btnUpdateMode" class="btn-normal-mode" value="수정모드" />
