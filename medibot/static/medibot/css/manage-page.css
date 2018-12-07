@@ -1,5 +1,8 @@
-
 /* 대쉬보드 */
+.manage-header{
+    width:100%;
+}
+
 .result-wrap{width:100%;height:100%;position:relative;}
 .result-wrap .result-box{width:calc(33% - 10px);height:200px;margin:0 10px;box-shadow:3px 3px 3px 3px #222222;padding:5px;position:absolute;background:#333333}
 .result-wrap #result-box1{top:0;left:0;}
