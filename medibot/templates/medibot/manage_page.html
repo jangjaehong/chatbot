@@ -1,0 +1,162 @@
+<script>
+
+$(document).ready(function(){
+    $('.result-box').hide();
+    $('#result-box1').show();
+    $('#result-box2').show();
+    $('#result-box3').show();
+
+    // 측정하기
+    $('#measureFrm').submit(function(){
+        $.ajax({
+            type: 'POST',
+            url:"/day_measure",
+            dataType: 'json',
+            data: $('#measureFrm').serialize(),
+            beforeSend: function(){
+                //유저 메세지 표시
+            },
+            success: function(response){
+                // 결과데이터
+                var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
+                var value = [response.bmi,  response.whr, response.energy];
+                var state = [response.bmi_state, response.whr_state, response.energy_state];
+                var age = response.age;
+                var gender = response.gender;
+                // 결과 표시
+                makeBullet(category, value, state, age, gender);
+            },
+            error: function(request, status, error) {
+               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+        return false;
+    });
+
+    // 기록보기
+    $('#histFrm').submit(function(e){
+        var gubun = $('#hist-gubun').val();
+        var type = $('#hist-type').val();
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url:"/hist",
+            dataType: 'json',
+            data: $('#histFrm').serialize(),
+            beforeSend: function(){
+                //유저 메세지 표시
+            },
+            success: function(data){
+                if(data.length == 0){
+                    if(type == "1")
+                        alert("기록이 없습니다. 먼저 일일체크 측정을 해보시기 바랍니다.");
+                    if(type == "2")
+                        alert("기록이 없습니다. 먼저 식단체크 측정을 해보시기 바랍니다.");
+                }else{
+                    var resultBox = $('#empty-result-container').clone().show().attr("id","");
+                    resultBox.find('.title').remove();
+                    resultBox.find('.text-info').remove();
+                    resultBox.find('.container').addClass('hist-container').addClass('hist-container' + type);
+                    if(type == 1){
+                        $('#hist-box1').append(resultBox);
+                        if(gubun == 1) {
+                            drawCurveBMI(data, 'div.hist-container' + type);
+                        }
+                        else if(gubun == 2){
+                            drawCurveWHR(data, 'div.hist-container' + type, data[data.length-1].gender);
+                        }
+                        else if(gubun == 3){
+                            drawCurveEnergy(data, 'div.hist-container' + type, data[data.length-1].gender, data[data.length-1].age);
+                        }
+                    }
+                    if(type == 2){
+                        $('#hist-box2').append(resultBox);
+                        drawCurveChart(data, 'div.hist-container' + type);
+                    }
+                }
+            },
+            error: function(request, status, error) {
+               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    });
+
+    // 결과창 메뉴 이벤트
+    $('#hist-menu li').on('click',function(){
+        var gubun = $(this).attr('id').replace('hist','');
+        $('#hist-menu li').removeClass('on');
+        $(this).addClass('on')
+
+        $('#hist-gubun').val(gubun);
+        $('#histFrm').submit();
+    });
+});
+</script>
+/* 그래프 호출 */
+function makeBullet(category, value, state, age, gender){
+    $('#measure_date').html('최근 측정 날짜 : {{ physical_report.pub_date }}');
+    for(var i = 0; i < 3; i++){
+        var container = $("#empty-result-container").clone().show().attr("id","");
+        container.find(".title").html(category[i])
+        container.find(".text-info").html("<p>" + category[i] + ": " + value[i] + "로 " + state[i] + "입니다.</p>");
+        container.find(".container").addClass("bullet-container").addClass("bullet-container" + (i + 1));
+        $('#result-box' + (i+1)).append(container);
+    }
+    drawBulletBMI(value[0], state[0], "div.bullet-container1");
+    drawBulletWHR(value[1], state[1], gender, age, "div.bullet-container2");
+    drawBulletEnergy(value[2], state[2], gender, age, "div.bullet-container3");
+}
+</script>
+
+<!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
+<div id="empty-result-container" class="result-container" style="display:none">
+    <div class="title"></div>
+    <div class="text-info"></div>
+    <div class="container">
+        <div id="tooltip" class="hidden">
+            <p class="text1"></p>
+            <p class="text2"></p>
+        </div>
+    </div>
+</div>
+
+<!-- 측정을 위한 데이터 공간 -->
+<form action="" id="measureFrm" name="measureFrm" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="gender" value="{{ physical_report.gender }}">
+    <input type="hidden" name="age" value="{{ physical_report.age }}" >
+    <input type="hidden" name="stature" value="{{ physical_report.stature }}"/>
+    <input type="hidden" name="weight" value="{{ physical_report.weight }}"/>
+    <input type="hidden" name="waist" value="{{ physical_report.waist }}">
+    <input type="hidden" name="hip" value="{{ physical_report.hip }}">
+</form>
+<!-- 측정결과 표시 -->
+<div class="result-wrap">
+    <!-- 일일체크 측정결과 표시 -->
+    <!--<div class="pub_date" id="measure_date"></div>-->
+    <div class="result-box" id="result-box1"></div>
+    <div class="result-box" id="result-box2"></div>
+    <div class="result-box" id="result-box3"></div>
+    <!-- 식단체크 측정결과 표시 -->
+    <div class="result-box" id="result-box4"></div>
+</div>
+
+<!-- 기록확인을 위한 데이터 공간 -->
+<form action="" id="histFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
+    <input type="hidden" id="hist-term" name="term" value="7" />
+    <input type="hidden" id="hist-type" name="type" value="1" />
+    <input type="hidden" id="hist-gubun" name="gubun" value="1" />
+</form>
+<!-- 기록결과 표시 -->
+<div class="hist-wrap">
+    <!-- 기록표시 구분 메뉴 -->
+    <div class="hist-menu">
+        <ul id="hist-menu" class="row_menu">
+            <li id="hist1">체질량지수(BMI)</li>
+            <li id="hist2">복부비만도(WHR)</li>
+            <li id="hist3">기초대사량(kcal)</li>
+        </ul>
+    </div>
+    <div class="hist-box" id="hist-box1"></div>
+    <div class="hist-box" id="hist-box2"></div>
+</div>
+

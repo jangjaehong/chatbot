@@ -1,0 +1,56 @@
+
+/* 대쉬보드 */
+.result-wrap{width:100%;height:100%;position:relative;}
+.result-wrap .result-box{width:calc(33% - 20px);height:200px;margin:0 0 0 10px;box-shadow:3px 3px 3px 3px #222222;padding:5px;position:absolute;background:#333333}
+.result-wrap #result-box1{top:0px;left:18%;}
+.result-wrap #result-box2{top:0px;left:46%;}
+.result-wrap #result-box3{top:0px;left:74%}
+
+.result-wrap > .result-box > .result-container{width:100%;height:100%;position:relative}
+.result-wrap > .result-box > .result-container > .title{font-size: 1.2em;font-weight: bold;}
+.result-wrap > .result-box > .result-container > .text-info{width:100%;height:auto;margin-top:10px;}
+.result-wrap > .result-box > .result-container > .container{margin-top:10px;position:relative}
+.result-wrap > .result-box > .result-container > .bullet-container1,
+.result-wrap > .result-box > .result-container > .bullet-container2,
+.result-wrap > .result-box > .result-container > .bullet-container3{width:100%;height:120px;}
+.result-wrap > .result-box > .result-container > .circle-container{width:100%;height:600px;}
+
+.hist-wrap{width:100%;height:auto;position:absolute;top:0;left:0;z-index:0;background:#333333}
+.hist-wrap > .hist-box{width:calc(100% - 80px);height:auto;margin:20px 10px;box-shadow:3px 3px 3px 3px #222222;padding:20px;position:relative;display:none;}
+.hist-wrap > .hist-menu{width:100%;height:52px;display:none}
+.hist-wrap > .hist-box > .result-container > .hist-container{width:100%;height:600px;}
+
+/* 결과창 테이블3 */
+.result-wrap  > .result-box .tb-diet {width:100%;height:auto}
+.result-wrap  > .result-box .tb-diet th{color:#A4DBf8;margin:0;padding:5px 0;border-bottom:1px solid #A4DBf8;}
+.result-wrap  > .result-box .tb-diet td{color:#A4DBf8;text-align:center;margin:0;padding:5px 0;border-bottom:1px solid #A4DBf8;}
+
+#tooltip{
+    width:120px;
+    height:auto;
+    font-size:1em;
+    color:white;
+    background-color:rgba(25, 25, 25, 0.8);
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    position:absolute;
+    border-radius:3px;
+    padding:2px 3px 8px 3px;
+    margin: 0 auto 10px;
+    top:8px;
+}
+#tooltip > p{
+    display: flex;
+    justify-content: center;
+}
+#tooltip.hidden{display:none;}
+#tooltip:after{
+    content: '';
+    position:absolute;
+    border-top:10px solid rgba(25, 25, 25, 0.8);
+    border-right:8px solid transparent;
+    border-left:8px solid transparent;
+    bottom:-10px;
+    left:45%;
+}

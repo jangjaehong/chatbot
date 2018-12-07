@@ -7,58 +7,24 @@
 {% block head %}
 {% load staticfiles %}
 <link rel="stylesheet" href="{% static 'medibot/css/index.css' %}">
+<link rel="stylesheet" href="{% static 'medibot/css/user-info.css' %}">
+<link rel="stylesheet" href="{% static 'medibot/css/manage-page.css' %}">
 <link rel="stylesheet" href="{% static 'medibot/css/chat.css' %}">
 <script type="text/javascript" src="{% static 'medibot/js/libs/d3.js' %}"></script>
 <script type="text/javascript" src="{% static 'medibot/js/contents/autocomplete.js' %}"></script>
 <script type="text/javascript" src="{% static 'medibot/js/contents/plot.js' %}"></script>
-<script>
-$(document).ready(function(){
-    $('#btnUpdateMode').on('click',function(){
-        $(this).hide();
-        $('#btnNormalMode').show();
-        $('.tb-base .update-text').show();
-        $('.tb-base .normal-text').hide();
-    });
-
-    $('#btnNormalMode').on('click',function(e){
-        $('#physicalFrm').submit(function(){
-            //e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url:"/physical_update",
-                dataType: 'json',
-                data: $('#physicalFrm').serialize(),
-                beforeSend: function(){
-                    //유저 메세지 표시
-                },
-                success: function(response){
-                    alert("신체정보 수정을 완료했습니다");
-                    $('.tb-base .update-text').hide();
-                    $('.tb-base .normal-text').show();
-                    $(this).hide();
-                    $('#btnUpdateMode').show();
-                },
-                error: function(request, status, error) {
-                   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-                }
-            });
-            return false;
-        });
-    });
-})
-</script>
 {% endblock head %}
 
 {% block userspace %}
-
+{% include 'medibot/user_info.html' %}
 {% endblock userspace %}
 
-
 {% block dashboard_contents %}
-
+{% include 'medibot/manage-page.html' %}
 {% endblock dashboard_contents %}
 
 {% block chatbot %}
+{% include 'medibot/chat.html' %}
 {% endblock chatbot %}
 
 

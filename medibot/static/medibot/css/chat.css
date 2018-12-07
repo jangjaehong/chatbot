@@ -5,17 +5,14 @@
 .chat-wrap{
     width:100%;
     height:100%;
-    z-index:9999;
     background:#fff;
-    box-shadow:3px 3px 3px 3px #222222;
-    border-radius:10px;
     font-size:1.2em;
 }
 /* 타이틀바 */
 .chat-header{
-    width:calc(100% - 30px);
+    width:calc(100% - 18px);
     display:flex;
-    padding:15px 15px;
+    padding:8px 0 8px 10px;
     flex-direction:row;
     background:#368AFF;
     color:white;
@@ -40,7 +37,7 @@
 /* 채팅영역 */
 .chat-box{
     width:100%;
-    height:calc(100% - 78px); /* 헤더의 크기를 제외*/
+    height:calc(100% - 66px); /* 헤더의 크기를 제외*/
     display:flex;
     flex-direction:column;
     position:relative;
