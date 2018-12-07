@@ -1,31 +1,38 @@
 /* logo */
-.logo{
-    width:calc(100% - 12px);
+.user-box{
+    width:calc(100% - 20px);
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    background:#fff;
+}
+
+.user-box .logo{
+    width:100%;
+    padding:5px 0;
     position:relative;
     display:flex;
     flex-direction:row;
     justify-content:flex-start;
     align-items:center;
-    padding:12px 0 0 12px;
-    background:#fff;
     border-bottom:1px solid #333333
+
 }
-.logo a{
+.user-box .logo a{
     color:#000;
     font-size:2em;
     font-weight:bold;
 }
-.logo > .ic_menu{display:none;}
+.user-box .logo .ic_menu{display:none;}
 
 /* 유저정보 Box */
-.user-box{
-    width:calc(100% - 12px);
+.user-info{
+    width:100%;
+    padding:5px 0;
     display:flex;
     flex-direction:row;
     justify-content:flex-start;
     align-items:center;
-    padding:12px 0 12px 12px;
-    background:#fff;
     color:#000;
     font-weight:bold;
     font-size:1.1em;
