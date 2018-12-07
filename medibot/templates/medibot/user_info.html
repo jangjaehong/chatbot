@@ -44,8 +44,14 @@ $(document).ready(function(){
         <a href="{% url 'medibot:index' %}">Medi-BOT</a>
     </div>
     <div class="user-info">
-        <img src="{% static 'medibot/img/icon/ic_user.png' %}" alt="userinfo">
-        <div class="ml_10"> {{ user.username }} 님, 환영합니다. </div>
+        <div>
+            <img src="{% static 'medibot/img/icon/ic_user.png' %}" alt="userinfo">
+            <div class="ml_10"> {{ user.username }} 님, 환영합니다. </div>
+        </div>
+        <div>
+            <div>마지막 로그인 : 2018-12-07</div>
+            <div style="background-color:#368AFF"><a href="{% url 'accounts:login' %}">로그아웃</a></div>
+        </div>
     </div>
 </div>
 
