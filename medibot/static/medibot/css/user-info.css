@@ -14,13 +14,16 @@
     flex-direction:row;
     justify-content:flex-start;
     align-items:center;
-    border-bottom:1px solid #333333
+    border-bottom:1px dash #333333
 
 }
 .user-box .logo a{
     color:#000;
     font-size:2em;
     font-weight:bold;
+}
+.user-box .logo a:hover{
+    background:#fff;
 }
 .user-box .logo .ic_menu{display:none;}
 
