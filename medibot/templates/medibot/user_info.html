@@ -34,13 +34,30 @@ $(document).ready(function(){
     });
 })
 </script>
+<div class="logo">
+    <div class="ic_menu mr_10">
+        <img id="ic_menu"  src="{% static 'medibot/img/icon/ic_menu.png' %}" alt="menu" >
+        <img id="ic_arrow" src="{% static 'medibot/img/icon/ic_arrow.png' %}" alt="menu">
+    </div>
+    <div class="tit">
+        <a href="{% url 'medibot:index' %}">Medi-BOT</a>
+    </div>
+</div>
+
+<div class="user-box">
+    <img src="{% static 'medibot/img/icon/ic_user.png' %}" alt="userinfo">
+    <div class="mr_10"> {{ user.username }} 님, 환영합니다. </div>
+</div>
+
+<div class="line"></div>
+
 <div class="physical-box">
     <form action="" id="physicalFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table class="tb-base">
             <colgroup>
-                <col width="25%">
-                <col width="75%">
+                <col width="35%">
+                <col width="65%">
             </colgroup>
             <tr>
                 <th><label for="gender1">성별 : </label></th>

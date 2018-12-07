@@ -1,15 +1,15 @@
 /* 대쉬보드 */
 .manage-header{
-    width:calc(100% - 18px);
-    padding:8px 0 8px 10px;
+    width:calc(100% - 20px);
+    padding:8px 0 8px 12px;
 }
 .manage-header .title{
-    font-size:1.7em;
+    font-size:18em;
     color:#fff;
     font-weight:bold
 }
 .manage-header .explain{
-    font-size:1.1em;
+    font-size:1em;
     color:#fff
 }
 
