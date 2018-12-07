@@ -1,13 +1,5 @@
-/* 좌측 유저정보 */
-.user-box{
-    width:calc(100% - 20px);
-    padding:0 10px;
-    display:flex;
-    flex-direction:column;
-    background:#fff;
-}
 /* logo */
-.user-box .logo{
+.logo{
     width:100%;
     position:relative;
     display:flex;
@@ -16,14 +8,21 @@
     align-items:center;
     border-bottom:1px solid #333333
 }
-.user-box .logo a{padding:10px 0;font-size:2em;font-weight:bold;color:#000;}
-.user-box .logo a:hover{background:#fff;}
-.user-box .logo .ic_menu{display:none;}
+.logo a{padding:10px 0;font-size:2em;font-weight:bold;color:#000;}
+.logo a:hover{background:#fff;}
+.logo .ic_menu{display:none;}
 
-/* 유저정보 Box */
-.user-box .user-info{width:100%;padding:10px 0;color:#000;font-weight:bold;font-size:1.1em;display:flex;flex-direction:row;}
-.user-box .user-info > div{display:flex;flex-direction:column;align-items:center;}
-.user-box .user-info input{background-color:#368AFF;color:#fff;padding:0;}
+/* 좌측 유저정보 */
+.user-box{
+    width:calc(100% - 20px);
+    padding:10px;
+    display:flex;
+    flex-direction:row;
+    background:#fff;
+}
+.user-box .user-info{width:70%;padding:0;display:flex;flex-direction:row;}
+.user-box .btn-wrap{width:30%;padding:0;}
+.user-box .btn-wrap input{width:100%;padding:0;background-color:#368AFF;color:#fff;}
 
 /* 신체정보 Box */
 .physical-box{width:calc(100% - 20px);height:calc(100% - 20px);padding:10px;}

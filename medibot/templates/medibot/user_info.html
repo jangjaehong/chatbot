@@ -35,14 +35,14 @@ $(document).ready(function(){
     });
 })
 </script>
-<div class="user-box">
-    <div class="logo">
-        <div class="ic_menu mr_10">
-            <img id="ic_menu"  src="{% static 'medibot/img/icon/ic_menu.png' %}" alt="menu" >
-            <img id="ic_arrow" src="{% static 'medibot/img/icon/ic_arrow.png' %}" alt="menu">
-        </div>
-        <a href="{% url 'medibot:index' %}">Medi-BOT</a>
+<div class="logo">
+    <div class="ic_menu mr_10">
+        <img id="ic_menu"  src="{% static 'medibot/img/icon/ic_menu.png' %}" alt="menu" >
+        <img id="ic_arrow" src="{% static 'medibot/img/icon/ic_arrow.png' %}" alt="menu">
     </div>
+    <a href="{% url 'medibot:index' %}">Medi-BOT</a>
+</div>
+<div class="user-box">
     <div class="user-info">
         <div>
             <img src="{% static 'medibot/img/icon/ic_user.png' %}" alt="userinfo">
@@ -51,9 +51,9 @@ $(document).ready(function(){
             <div class="ml_10"> {{ user.username }} 님, 환영합니다. </div>
             <div>로그인 : 2018-12-07</div>
         </div>
-        <div>
-            <input type="button" id="btn_logout" value="로그아웃" />
-        </div>
+    </div>
+    <div class="btn-wrap">
+        <input type="button" id="btn_logout" value="로그아웃" />
     </div>
 </div>
 
