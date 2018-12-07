@@ -56,8 +56,7 @@
 
 /* 신체정보 Box */
 .physical-box{width:calc(100% - 20px);height:calc(100% - 20px);padding:10px;}
-.physical-box .physical-box-header{width:100%;display:flex;flex-direction:row;border-bottom:3px double #fff}
-.physical-box .physical-box-header .tit-wrap{width:70%}
+.physical-box .physical-box-header{width:100%;display:flex;flex-direction:row;border-bottom:1px solid #fff} .physical-box .physical-box-header .tit-wrap{width:70%}
 .physical-box .physical-box-header .tit-wrap p.tit{font-size:1.5em;font-weight:bold;color:#fff}
 .physical-box .physical-box-header .tit-wrap p.update{font-size:1em;;color:#fff}
 .physical-box .physical-box-header .btn_wrap{width:30%;display:flex;align-items:center}
@@ -65,7 +64,7 @@
 .physical-box .physical-box-header .btn_wrap input:hover{font-weight:bold}
 
 .physical-box .tb-base{width:100%;height:100%;color:#000}
-.physical-box .tb-base th, .tb-base td{padding:5px;color:#fff;align-text:right}
+.physical-box .tb-base th, .tb-base td{padding:5px;color:#fff;text-align:right}
 .physical-box .tb-base .update-text,
 .physical-box .tb-base .btn-physical-up{display:none}
 .physical-box .tb-base th{text-align:left}
