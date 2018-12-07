@@ -1,7 +1,7 @@
 /* logo */
 .user-box{
     width:calc(100% - 20px);
-    padding:10px;
+    padding:0 10px;
     display:flex;
     flex-direction:column;
     background:#fff;
@@ -9,7 +9,6 @@
 
 .user-box .logo{
     width:100%;
-    padding:5px 0;
     position:relative;
     display:flex;
     flex-direction:row;
@@ -28,7 +27,7 @@
 /* 유저정보 Box */
 .user-info{
     width:100%;
-    padding:5px 0;
+    padding:8px 0;
     display:flex;
     flex-direction:row;
     justify-content:flex-start;
