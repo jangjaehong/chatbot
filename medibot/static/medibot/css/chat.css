@@ -10,7 +10,7 @@
 }
 /* 타이틀바 */
 .chat-header{
-    width:calc(100% - 18px);
+    width:calc(100% - 10px);
     display:flex;
     padding:8px 0 8px 10px;
     flex-direction:row;
