@@ -1,26 +1,20 @@
 /* logo */
 .logo{
-    width:100%;
-    position:relative;
-    display:flex;
-    flex-direction:row;
-    justify-content:flex-start;
-    align-items:center;
-    border-bottom:1px solid #333333
-}
-.logo a{padding:10px 0;font-size:2em;font-weight:bold;color:#000;}
-.logo a:hover{background:#fff;}
-.logo .ic_menu{display:none;}
-
-/* 좌측 유저정보 */
-.user-box{
     width:calc(100% - 20px);
     padding:10px;
     display:flex;
     flex-direction:row;
+    justify-content:flex-start;
+    align-items:center;
     background:#fff;
 }
-.user-box .user-info{width:70%;padding:0;display:flex;flex-direction:row;}
+.logo .tit{font-size:2em;font-weight:bold;color:#333333}
+.logo a:hover{background:#fff;}
+.logo .ic_menu{display:none;}
+
+/* 좌측 유저정보 */
+.user-box{width:calc(100% - 20px);padding:10px;display:flex;flex-direction:row;background:#fff;}
+.user-box .user-info{width:70%;padding:0;display:flex;flex-direction:row;color:#000}
 .user-box .btn-wrap{width:30%;padding:0;}
 .user-box .btn-wrap input{width:100%;padding:0;background-color:#368AFF;color:#fff;}
 
