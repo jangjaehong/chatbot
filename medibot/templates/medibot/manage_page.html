@@ -1,5 +1,4 @@
 <script>
-
 $(document).ready(function(){
     $('.result-box').hide();
     $('#result-box1').show();
@@ -91,7 +90,6 @@ $(document).ready(function(){
         $('#histFrm').submit();
     });
 });
-</script>
 /* 그래프 호출 */
 function makeBullet(category, value, state, age, gender){
     $('#measure_date').html('최근 측정 날짜 : {{ physical_report.pub_date }}');
@@ -107,6 +105,8 @@ function makeBullet(category, value, state, age, gender){
     drawBulletEnergy(value[2], state[2], gender, age, "div.bullet-container3");
 }
 </script>
+
+
 
 <!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
 <div id="empty-result-container" class="result-container" style="display:none">
