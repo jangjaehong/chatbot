@@ -65,7 +65,7 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
-<!-- 유저 정보 -->
+{% block userbox %}
 <div class="physical-box">
         <form action="" id="physicalFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -124,6 +124,7 @@ $(document).ready(function(){
             </table>
         </form>
     </div>
+{% enduserbox %}
 <!-- 측정결과 표시 -->
 <div class="result-wrap">
     <!-- 일일체크 측정결과 표시 -->

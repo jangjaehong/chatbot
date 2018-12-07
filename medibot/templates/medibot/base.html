@@ -40,8 +40,19 @@
     {% endblock %}
 </head>
 <body>
+    <!-- 좌측 메뉴(모바일용) -->
+    <nav>
+        <ul class="nav-menu">
+            <li class="menu-tit">대쉬보드</li>
+        </ul>
+    </nav>
+    <!-- 유저 정보 -->
+    <div class="user-info-wrap">
+        {% block userspace %}
+        {% enduserspace %}
+    </div>
 
-    <header>
+    <header style="display:none">
          <div class="logo">
             <div class="ic_menu mr_10">
                 <img id="ic_menu"  src="{% static 'medibot/img/icon/ic_menu.png' %}" alt="menu" >
@@ -55,7 +66,6 @@
             <div class="mr_10"> {{ user.username }} 님, 환영합니다. </div>
             <img src="{% static 'medibot/img/icon/ic_user.png' %}" alt="userinfo">
             <!--상단 계정 컨트롤 -->
-
         </div>
     </header>
     <div id="user-control-box" class="user-control-box">
@@ -76,34 +86,21 @@
         </div>
     </div>
 
-    <nav>
-        <ul class="nav-menu">
-            <li class="menu-tit">대쉬보드</li>
-        </ul>
-    </nav>
-
+    <!-- 대쉬보드 -->
     <section>
         <header>
-            <div class="sub-tit">대쉬보드</div>
-            {% block subtitle %}
-            {% endblock %}
-            <div class="line"></div>
+            {% block dashboard_head %}
+            {% enddashboard_head %}
         </header>
         <article>
-            {% block result %}
-            {% endblock %}
+            {% block dashboard_contents %}
+            {% enddashboard_contents %}
         </article>
     </section>
+    <!-- 채팅창 -->
     <aside>
-        {% block input %}
-        {% endblock %}
+        {% block chatbot %}
+        {% endchatbot %}
     </aside>
-
-
-    <!--&lt;!&ndash; 채팅방 아이콘&ndash;&gt;-->
-    <!--<div class="floating_btn">-->
-        <!--<img id="go_chat" src="{% static 'medibot/img/icon/ic_message.png' %}" alt="chat_icon">-->
-    <!--</div>-->
-
 </body>
 </html>
