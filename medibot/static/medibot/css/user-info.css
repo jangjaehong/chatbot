@@ -8,7 +8,7 @@
     align-items:center;
     background:#fff;
 }
-.logo .tit{font-size:2em;font-weight:bold;color:#333333;border-bottom:1px solid #333333;}
+.logo .tit{width:100%;font-size:2em;font-weight:bold;color:#333333;border-bottom:1px solid #333333;}
 .logo a:hover{background:#fff;}
 .logo .ic_menu{display:none;}
 
