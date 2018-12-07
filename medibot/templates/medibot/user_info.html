@@ -49,7 +49,7 @@ $(document).ready(function(){
         </div>
         <div>
             <div class="ml_10"><b>{{ user.username }}님</b>, 환영합니다. </div>
-            <div class="ml_10">로그인 : {{ request.user.last_login|date:"Y-m-d hh:mm" }}</div>
+            <div class="ml_10">로그인 : {{ request.user.last_login|date:"Y-m-d H:M" }}</div>
         </div>
     </div>
     <div class="btn-wrap">
