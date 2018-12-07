@@ -48,7 +48,8 @@
 .user-box .user-info .btn_logout{
     padding:0 8px;
     background-color:#368AFF;
-    display:block;
+    display:flex;
+    align-items:center;
     height:100%;
 }
 
