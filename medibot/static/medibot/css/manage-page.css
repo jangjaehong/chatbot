@@ -2,9 +2,9 @@
 /* 대쉬보드 */
 .result-wrap{width:100%;height:100%;position:relative;}
 .result-wrap .result-box{width:calc(33% - 20px);height:200px;margin:0 0 0 10px;box-shadow:3px 3px 3px 3px #222222;padding:5px;position:absolute;background:#333333}
-.result-wrap #result-box1{top:0px;left:18%;}
-.result-wrap #result-box2{top:0px;left:46%;}
-.result-wrap #result-box3{top:0px;left:74%}
+.result-wrap #result-box1{top:0;left:0;}
+.result-wrap #result-box2{top:0;left:calc(33% - 6px);}
+.result-wrap #result-box3{top:0;left:calc(66% - 6px)}
 
 .result-wrap > .result-box > .result-container{width:100%;height:100%;position:relative}
 .result-wrap > .result-box > .result-container > .title{font-size: 1.2em;font-weight: bold;}
