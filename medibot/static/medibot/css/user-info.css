@@ -43,7 +43,7 @@
 
 /* 신체정보 Box */
 .physical-box{width:calc(100% - 20px);height:calc(100% - 20px);padding:10px;}
-.physical-box .physical-box-header{width:100%;padding:8px 0;display:flex;flex-direction:row;border-bottom:1px solid #fff}
+.physical-box .physical-box-header{width:100%;padding:8px 0;display:flex;flex-direction:row;align-items:center;border-bottom:1px solid #fff}
 .physical-box .physical-box-header .tit-wrap{width:70%;color:#fff}
 .physical-box .physical-box-header .tit-wrap p.tit{font-size:1.5em;font-weight:bold;}
 .physical-box .physical-box-header .tit-wrap p.update{font-size:1em;}
