@@ -137,30 +137,6 @@ $(document).ready(function(){
     });
 });
 </script>
-<!-- chatting -->
-<div id="chat-wrap" class="chat-wrap">
-    <form action="" method="post" name="chatFrm" id="chatFrm">
-        {% csrf_token %}
-        <input type="hidden" id="msg" name="msg" value=""/>
-        <div id="chat-header" class="chat-header">
-            <div class="tit">Medi-BOT</div>
-        </div>
-        <div id="chat-box" class="chat-box">
-            <div id="sentence" class="sentence"></div>
-            <div class="input-wrap">
-                <textarea id="input_message" name="input_message" placeholder="Medi-BOT에게 물어보세요!"></textarea>
-                <div class="ic_wrap">
-                    <div class="img_back"><input type="image" src="{% static 'medibot/img/icon/ic_submit.png' %}" /></div>
-                </div>
-            </div>
-        </div>
-        <div id="btn-controller-wrap" class="btn-controller-wrap">
-            <div><input type="button" id='btn_check1' class="check_btn" value="일일체크" onclick="check_buttons_event(1)"></div>
-            <div><input type="button" id='btn_check2' class="check_btn" value="영양체크" onclick="check_buttons_event(2)"></div>
-            <div><input type="button" id="btn-day-cancel"  value="취소"  onclick="cancel_event()"></div>
-        </div>
-    </form>
-</div>
 
 <!-- 식단체크 데이터 공간-->
 <form action="" id="foodFrm" name="foodFrm" class="foodFrm" method="post"  enctype="multipart/form-data">
@@ -197,3 +173,28 @@ $(document).ready(function(){
         </div>
     </div>
 </form>
+
+<!-- chatting -->
+<div id="chat-wrap" class="chat-wrap">
+    <form action="" method="post" name="chatFrm" id="chatFrm">
+        {% csrf_token %}
+        <input type="hidden" id="msg" name="msg" value=""/>
+        <div id="chat-header" class="chat-header">
+            <div class="tit">Medi-BOT</div>
+        </div>
+        <div id="chat-box" class="chat-box">
+            <div id="sentence" class="sentence"></div>
+            <div class="input-wrap">
+                <textarea id="input_message" name="input_message" placeholder="Medi-BOT에게 물어보세요!"></textarea>
+                <div class="ic_wrap">
+                    <div class="img_back"><input type="image" src="{% static 'medibot/img/icon/ic_submit.png' %}" /></div>
+                </div>
+            </div>
+        </div>
+        <div id="btn-controller-wrap" class="btn-controller-wrap">
+            <div><input type="button" id='btn_check1' class="check_btn" value="일일체크" onclick="check_buttons_event(1)"></div>
+            <div><input type="button" id='btn_check2' class="check_btn" value="영양체크" onclick="check_buttons_event(2)"></div>
+            <div><input type="button" id="btn-day-cancel"  value="취소"  onclick="cancel_event()"></div>
+        </div>
+    </form>
+</div>
