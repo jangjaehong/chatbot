@@ -33,6 +33,58 @@ $(document).ready(function(){
         return false;
     });
 
+    // 식단체크
+    $('#foodFrm').submit(function(e){
+        e.preventDefault();
+        if( $('#fcount').val() == 0){
+            alert("오늘 섭취한 음식을 추가해주세요!");
+        }else{
+            var table_base_info = "<tr id='info_ment' class='info_men'><td colspan='5' height='150' align='center'>음식을 검색 후 선택하시면 추가됩니다.</td></tr>";
+            $.ajax({
+                type: 'POST',
+                url:"/diet",
+                dataType: 'json',
+                data: $('#foodFrm').serialize(),
+                beforeSend: function(){
+                    //유저 메세지 표시
+                },
+                success: function(data){
+                    var nutrition = ["섭취량(g)", "에너지(kcal)", "탄수화물(g)", "단백질(g)", "지방(g)",
+                    "당류(g)", "나트륨(mg)", "클레스테롤(mg)", "포화지방(g)", "트랜스지방(g)"];
+                    if( data.energy == 0)
+                    {
+                        alert("상단에 일일점검을 최초 1회이상 하셔야 결과를 확인하실수 있습니다");
+                        $("#sel_food_list").html(table_base_info);
+                    }else{
+                        var foodAry = new Array(data.energy, data.gram, data.kcal, data.carbohydrate, data.protein, data.fat
+                        ,data.sugars, data.salt, data.cholesterol ,data.saturatedfat ,data.transfat);
+
+                        var info = "<table class='tb-diet'>";
+                        info += "<tr>";
+                        for(var i=0; i < nutrition.length; i++){
+                            info += "<th>" + nutrition[i];
+                        }
+                        info += "<tr>";
+                        for(var i=1; i < foodAry.length; i++){
+                            info += "<td>" + foodAry[i].toFixed(2);
+                        }
+                        var resultBox = $('#empty-result-container').clone().show().attr("id","");
+                        resultBox.find('.title').html("<h4>{{ user.username }}님이 오늘 섭취하신 음식의 영양정보입니다.</h4>");
+                        resultBox.find('.text-info').html(info);
+                        resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
+                        $('#result-box2').append(resultBox);
+                         var flag = false;
+                        drawCircleChart(foodAry, "div.circle-container1", flag);
+                    }
+                },
+                error: function(request, status, error) {
+                   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+            return false;
+        }
+    });
+
     // 기록보기
     $('#histFrm').submit(function(e){
         var gubun = $('#hist-gubun').val();
@@ -80,15 +132,9 @@ $(document).ready(function(){
             }
         });
     });
-
-    // 결과창 메뉴 이벤트
-    $('#hist-menu li').on('click',function(){
-        var gubun = $(this).attr('id').replace('hist','');
-        $('#hist-menu li').removeClass('on');
-        $(this).addClass('on')
-
-        $('#hist-gubun').val(gubun);
-        $('#histFrm').submit();
+    // 식단 체크 버튼 이벤트
+    $('#btn-diet-measure').on('click',function(){
+        $('#foodFrm').submit();
     });
 });
 /* 그래프 호출 */
@@ -133,6 +179,49 @@ function makeBullet(category, value, state, age, gender){
     <input type="hidden" name="waist" value="{{ physical_report.waist }}">
     <input type="hidden" name="hip" value="{{ physical_report.hip }}">
 </form>
+
+<!-- 식단체크 데이터 공간-->
+<form action="" id="foodFrm" name="foodFrm" class="foodFrm" method="post"  enctype="multipart/form-data">
+    <input type="hidden" id="term2" name="term" value="7" />
+    <input type="hidden" name="type" value="1" />
+    {% csrf_token %}
+    <div class="input-box">
+        <input class="searchText" id="searchText" name="searchText" type="text" autocomplete="on" placeholder="음식을 검색해주세요" value=""/>
+        <input type="hidden" id="fcount" name="fcount" value="0" />
+        <table class="tb-food" id="tb-food">
+            <thead>
+                <tr>
+                    <th>선택음식</th>
+                    <th>1회 제공량</th>
+                    <th>섭취량</th>
+                    <th>분량</th>
+                    <th>삭제</th>
+                </tr>
+            </thead>
+            <tbody id="sel_food_list">
+                <tr id="info_ment" class="info_ment">
+                    <td colspan="5" height="150" align="center">
+                        음식을 검색 후 선택하시면 추가됩니다.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--<div class="btn_wrap">-->
+            <!--<input type="button" id="reset-btn" name="reset" class="reset-btn" value="초기화" />-->
+        <!--</div>-->
+        <div class="btn_wrap">
+            <input type="button" id="btn-diet-measure" class="measure-btn" value="확인" />
+        </div>
+    </div>
+</form>
+
+<!-- 기록확인을 위한 데이터 공간 -->
+<form action="" id="histFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
+    <input type="hidden" id="hist-term" name="term" value="7" />
+    <input type="hidden" id="hist-type" name="type" value="1" />
+    <input type="hidden" id="hist-gubun" name="gubun" value="1" />
+</form>
+
 <!-- 측정결과 표시 -->
 <div class="result-wrap">
     <!-- 일일체크 측정결과 표시 -->
@@ -144,12 +233,6 @@ function makeBullet(category, value, state, age, gender){
     <div class="result-box" id="result-box4"><div class="none-result">최근 '섭취영양'을 측정한 결과가 없습니다.</div></div>
 </div>
 
-<!-- 기록확인을 위한 데이터 공간 -->
-<form action="" id="histFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
-    <input type="hidden" id="hist-term" name="term" value="7" />
-    <input type="hidden" id="hist-type" name="type" value="1" />
-    <input type="hidden" id="hist-gubun" name="gubun" value="1" />
-</form>
 <!-- 기록결과 표시 -->
 <div class="hist-wrap">
     <!-- 기록표시 구분 메뉴 -->

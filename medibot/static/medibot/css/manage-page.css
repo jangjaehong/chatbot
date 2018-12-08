@@ -1,18 +1,23 @@
 /* 대쉬보드 */
-.manage-header{
-    width:calc(100% - 20px);
-    padding:8px 0 8px 12px;
-}
-.manage-header .title{
-    font-size:1.8em;
-    color:#fff;
-    font-weight:bold
-}
-.manage-header .explain{
-    font-size:1em;
-    color:#fff
-}
+.manage-header{width:calc(100% - 20px);padding:8px 0 8px 12px;}
+.manage-header .title{font-size:1.8em;color:#fff;font-weight:bold}
+.manage-header .explain{font-size:1em;color:#fff}
 
+/* 식단체크 테이블 */
+.foodFrm{width:100%;height:100%;display:none;}
+.input-box > .tb-food {width:100%;height:calc(100% - 177px);display:flex;flex-flow: column;background:#fff;}
+.input-box > .tb-food thead {flex: 0 0 auto;width: calc(100% - 0.9em);border-bottom:1px solid #D5D5D5}
+.input-box > .tb-food tbody {flex: 1 1 auto;display: block;overflow-y:auto;height:100%;}
+.input-box > .tb-food tbody tr {width: 100%;}
+.input-box > .tb-food thead, .tb-food tbody tr {display: table;table-layout: fixed;}
+.input-box > .tb-food td, .tb-food th{width:15%;color:#000;text-align:center;height:30px;padding:5px 0}
+.input-box > .tb-food input{width:70%;height:30px;padding:0;min-width:0;}
+.input-box > .tb-food input[type=number]{text-align:right}
+.input-box > .tb-food td:first-child, .tb-food th:first-child{width:35%;}
+.ui-autocomplete{overflow-y:auto;}
+.info_ment{height:100%}
+
+/* 일일체크 결과창 */
 .result-wrap{width:100%;height:100%;position:relative;}
 .result-wrap .result-box{width:calc(33% - 20px);height:200px;margin:0 10px;box-shadow:3px 3px 3px 3px #222222;padding:5px;position:absolute;background:#333333}
 .result-wrap #result-box1{top:0;left:0;}
@@ -21,6 +26,7 @@
 .result-wrap #result-box4{width:calc(100% - 30px);top:220px;left:0;}
 .result-wrap .result-box .none-result{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.3em;font-weight:bold}
 
+/* 결과창 그래프 */
 .result-wrap > .result-box > .result-container{width:100%;height:100%;position:relative}
 .result-wrap > .result-box > .result-container > .title{font-size: 1.2em;font-weight: bold;}
 .result-wrap > .result-box > .result-container > .text-info{width:100%;height:auto;margin-top:10px;}
@@ -30,16 +36,18 @@
 .result-wrap > .result-box > .result-container > .bullet-container3{width:100%;height:120px;}
 .result-wrap > .result-box > .result-container > .circle-container{width:100%;height:600px;}
 
+/* 기록 표시 */
 .hist-wrap{width:100%;height:auto;position:absolute;top:0;left:0;z-index:0;background:#333333}
 .hist-wrap > .hist-box{width:calc(100% - 80px);height:auto;margin:20px 10px;box-shadow:3px 3px 3px 3px #222222;padding:20px;position:relative;display:none;}
 .hist-wrap > .hist-menu{width:100%;height:52px;display:none}
 .hist-wrap > .hist-box > .result-container > .hist-container{width:100%;height:600px;}
 
-/* 결과창 테이블3 */
+/* 식단체크 결과*/
 .result-wrap  > .result-box .tb-diet {width:100%;height:auto}
 .result-wrap  > .result-box .tb-diet th{color:#A4DBf8;margin:0;padding:5px 0;border-bottom:1px solid #A4DBf8;}
 .result-wrap  > .result-box .tb-diet td{color:#A4DBf8;text-align:center;margin:0;padding:5px 0;border-bottom:1px solid #A4DBf8;}
 
+/* 그래프 말풍선 */
 #tooltip{
     width:120px;
     height:auto;
