@@ -33,9 +33,18 @@ function view_btn_controller(flag){
     $('.check_btn').hide();
     $('#btn_check' + flag).show();
 }
-/* 버튼 취소 */
+
+// 식단 체크 버튼 이벤트
+$('#btn-diet-measure').on('click',function(){
+    $('#foodFrm').submit();
+});
+
+/* 취소 버튼 이벤트*/
 function cancel_event(){
     $('#btn-controller-wrap').animate({bottom:-200});
+}
+function diet_check_cancel(){
+    $('#foodFrm').animate({display:none});
 }
 
 /* 일일체크 */
@@ -146,10 +155,45 @@ $(document).ready(function(){
             </div>
         </div>
         <div id="btn-controller-wrap" class="btn-controller-wrap">
-            <div><input type="button" id='btn_check1' class="check_btn" value="DayCheck" onclick="check_buttons_event(1)"></div>
-            <div><input type="button" id='btn_check2' class="check_btn" value="DietCheck" onclick="check_buttons_event(2)"></div>
-            <div><input type="button" id="btn_day_history" value="기록보기" onclick="check_buttons_event(3)"></div>
-            <div><input type="button" id="btn_day-cancel"  value="취소"  onclick="cancel_event()"></div>
+            <div><input type="button" id='btn_check1' class="check_btn" value="일일체크" onclick="check_buttons_event(1)"></div>
+            <div><input type="button" id='btn_check2' class="check_btn" value="영양체크" onclick="check_buttons_event(2)"></div>
+            <div><input type="button" id="btn-day-cancel"  value="취소"  onclick="cancel_event()"></div>
         </div>
     </form>
 </div>
+
+<!-- 식단체크 데이터 공간-->
+<form action="" id="foodFrm" name="foodFrm" class="foodFrm" method="post"  enctype="multipart/form-data">
+    <input type="hidden" id="term2" name="term" value="7" />
+    <input type="hidden" name="type" value="1" />
+    {% csrf_token %}
+    <div class="input-box">
+        <input class="searchText" id="searchText" name="searchText" type="text" autocomplete="on" placeholder="음식을 검색해주세요" value=""/>
+        <input type="hidden" id="fcount" name="fcount" value="0" />
+        <table class="tb-food" id="tb-food">
+            <thead>
+                <tr>
+                    <th>선택음식</th>
+                    <th>1회 제공량</th>
+                    <th>섭취량</th>
+                    <th>분량</th>
+                    <th>삭제</th>
+                </tr>
+            </thead>
+            <tbody id="sel_food_list">
+                <tr id="info_ment" class="info_ment">
+                    <td colspan="5" height="150" align="center">
+                        음식을 검색 후 선택하시면 추가됩니다.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--<div class="btn_wrap">-->
+            <!--<input type="button" id="reset-btn" name="reset" class="reset-btn" value="초기화" />-->
+        <!--</div>-->
+        <div class="btn_wrap">
+            <input type="button" id="btn-diet-measure" class="measure-btn" value="확인" />
+            <input type="button" id="btn-cancel" value="취소" onclick="diet_check_cancel()"/>
+        </div>
+    </div>
+</form>

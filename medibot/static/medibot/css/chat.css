@@ -155,3 +155,17 @@
 .btn-controller-wrap .check_btn{
     display:none;
 }
+
+/* 식단체크 테이블 */
+.foodFrm{width:100%;height:100%;display:none;}
+.input-box > .tb-food {width:100%;height:calc(100% - 177px);display:flex;flex-flow: column;background:#fff;}
+.input-box > .tb-food thead {flex: 0 0 auto;width: calc(100% - 0.9em);border-bottom:1px solid #D5D5D5}
+.input-box > .tb-food tbody {flex: 1 1 auto;display: block;overflow-y:auto;height:100%;}
+.input-box > .tb-food tbody tr {width: 100%;}
+.input-box > .tb-food thead, .tb-food tbody tr {display: table;table-layout: fixed;}
+.input-box > .tb-food td, .tb-food th{width:15%;color:#000;text-align:center;height:30px;padding:5px 0}
+.input-box > .tb-food input{width:70%;height:30px;padding:0;min-width:0;}
+.input-box > .tb-food input[type=number]{text-align:right}
+.input-box > .tb-food td:first-child, .tb-food th:first-child{width:35%;}
+.ui-autocomplete{overflow-y:auto;}
+.info_ment{height:100%}

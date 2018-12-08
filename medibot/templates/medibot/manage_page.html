@@ -132,10 +132,7 @@ $(document).ready(function(){
             }
         });
     });
-    // 식단 체크 버튼 이벤트
-    $('#btn-diet-measure').on('click',function(){
-        $('#foodFrm').submit();
-    });
+
 });
 /* 그래프 호출 */
 function makeBullet(category, value, state, age, gender){
@@ -180,40 +177,6 @@ function makeBullet(category, value, state, age, gender){
     <input type="hidden" name="hip" value="{{ physical_report.hip }}">
 </form>
 
-<!-- 식단체크 데이터 공간-->
-<form action="" id="foodFrm" name="foodFrm" class="foodFrm" method="post"  enctype="multipart/form-data">
-    <input type="hidden" id="term2" name="term" value="7" />
-    <input type="hidden" name="type" value="1" />
-    {% csrf_token %}
-    <div class="input-box">
-        <input class="searchText" id="searchText" name="searchText" type="text" autocomplete="on" placeholder="음식을 검색해주세요" value=""/>
-        <input type="hidden" id="fcount" name="fcount" value="0" />
-        <table class="tb-food" id="tb-food">
-            <thead>
-                <tr>
-                    <th>선택음식</th>
-                    <th>1회 제공량</th>
-                    <th>섭취량</th>
-                    <th>분량</th>
-                    <th>삭제</th>
-                </tr>
-            </thead>
-            <tbody id="sel_food_list">
-                <tr id="info_ment" class="info_ment">
-                    <td colspan="5" height="150" align="center">
-                        음식을 검색 후 선택하시면 추가됩니다.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <!--<div class="btn_wrap">-->
-            <!--<input type="button" id="reset-btn" name="reset" class="reset-btn" value="초기화" />-->
-        <!--</div>-->
-        <div class="btn_wrap">
-            <input type="button" id="btn-diet-measure" class="measure-btn" value="확인" />
-        </div>
-    </div>
-</form>
 
 <!-- 기록확인을 위한 데이터 공간 -->
 <form action="" id="histFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
