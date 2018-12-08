@@ -14,6 +14,7 @@ $(document).ready(function(){
             dataType: 'json',
             data: $('#measureFrm').serialize(),
             beforeSend: function(){
+                addMessage('com', 'Medi-BOT', "{{ user.username }}님의 신체정보를 사용하여 체질량지수, 복부비만도, 기초대사량을 계산하고 있습니다." );
                 //유저 메세지 표시
             },
             success: function(response){
@@ -33,58 +34,6 @@ $(document).ready(function(){
         return false;
     });
 
-    // 식단체크
-    $('#foodFrm').submit(function(e){
-        e.preventDefault();
-        if( $('#fcount').val() == 0){
-            alert("오늘 섭취한 음식을 추가해주세요!");
-        }else{
-            var table_base_info = "<tr id='info_ment' class='info_men'><td colspan='5' height='150' align='center'>음식을 검색 후 선택하시면 추가됩니다.</td></tr>";
-            $.ajax({
-                type: 'POST',
-                url:"/diet",
-                dataType: 'json',
-                data: $('#foodFrm').serialize(),
-                beforeSend: function(){
-                    //유저 메세지 표시
-                },
-                success: function(data){
-                    var nutrition = ["섭취량(g)", "에너지(kcal)", "탄수화물(g)", "단백질(g)", "지방(g)",
-                    "당류(g)", "나트륨(mg)", "클레스테롤(mg)", "포화지방(g)", "트랜스지방(g)"];
-                    if( data.energy == 0)
-                    {
-                        alert("상단에 일일점검을 최초 1회이상 하셔야 결과를 확인하실수 있습니다");
-                        $("#sel_food_list").html(table_base_info);
-                    }else{
-                        var foodAry = new Array(data.energy, data.gram, data.kcal, data.carbohydrate, data.protein, data.fat
-                        ,data.sugars, data.salt, data.cholesterol ,data.saturatedfat ,data.transfat);
-
-                        var info = "<table class='tb-diet'>";
-                        info += "<tr>";
-                        for(var i=0; i < nutrition.length; i++){
-                            info += "<th>" + nutrition[i];
-                        }
-                        info += "<tr>";
-                        for(var i=1; i < foodAry.length; i++){
-                            info += "<td>" + foodAry[i].toFixed(2);
-                        }
-                        var resultBox = $('#empty-result-container').clone().show().attr("id","");
-                        resultBox.find('.title').html("<h4>{{ user.username }}님이 오늘 섭취하신 음식의 영양정보입니다.</h4>");
-                        resultBox.find('.text-info').html(info);
-                        resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
-                        $('#result-box2').append(resultBox);
-                         var flag = false;
-                        drawCircleChart(foodAry, "div.circle-container1", flag);
-                    }
-                },
-                error: function(request, status, error) {
-                   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-                }
-            });
-            return false;
-        }
-    });
-
     // 기록보기
     $('#histFrm').submit(function(e){
         var gubun = $('#hist-gubun').val();
@@ -97,6 +46,7 @@ $(document).ready(function(){
             data: $('#histFrm').serialize(),
             beforeSend: function(){
                 //유저 메세지 표시
+                Medi-BOT
             },
             success: function(data){
                 if(data.length == 0){
