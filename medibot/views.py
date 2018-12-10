@@ -3,22 +3,39 @@ from django.http import HttpResponse
 from django.utils import timezone
 
 import math
-import datetime
+from datetime import datetime, timedelta
 import json
 
 from .models import *
 import algorithm.chatbot as chatbot
 
-def test(request):
-    return render(request, 'medibot/test.html')
+
+def chat_save(uid, speaker, username, message):
+    ChatReport(uid=uid, speaker=speaker, username=username, contents=message, pub_date=timezone.now()).save()
 
 
 # 화면이나 데이터 렌더링 하는 공간
 def index(request):
     if request.user.is_authenticated:
-        #reply = chatbot._get_answer("")
         chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-        physical_report = PhysicalReport.objects.get(uid=request.user.pk)
+        physical_report = PhysicalReport.objects.filter(uid=request.user.pk).order_by('pub_date')[:1]
+        # 휴먼유저 로그인
+        now_date = datetime.now()
+        last_login = request.user.last_login
+        last_login = datetime.strptime(last_login, "%Y-%m-%d")
+        last_login_day = now_date - last_login
+        if last_login_day.days > 0:
+            speaker = "com"
+            username = "Medi-Bot"
+            contents = request.user.username, "님", last_login_day, '일만에 접속하셨네요.혹시 사용법이 기억안나신다면 \'도움말\' 입력해주세요'
+            # 디비에 저장
+            ChatReport(uid=request.user.pk, speaker='com', username="Medi-Bot", contents=contents,pub_date=timezone.now()).save()
+            # template 전달
+            chatreport += [speaker, username, contents]
+        # 일일체크 확인
+        print(len(physical_report))
+        # 식단체크 확인
+
         return render(request, 'medibot/index.html', {"chatreport": chatreport, "physical_report": physical_report})
     else:
         return redirect(reverse('accounts:login'))
@@ -36,23 +53,9 @@ def physical_update(request):
                 waist = float(request.POST['waist'])
                 hip = float(request.POST['hip'])
                 # 정보 업데이트
-                pi = PhysicalReport.objects.get(uid=request.user.pk)
-                if pi:
-                    pi.age = age
-                    pi.gender = gender
-                    pi.stature = stature
-                    pi.weight = weight
-                    pi.waist = waist
-                    pi.hip = hip
-                    pi.save()
-                else:
-                    PhysicalReport(uid=uid, age=age, gender=gender,
-                                   stature=stature, weight=weight,
-                                   waist=waist, hip=hip, pub_date=timezone.now()).save()
-                physical_info = PhysicalReport.objects.get(uid=request.user.pk)
+                PhysicalReport(uid=uid, age=age, gender=gender, stature=stature, weight=weight, waist=waist, hip=hip, pub_date=timezone.now()).save()
+                physical_info = PhysicalReport.objects.filter(uid=request.user.pk).order_by('pub_date')[:1]
                 return render(request, 'medibot/index.html', {"result": 1, "physical_report": physical_info})
-                #context = [{'result': 1, "physical_report": physical_info}]
-                #return HttpResponse(json.dumps(context), content_type="application/json")
         return render(request)
     else:
         return redirect(reverse('accounts:login'))
@@ -66,7 +69,6 @@ def ajaxpost(request):
                 msg = request.POST['msg']
                 uid = request.user.pk
                 ChatReport(uid=uid, speaker='user', username=request.user.username, contents=msg, pub_date=timezone.now()).save()
-
                 # 사용자 질의문에 대한 챗봇의 답변
                 reply = chatbot._get_answer(msg)
                 funcIdx = reply.rfind('fn')
@@ -211,6 +213,9 @@ def day_measure(request):
                 # 기록 DB 저장
                 MeasureReport(uid=uid, bmi=bmi_result, bmi_state=bmi_state, whr=whr_result, whr_state=whr_state,
                               energy=energy_result, energy_state=energy_state, pub_date=timezone.now()).save()
+                BmiReport(uid=uid, stature=stature, weight=weight, bmi=bmi_result, state=bmi_state, pub_date=timezone.now()).save()
+                WHRReport(uid=uid, gender=gender, waist=waist, hip=hip, whr=whr_result, state=whr_state, pub_date=timezone.now()).save()
+                EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=timezone.now()).save()
                 # 리턴값
                 context = {'bmi': bmi_result, 'bmi_state': bmi_state,
                            'whr': whr_result, 'whr_state': whr_state,

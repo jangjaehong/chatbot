@@ -12,11 +12,8 @@ urlpatterns = [
     url(r'^day_measure', views.day_measure, name='day_measure'),
     url(r'^diet', views.diet, name='diet'),
     url(r'^hist', views.hist, name='hist'),
-    # url(r'^bmi$', views.bmi, name='bmi'),
-    # url(r'^whr$', views.whr, name='whr'),
-    # url(r'^energy$', views.energy, name='energy'),
     # 테스트용
-    url(r'^test$', views.test, name='test'),
+    #url(r'^test$', views.test, name='test'),
 ]
 
 
