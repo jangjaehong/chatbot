@@ -37,7 +37,7 @@ form{width:100%}
 ::-webkit-scrollbar-thumb {background: #FF0000;}
 
 /* 공통 콘텐츠 */
-div.line{z-index:0;width:100%;height:1px;margin:15px 0;border:1px solid #367AAF;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:row;}
+div.line{z-index:0;width:calc(100% - 20xp);height:1px;margin:10px 10px;border-bottom:3px solid #367AAF;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:row;}
 div.line div.line_text{font-size:1em;font-weight:bold;background-color:rgba(51, 51, 51, 0.8);padding:5px;color:#fff}
 
 /*여백*/
