@@ -19,10 +19,10 @@ def index(request):
     if request.user.is_authenticated:
         chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
         physical_report = PhysicalReport.objects.filter(uid=request.user.pk).order_by('pub_date')[:1]
+
         # 휴먼유저 로그인
         now_date = datetime.now()
         last_login = request.user.last_login
-        last_login = datetime.strptime(last_login, "%Y-%m-%d")
         last_login_day = now_date - last_login
         if last_login_day.days > 0:
             speaker = "com"
@@ -33,7 +33,9 @@ def index(request):
             # template 전달
             chatreport += [speaker, username, contents]
         # 일일체크 확인
-        print(len(physical_report))
+        if physical_report:
+            for physical in physical_report:
+                print(physical.pub_date)
         # 식단체크 확인
 
         return render(request, 'medibot/index.html', {"chatreport": chatreport, "physical_report": physical_report})
