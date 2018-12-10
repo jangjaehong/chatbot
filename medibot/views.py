@@ -18,27 +18,29 @@ def chat_save(uid, speaker, username, message):
 def index(request):
     if request.user.is_authenticated:
         chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-        physical_report = PhysicalReport.objects.filter(uid=request.user.pk).order_by('pub_date')[:1]
+
 
         # 휴먼유저 로그인
         now_date = datetime.now()
         last_login = request.user.last_login
-        last_login_day = now_date - last_login
-        if last_login_day.days > 0:
+        last_login_day = (now_date - last_login).days
+        if last_login_day > 0:
             speaker = "com"
             username = "Medi-Bot"
-            contents = request.user.username, "님", last_login_day, '일만에 접속하셨네요.혹시 사용법이 기억안나신다면 \'도움말\' 입력해주세요'
+            contents = "%s님 %d일만에 접속하셨네요." \
+                       "혹시 사용법이 기억안나신다면 \'도움말\' 입력해주세요" % (request.user.username, last_login_day)
             # 디비에 저장
             ChatReport(uid=request.user.pk, speaker='com', username="Medi-Bot", contents=contents,pub_date=timezone.now()).save()
             # template 전달
             chatreport += [speaker, username, contents]
+
+        physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
         # 일일체크 확인
         if physical_report:
-            for physical in physical_report:
-                print(physical.pub_date)
+            print(physical_report.pub_date)
         # 식단체크 확인
 
-        return render(request, 'medibot/index.html', {"chatreport": chatreport, "physical_report": physical_report})
+        return render(request, 'medibot/index.html', {"chatreport": chatreport, "physical_report": physical_report[:1]})
     else:
         return redirect(reverse('accounts:login'))
 
