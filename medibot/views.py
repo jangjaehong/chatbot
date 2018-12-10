@@ -10,23 +10,19 @@ from .models import *
 import algorithm.chatbot as chatbot
 
 
-def chat_save(uid, speaker, username, message):
-    ChatReport(uid=uid, speaker=speaker, username=username, contents=message, pub_date=timezone.now()).save()
-
-
-# 화면이나 데이터 렌더링 하는 공간
+# 메인페이지
 def index(request):
     if request.user.is_authenticated:
-        chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-
-
-        # 휴먼유저 로그인
         now_date = datetime.now()
+        speaker = "com"
+        username = "Medi-Bot"
+        contents = ""
+
+        chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
+        # 로그인 체크
         last_login = request.user.last_login
         last_login_day = (now_date - last_login).days
-        if last_login_day > 0:
-            speaker = "com"
-            username = "Medi-Bot"
+        if last_login_day > 1:
             contents = "%s님 %d일만에 접속하셨네요." \
                        "혹시 사용법이 기억안나신다면 \'도움말\' 입력해주세요" % (request.user.username, last_login_day)
             # 디비에 저장
@@ -34,13 +30,49 @@ def index(request):
             # template 전달
             chatreport += [speaker, username, contents]
 
-        physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
         # 일일체크 확인
+        physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
         if physical_report:
-            print(physical_report.pub_date)
-        # 식단체크 확인
+            last_check_day = (now_date - physical_report.pub_date).days
+            # 마지막 체크일이 어제일 경우
+            if last_check_day == 1:
+                contents = "%s님의 어제 체질량지수: %d | %s 복부비만도: %d | %s, 기초대사량: %d | %s 였네요. 오늘도 꼭 체크 해주세요!" \
+                           % (request.user.username,
+                              physical_report.bmi, physical_report.bmi_state,
+                              physical_report.whr, physical_report.whr_state,
+                              physical_report.energy,  physical_report.energy_state,)
+            # 마지막 체크일이 1일 초과
+            elif last_check_day > 1:
+                contents = "%s님 확인해보니깐 마지막 건강 체크가 %s 네요, 건강체크는 매일 체크해서 관리를 해줘야 효과가 있답니다." \
+                           % (request.user.username, physical_report.pub_date.strftime("%Y-%m-%d"),)
+            chatreport += [speaker, username, contents]
+        else:
+            # 체크 기록이 없음
+            contents = "%s님 건강 체크를 한번도 하신적이 없네요. 그러면 안되며 만성질환은 언제 생길지 몰라요!" \
+                       % request.user.username
+            chatreport += [speaker, username, contents]
 
-        return render(request, 'medibot/index.html', {"chatreport": chatreport, "physical_report": physical_report[:1]})
+        # 식단체크 확인
+        intake_food_report = IntakeFoodReport.objects.filter(uid=request.user.pk).last()
+        if intake_food_report:
+            last_check_day = (now_date - intake_food_report.pub_date).days
+            if last_check_day == 1:
+                contents = "%s님의 어제 체질량지수: %d | %s 복부비만도: %d | %s, 기초대사량: %d | %s 였네요. 오늘도 꼭 체크 해주세요!" \
+                           % (request.user.username,
+                              physical_report.bmi, physical_report.bmi_state,
+                              physical_report.whr, physical_report.whr_state,
+                              physical_report.energy, physical_report.energy_state,)
+                # 마지막 체크일이 1일 초과
+            elif last_check_day > 1:
+                contents = "%s님 확인해보니깐 마지막 영양 체크가 %s 네요, 건강체크는 매일 체크해서 관리를 해줘야 효과가 있답니다." \
+                           % (request.user.username, physical_report.pub_date.strftime("%Y-%m-%d"),)
+            chatreport += [speaker, username, contents]
+        else:
+            # 체크 기록이 없음
+            contents = "%s님 영양 체크를 한번도 하신적이 없네요..오늘은 드신음식을 통해 얼마나 영양소를 섭취했는지 알아보세요." \
+                       % request.user.username
+            chatreport += [speaker, username, contents]
+        return render(request, 'medibot/index.html', {"chatreport": chatreport, "physical_report": physical_report, "intake_food_report": intake_food_report})
     else:
         return redirect(reverse('accounts:login'))
 
@@ -65,7 +97,7 @@ def physical_update(request):
         return redirect(reverse('accounts:login'))
 
 
-def ajaxpost(request):
+def comunication(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
@@ -151,85 +183,90 @@ class Calc:
             energy_result = (66.47 + (13.75 * weight) + (5 * stature) - (6.76 * age))
             if age >=20 or age <= 29:
                 if energy_result >= 1359.8 or energy_result < 1728:
-                    energy_state = 'low'
+                    energy_state = '낮음'
                 elif energy_result >= 1728 or energy_result <= 2096.2:
-                    energy_state = 'normal'
+                    energy_state = '적정'
                 elif energy_result > 2096.2:
-                    energy_result = 'height'
+                    energy_result = '높음'
             if age >= 30 or age <= 49:
                 if energy_result >= 1367.4 or energy_result < 1669.5:
-                    energy_state = 'low'
+                    energy_state = '낮음'
                 elif energy_result >= 1669.5 or energy_result <= 1971.6:
-                    energy_state = 'normal'
+                    energy_state = '적정'
                 elif energy_result > 1971.6:
-                    energy_state = 'height'
+                    energy_state = '높음'
             if age >= 50:
                 if energy_result >= 1178.5 or energy_result < 1493.8:
-                    energy_state = 'low'
+                    energy_state = '낮음'
                 elif energy_result >= 1493.8 or energy_result <= 1809.1:
-                    energy_state = 'normal'
+                    energy_state = '적정'
                 elif energy_result > 1809.1:
-                    energy_state = 'height'
+                    energy_state = '높음'
         else:
             energy_result = (65.51 + (9.56 * weight) + (1.85 * stature) - (4.68 * age))
             if age >=20 or age <= 29:
                 if energy_result >= 1078.5 or energy_result < 1311.5:
-                    energy_state = 'low'
+                    energy_state = '낮음'
                 elif energy_result >= 1311.5 or energy_result <= 1544.5:
-                    energy_state = 'normal'
+                    energy_state = '적정'
                 elif energy_result > 1544.5:
-                    energy_result = 'height'
+                    energy_result = '높음'
             if age >= 30 or age <= 49:
                 if energy_result >= 1090.9 or energy_result < 1316.8:
-                    energy_state = 'low'
+                    energy_state = '낮음'
                 elif energy_result >= 1316.8 or energy_result <= 1542.7:
-                    energy_state = 'normal'
+                    energy_state = '적정'
                 elif energy_result > 1542.7:
-                    energy_state = 'height'
+                    energy_state = '높음'
             if age >= 50:
                 if energy_result >= 1023.9 or energy_result < 1252.5:
-                    energy_state = 'low'
+                    energy_state = '낮음'
                 elif energy_result >= 1252.5 or energy_result <= 1481.1:
-                    energy_state = 'normal'
+                    energy_state = '적정'
                 elif energy_result > 1481.1:
-                    energy_state = 'height'
+                    energy_state = '높음'
         return energy_result, energy_state
 
 
 def day_measure(request):
+    # 측정 성공:1, 신체정보 조회 실패:2
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
                 print("측정시작")
-                uid = request.user.pk
-                age = int(request.POST['age'])
-                gender = int(request.POST['gender'])
-                stature = float(request.POST['stature'])
-                weight = float(request.POST['weight'])
-                waist = float(request.POST['waist'])
-                hip = float(request.POST['hip'])
+                physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
+                if physical_report:
+                    uid = request.user.pk
+                    age = physical_report.age
+                    gender = physical_report.gender
+                    stature = physical_report.stature
+                    weight = physical_report.weight
+                    waist = physical_report.waist
+                    hip = physical_report.hip
 
-                # bmi 계산
-                calc = Calc()
-                bmi_result, bmi_state = calc.bmi(stature, weight)
-                whr_result, whr_state = calc.whr(gender, waist, hip)
-                energy_result, energy_state = calc.energy(gender, age, stature, weight)
-                # 기록 DB 저장
-                MeasureReport(uid=uid, bmi=bmi_result, bmi_state=bmi_state, whr=whr_result, whr_state=whr_state,
-                              energy=energy_result, energy_state=energy_state, pub_date=timezone.now()).save()
-                BmiReport(uid=uid, stature=stature, weight=weight, bmi=bmi_result, state=bmi_state, pub_date=timezone.now()).save()
-                WHRReport(uid=uid, gender=gender, waist=waist, hip=hip, whr=whr_result, state=whr_state, pub_date=timezone.now()).save()
-                EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=timezone.now()).save()
-                # 리턴값
-                context = {'bmi': bmi_result, 'bmi_state': bmi_state,
-                           'whr': whr_result, 'whr_state': whr_state,
-                           'energy': energy_result, 'energy_state': energy_state,
-                           'age': age, 'gender': gender}
-                return HttpResponse(json.dumps(context), content_type="application/json")
-        else:
-            chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-            context = {'chatreport': chatreport}
-            return render(request, 'medibot/index.html', context)
+                    # bmi 계산
+                    calc = Calc()
+                    bmi_result, bmi_state = calc.bmi(stature, weight)
+                    whr_result, whr_state = calc.whr(gender, waist, hip)
+                    energy_result, energy_state = calc.energy(gender, age, stature, weight)
+                    # 기록 DB 저장
+                    MeasureReport(uid=uid, bmi=bmi_result, bmi_state=bmi_state, whr=whr_result, whr_state=whr_state,
+                                  energy=energy_result, energy_state=energy_state, pub_date=timezone.now()).save()
+                    BmiReport(uid=uid, stature=stature, weight=weight, bmi=bmi_result, state=bmi_state, pub_date=timezone.now()).save()
+                    WHRReport(uid=uid, gender=gender, waist=waist, hip=hip, whr=whr_result, state=whr_state, pub_date=timezone.now()).save()
+                    EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=timezone.now()).save()
+                    # 리턴값
+                    context = {'bmi': bmi_result, 'bmi_state': bmi_state,
+                               'whr': whr_result, 'whr_state': whr_state,
+                               'energy': energy_result, 'energy_state': energy_state,
+                               'age': age, 'gender': gender, "result": 1}
+                    return HttpResponse(json.dumps(context), content_type="application/json")
+                else:
+                    speaker = "com"
+                    username = "Medi-Bot"
+                    contents = "신체정보를 한번도 등록안하셨네요. 먼저 신체정보를 등록해주세요!"
+                    chat_report = {"speaker": speaker, "username": username, "contents": contents}
+                    return render(request, 'medibot/index.html', {"result": 2, "chat_report": chat_report})
     else:
         return redirect(reverse('accounts:login'))
 
@@ -272,10 +309,6 @@ def diet(request):
                                          sugars=context["sugars"], salt=context["salt"], cholesterol=context["cholesterol"],
                                          saturatedfat=context["saturatedfat"], transfat=context["transfat"], pub_date=timezone.now()).save()
                 return HttpResponse(json.dumps(context), content_type="application/json")
-        else:
-            chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-            context = {'chatreport': chatreport}
-            return render(request, 'medibot/index.html', context)
     else:
         return redirect(reverse('accounts:login'))
 

@@ -5,7 +5,7 @@ app_name = 'medibot'
 urlpatterns = [
     # 챗봇
     url(r'^$', views.index, name='index'),
-    url(r'^ajaxpost$', views.ajaxpost, name='ajaxpost'),
+    url(r'^comunication$', views.comunication, name='comunication'),
     # 추가 기능
     url(r'^autocomplete', views.autocomplete, name='autocomplete'),
     url(r'^physical_update', views.physical_update, name='physical_update'),

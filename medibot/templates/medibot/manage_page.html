@@ -7,25 +7,29 @@ $(document).ready(function(){
     $('#result-box4').show();
 
     // 측정하기
-    $('#measureFrm').submit(function(){
+    $('#physicalFrm').submit(function(){
         $.ajax({
             type: 'POST',
             url:"/day_measure",
             dataType: 'json',
-            data: $('#measureFrm').serialize(),
+            data: $('#physicalFrm').serialize(),
             beforeSend: function(){
                 addMessage('com', 'Medi-BOT', "{{ user.username }}님의 신체정보를 사용하여 체질량지수, 복부비만도, 기초대사량을 계산하고 있습니다." );
                 //유저 메세지 표시
             },
             success: function(response){
-                // 결과데이터
-                var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
-                var value = [response.bmi,  response.whr, response.energy];
-                var state = [response.bmi_state, response.whr_state, response.energy_state];
-                var age = response.age;
-                var gender = response.gender;
-                // 결과 표시
-                makeBullet(category, value, state, age, gender);
+                if(response.result == 1){
+                    // 결과데이터
+                    var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
+                    var value = [response.bmi,  response.whr, response.energy];
+                    var state = [response.bmi_state, response.whr_state, response.energy_state];
+                    var age = response.age;
+                    var gender = response.gender;
+                    // 결과 표시
+                    makeBullet(category, value, state, age, gender);
+                }else if(response.result == 2){
+                     addMessage(response.speaker, response.username, response.contents);
+                }
             },
             error: function(request, status, error) {
                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -116,17 +120,6 @@ function makeBullet(category, value, state, age, gender){
         </div>
     </div>
 </div>
-
-<!-- 측정을 위한 데이터 공간 -->
-<form action="" id="measureFrm" name="measureFrm" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="gender" value="{{ physical_report.gender }}">
-    <input type="hidden" name="age" value="{{ physical_report.age }}" >
-    <input type="hidden" name="stature" value="{{ physical_report.stature }}"/>
-    <input type="hidden" name="weight" value="{{ physical_report.weight }}"/>
-    <input type="hidden" name="waist" value="{{ physical_report.waist }}">
-    <input type="hidden" name="hip" value="{{ physical_report.hip }}">
-</form>
-
 
 <!-- 기록확인을 위한 데이터 공간 -->
 <form action="" id="histFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
