@@ -25,9 +25,9 @@ class Config:
     enc_sentence_length = datautil.enc_sentence_length
     dec_sentence_length = target_sentence_length = datautil.dec_sentence_length
 
-    embedding_size = enc_emb_size = dec_emb_size = 300
-    hidden_size = 300
-    attn_size = 300
+    embedding_size = enc_emb_size = dec_emb_size = 400
+    hidden_size = 400
+    attn_size = 400
     n_epoch = 2000
     learning_rate = 0.0001
 
@@ -111,7 +111,6 @@ class Seq2Seq:
 
             # decoder_inputs_length_train: [batch_size]
             self.train_dec_inputs_length = self.dec_inputs_length + 1
-
 
     def _make_cell(self, hidden_size, cell_type, cell_multi=False):
         single_cell = None
