@@ -65,11 +65,20 @@ function diet_check_cancel(){
 
 $(document).ready(function(){
     /* 채팅 초기화 */
-    {% if chatreport %}
-        {% for report in chatreport %}
+    {% if chat_reports %}
+        {% for report in chat_reports %}
             addMessage('{{ report.speaker }}','{{ report.username }}','{{ report.contents }}');
         {% endfor %}
     {% endif %}
+
+    {% if add_message %}
+        {% for msg in add_message %}
+            addMessage('{{ msg.speaker }}','{{ msg.username }}','{{ msg.contents }}');
+        {% endfor %}
+    {% endif %}
+
+    /* 채팅창 스크롤 제일 아래로 */
+    move_chat_scroll();
 
     /* 입력 버튼 이벤트 */
     $('#input_message').on('keydown', function(e){
