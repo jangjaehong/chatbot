@@ -16,8 +16,6 @@ function addMessage(sender, name, message){
     speechBubble += '<div class="content">' + message + '</div>';
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
-
-    move_chat_scroll();
 };
 /* 채팅창 맨아래로 */
 function move_chat_scroll(){
@@ -27,29 +25,9 @@ function move_chat_scroll(){
     $('#sentence').animate({scrollTop : scrollPosition}, 0);
 };
 
-/* 채팅에 따른 버튼 보여주기 */
-function view_btn_controller(flag){
-    $('#btn-controller-wrap').animate({bottom:0});
+/* 채팅에 기능 수행 */
+function check_event(flag){
     $('.check_btn').hide();
-    $('#btn_check' + flag).show();
-}
-
-// 식단 체크 버튼 이벤트
-$('#btn-diet-measure').on('click',function(){
-    $('#foodFrm').submit();
-});
-
-/* 취소 버튼 이벤트*/
-function cancel_event(){
-    $('#btn-controller-wrap').animate({bottom:-200});
-}
-function diet_check_cancel(){
-    $('#foodFrm').animate({display:none});
-}
-
-/* 일일체크 */
-function check_buttons_event(flag){
-    cancel_event();
     if(flag == 1){
         /* 일일체크 */
         addMessage('com','Medi-BOT','체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.');
@@ -59,6 +37,7 @@ function check_buttons_event(flag){
         /* 식단체크 */
         $('#foodFrm').show();
     }
+    /* 일일체크 기록보기 */
     if(flag == 3){
         /* 기록보기 */
         $('.result-wrap').hide();
@@ -75,6 +54,13 @@ function check_buttons_event(flag){
         $('#hist-type').val(flag);
         $('#histFrm').submit();
     }
+    /* 식단체크 기록보기 */
+}
+
+
+/* 취소 버튼 이벤트*/
+function diet_check_cancel(){
+    $('#foodFrm').animate({display:none});
 }
 
 $(document).ready(function(){
@@ -94,9 +80,7 @@ $(document).ready(function(){
                 $('#input_message').val(tmp)
             }else{
                 $('#chatFrm').submit();
-                move_chat_scroll();
             }
-
             return false;
         }
     });
@@ -133,6 +117,59 @@ $(document).ready(function(){
         });
         return false;
     });
+
+    // 식단체크
+    $('#foodFrm').submit(function(e){
+        e.preventDefault();
+        if( $('#fcount').val() == 0){
+            alert("오늘 섭취한 음식을 추가해주세요!");
+        }else{
+            var table_base_info = "<tr id='info_ment' class='info_men'><td colspan='5' height='150' align='center'>음식을 검색 후 선택하시면 추가됩니다.</td></tr>";
+            $.ajax({
+                type: 'POST',
+                url:"/diet",
+                dataType: 'json',
+                data: $('#foodFrm').serialize(),
+                beforeSend: function(){
+                    addMessage('com', 'Medi-BOT', "오늘 섭취한 음식의 총칼로리와 영샹소를 {{ user.username }}님의 기초대사량와 하루 권장량의 비율 계산하고 있습니다!" );
+                    $('#foodFrm').hide();
+                },
+                success: function(data){
+                    var nutrition = ["섭취량(g)", "에너지(kcal)", "탄수화물(g)", "단백질(g)", "지방(g)",
+                    "당류(g)", "나트륨(mg)", "클레스테롤(mg)", "포화지방(g)", "트랜스지방(g)"];
+                    if( data.energy == 0)
+                    {
+                        alert("상단에 일일점검을 최초 1회이상 하셔야 결과를 확인하실수 있습니다");
+                        $("#sel_food_list").html(table_base_info);
+                    }else{
+                        var foodAry = new Array(data.energy, data.gram, data.kcal, data.carbohydrate, data.protein, data.fat
+                        ,data.sugars, data.salt, data.cholesterol ,data.saturatedfat ,data.transfat);
+
+                        var info = "<table class='tb-diet'>";
+                        info += "<tr>";
+                        for(var i=0; i < nutrition.length; i++){
+                            info += "<th>" + nutrition[i];
+                        }
+                        info += "<tr>";
+                        for(var i=1; i < foodAry.length; i++){
+                            info += "<td>" + foodAry[i].toFixed(2);
+                        }
+                        var resultBox = $('#empty-result-container').clone().show().attr("id","");
+                        resultBox.find('.title').html("<h4>{{ user.username }}님이 오늘 섭취하신 음식의 영양정보입니다.</h4>");
+                        resultBox.find('.text-info').html(info);
+                        resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
+                        $('#result-box2').append(resultBox);
+                         var flag = false;
+                        drawCircleChart(foodAry, "div.circle-container1", flag);
+                    }
+                },
+                error: function(request, status, error) {
+                   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+            return false;
+        }
+    });
 });
 </script>
 
@@ -141,7 +178,7 @@ $(document).ready(function(){
     <input type="hidden" id="term2" name="term" value="7" />
     <input type="hidden" name="type" value="1" />
     {% csrf_token %}
-    <div class="input-box">
+    <div class="diet-box">
         <input class="searchText" id="searchText" name="searchText" type="text" autocomplete="on" placeholder="음식을 검색해주세요" value=""/>
         <input type="hidden" id="fcount" name="fcount" value="0" />
         <table class="tb-food" id="tb-food">
@@ -162,11 +199,8 @@ $(document).ready(function(){
                 </tr>
             </tbody>
         </table>
-        <!--<div class="btn_wrap">-->
-            <!--<input type="button" id="reset-btn" name="reset" class="reset-btn" value="초기화" />-->
-        <!--</div>-->
         <div class="btn_wrap">
-            <input type="button" id="btn-diet-measure" class="measure-btn" value="확인" />
+            <input type="submit" id="btn-diet-measure" class="measure-btn" value="확인" />
             <input type="button" id="btn-cancel" value="취소" onclick="diet_check_cancel()"/>
         </div>
     </div>
@@ -188,11 +222,6 @@ $(document).ready(function(){
                     <div class="img_back"><input type="image" src="{% static 'medibot/img/icon/ic_submit.png' %}" /></div>
                 </div>
             </div>
-        </div>
-        <div id="btn-controller-wrap" class="btn-controller-wrap">
-            <div><input type="button" id='btn_check1' class="check_btn" value="일일체크" onclick="check_buttons_event(1)"></div>
-            <div><input type="button" id='btn_check2' class="check_btn" value="영양체크" onclick="check_buttons_event(2)"></div>
-            <div><input type="button" id="btn-day-cancel"  value="취소"  onclick="cancel_event()"></div>
         </div>
     </form>
 </div>
