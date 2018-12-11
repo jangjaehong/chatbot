@@ -1,4 +1,5 @@
 import psycopg2 as pg2
+from datetime import timezone,datetime
 
 def connect(host='113.198.224.50', port='5432', database='medibot', user='jjh', password='skwoghd1'):
     conn = False
@@ -11,21 +12,20 @@ def connect(host='113.198.224.50', port='5432', database='medibot', user='jjh', 
     return conn
 
 
-def inser_chat_sequnece(questions, answers):
+def inser_chat_sequnece(dataset):
     with connect() as conn:
         with conn.cursor() as cur:
-            sql = "delete from medibot_vocabdict "
-            cur.execute(sql)
-
             sql = '''
-                   INSERT INTO medibot_chatsequence (qeustion, answer, morpheme)
-                   SELECT  unnest(%(qestion)s),
-                           unnest(%(answer)s)
-               '''
-            qestion = questions
-            answer = answers
+               INSERT INTO medibot_chatsequence (question, answer, pub_date)
+               SELECT  unnest(%(question)s),
+                       unnest(%(answer)s),
+                       unnest(%(pub_date)s)
+            '''
+            question = [r["question"] for r in dataset]
+            answer = [r["answer"] for r in dataset]
+            pub_date = [r["pub_date"] for r in dataset]
             cur.execute(sql, locals())
-    print("어휘 사전을 데이터베이스에 저장했습니다...")
+    print("질의응답 데이터셋을 데이터베이스에 저장했습니다...")
 
 
 def select_chat_sequence():

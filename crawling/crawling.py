@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from collections import OrderedDict
 from algorithm.db import inser_chat_sequnece
-
+from datetime import datetime
 
 
 class Crawling:
@@ -111,22 +111,34 @@ class BuildDataSet:
             data = json.load(json_file)
             category = data["category"]
             for idx, tit in enumerate(data["title"]):
-                q = "%s %s" % (category, tit )
+                if idx <= 7:
+                    q = "%s" % tit
+                else:
+                    q = "%s %s" % (category, tit)
+                print("질문:", q)
                 self.question_list.append(q)
                 if data["sub_title"][idx]:
                     a = "%s 관련 내용은 %s %d가지 종류가 있습니다. 어떤걸 알고 싶으신가요?" % (tit, data["sub_title"][idx], len(data["sub_title"][idx]))
+                    print("내용:", a)
                     self.answer_list.append(a)
                     for idx2, sub_tit in enumerate(data["sub_title"][idx]):
                         q = sub_tit
                         self.question_list.append(q)
+                        print("질문:", q)
                         a = self.down_vec(data["content"][idx][idx2])
                         self.answer_list.append(a)
+                        print("내용:", a)
                 else:
                     a = self.down_vec(data["content"][idx][0])
                     self.answer_list.append(a)
+                    print("내용:", a)
 
     def save(self):
-        inser_chat_sequnece(self.question_list, self.answer_list)
+        data_set =[]
+        for q, a in zip(self.question_list, self.answer_list):
+            #print({"question": q, "answer": a, "pub_date": datetime.now()})
+            data_set.append({"question": q, "answer": a, "pub_date": datetime.now()})
+        inser_chat_sequnece(data_set)
 
 
     def down_vec(self, docs):
