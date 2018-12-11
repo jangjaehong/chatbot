@@ -27,14 +27,14 @@ function move_chat_scroll(){
 
 /* 채팅에 기능 수행 */
 function check_event(flag){
-    $('.check_btn').hide();
     if(flag == 1){
         /* 일일체크 */
-        addMessage('com','Medi-BOT','체질량지수, 복부비만도, 기초대사량 측정을 시작합니다. 조금만 기다려주세요.');
-        $('#measureFrm').submit();
+         addMessage('com', 'Medi-BOT', "건강상태 시작합니다." );
+        $('#physicalFrm').submit();
     }
     if(flag == 2){
         /* 식단체크 */
+        addMessage('com', 'Medi-BOT', "영양체크를 시작합니다." );
         $('#foodFrm').show();
     }
     /* 일일체크 기록보기 */
@@ -140,7 +140,7 @@ $(document).ready(function(){
                 dataType: 'json',
                 data: $('#foodFrm').serialize(),
                 beforeSend: function(){
-                    addMessage('com', 'Medi-BOT', "오늘 섭취한 음식의 총칼로리와 영샹소를 {{ user.username }}님의 기초대사량와 하루 권장량의 비율 계산하고 있습니다!" );
+                    addMessage('com', 'Medi-BOT', "영양소별 계산중입니다. 잠시만기다려주세요." );
                     $('#foodFrm').hide();
                 },
                 success: function(data){

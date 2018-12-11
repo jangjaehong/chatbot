@@ -14,7 +14,7 @@ $(document).ready(function(){
             dataType: 'json',
             data: $('#physicalFrm').serialize(),
             beforeSend: function(){
-                addMessage('com', 'Medi-BOT', "{{ user.username }}님의 신체정보를 사용하여 체질량지수, 복부비만도, 기초대사량을 계산하고 있습니다." );
+                addMessage('com', 'Medi-BOT', "건강상태 측정중입니다..." );
                 //유저 메세지 표시
             },
             success: function(response){
