@@ -2,6 +2,7 @@ import re
 from collections import Counter
 import algorithm.db as db
 import numpy as np
+from konlpy.tag import Mecab
 
 class DataUtil:
 
@@ -43,6 +44,16 @@ class DataUtil:
                     answer.append([sequence[1]] * len(doc))
         return question, answer
 
+    def tokenizer(self, sentence, flag=1):
+        # flag = 1 : word token
+        # flag = 2 : word & tag token
+        mecab = Mecab()
+        tokens = []
+        if flag == 1:
+            for sent in sentence:
+                tokens = mecab.morphs(sent)
+        return tokens
+
     def max_sequence_len(self, input):
         max_seq_len = 0
         for seq in input:
@@ -50,9 +61,6 @@ class DataUtil:
                 max_seq_len = len(seq)
         return max_seq_len
 
-    def tokenizer(self, sentence):
-        tokens = re.findall(r"[\w]+|[^\s\w]", sentence)
-        return tokens
 
     def build_vocab(self, sentences, is_target=False, max_vocab_size=None, max_sequence_len=None):
         word_counter = Counter()
@@ -112,3 +120,4 @@ class DataUtil:
     def idx2sent_pad_removce(self, indices, reverse_vocab):
         in_index = np.where(indices == self.pad_token)
         return " ".join([self.idx2token(idx, reverse_vocab) for idx in indices[0:in_index[0][0]]])
+
