@@ -4,6 +4,7 @@ import algorithm.db as db
 import numpy as np
 from konlpy.tag import Mecab
 
+
 class DataUtil:
 
     def __init__(self):

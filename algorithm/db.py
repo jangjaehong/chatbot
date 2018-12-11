@@ -11,6 +11,23 @@ def connect(host='113.198.224.50', port='5432', database='medibot', user='jjh', 
     return conn
 
 
+def inser_chat_sequnece(questions, answers):
+    with connect() as conn:
+        with conn.cursor() as cur:
+            sql = "delete from medibot_vocabdict "
+            cur.execute(sql)
+
+            sql = '''
+                   INSERT INTO medibot_chatsequence (qeustion, answer, morpheme)
+                   SELECT  unnest(%(qestion)s),
+                           unnest(%(answer)s)
+               '''
+            qestion = questions
+            answer = answers
+            cur.execute(sql, locals())
+    print("어휘 사전을 데이터베이스에 저장했습니다...")
+
+
 def select_chat_sequence():
     rows = None
     sequence_data = []
@@ -61,6 +78,7 @@ def delete_and_insert_vocab_list(vocab_dic):
             morpheme = [r['morpheme'] for r in vocab_dic]
             cur.execute(sql, locals())
     print("어휘 사전을 데이터베이스에 저장했습니다...")
+
 
 
 

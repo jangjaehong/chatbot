@@ -5,8 +5,8 @@ import os
 import requests
 from bs4 import BeautifulSoup
 from collections import OrderedDict
-from medibot.models import ChatSequence
-from datetime import datetime
+from algorithm.db import inser_chat_sequnece
+
 
 
 class Crawling:
@@ -126,8 +126,7 @@ class BuildDataSet:
                     self.answer_list.append(a)
 
     def save(self):
-        for q, a in zip(self.question_list, self.answer_list):
-            ChatSequence(question=q, answer=a, pub_date=datetime.now())
+        inser_chat_sequnece(self.question_list, self.answer_list)
 
 
     def down_vec(self, docs):
@@ -138,5 +137,6 @@ class BuildDataSet:
         return temp
 
 
-
+bds = BuildDataSet()
+bds.save()
 
