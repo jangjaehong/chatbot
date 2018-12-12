@@ -45,7 +45,7 @@ class DataUtil:
         return max_seq_len
 
 
-    def build_vocab(self, tonkens, is_target=False, max_vocab_size=None):
+    def build_vocab(self, tokens, is_target=False, max_vocab_size=None):
         word_counter = Counter()
         vocab = dict()
         reverse_vocab = dict()
