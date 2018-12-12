@@ -37,12 +37,8 @@ class DataUtil:
         answer = []
         if contents:
             for sequence in contents:
-                # 목적이 같은 질문을 ,를 통해 분리
-                docs = [sequence[0].split(',')]
-                for doc in docs:
-                    # 목적이 같은 여러 형태의 질문에 같은 답변 저장
-                    question.append(doc)
-                    answer.append([sequence[1]] * len(doc))
+                question.append([sequence[0]])
+                answer.append([sequence[1]])
         return question, answer
 
     def tokenizer(self, sentence, flag=1):
@@ -51,8 +47,7 @@ class DataUtil:
         mecab = Mecab()
         tokens = []
         if flag == 1:
-            for sent in sentence:
-                tokens = mecab.morphs(sent)
+            tokens = mecab.morphs(sentence)
         return tokens
 
     def max_sequence_len(self, input):
@@ -121,4 +116,3 @@ class DataUtil:
     def idx2sent_pad_removce(self, indices, reverse_vocab):
         in_index = np.where(indices == self.pad_token)
         return " ".join([self.idx2token(idx, reverse_vocab) for idx in indices[0:in_index[0][0]]])
-

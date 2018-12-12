@@ -25,9 +25,9 @@ class Config:
     enc_sentence_length = datautil.enc_sentence_length
     dec_sentence_length = target_sentence_length = datautil.dec_sentence_length
 
-    embedding_size = enc_emb_size = dec_emb_size = 400
-    hidden_size = 400
-    attn_size = 400
+    embedding_size = enc_emb_size = dec_emb_size = 200
+    hidden_size = 200
+    attn_size = 200
     n_epoch = 2000
     learning_rate = 0.0001
 
