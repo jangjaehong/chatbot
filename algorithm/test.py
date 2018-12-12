@@ -103,14 +103,18 @@ mecab = Mecab()
 tokens = []
 # 데이터 로드
 question = "당뇨병이란"
-answer = "당뇨병이란 혈액중의 포도당(혈당)이 높아서 소변으로 포도당이 넘쳐 나오는데서 지어진 이름입니다. 포도당은 우리가 먹는 음식물 중 탄수화물의 기본 구성성분입니다. 탄수화물은 위장에서 소화효소에 의해 포도당으로 변한 다음 혈액으로 흡수됩니다. 흡수된 포도당이 우리 몸의 세포들에서 이용되기 위해서는 인슐린이라는 호르몬이 반드시 필요합니다."
-
+answer = "당뇨병이란 혈액중의 포도당(혈당)이 높아서 소변으로 포도당이 넘쳐 나오는데서 지어진 이름입니다."
+print("질문 :", question)
+print("답변 :", answer)
+print()
 # 데이터 토큰화
 question_tokens = mecab.morphs(question)
 answer_tokens = mecab.morphs(answer)
-print("질문 토큰화:", question, " -> ", question_tokens)
-print("답변 토큰화:", answer, " -> ", answer_tokens)
-
+print("질문 토큰화:", question)
+print(" -> ", question_tokens)
+print("답변 토큰화:", answer)
+print(" -> ", answer_tokens)
+print()
 #데이터 최대길이 체크
 q_max_sequence_len =  datautil.max_sequence_len(question)
 a_max_sequence_len =  datautil.max_sequence_len(answer)
@@ -119,12 +123,13 @@ a_max_sequence_len =  datautil.max_sequence_len(answer)
 q_vocab, q_reverse_vocab, q_max_vocab_size = datautil.build_vocab(question_tokens)
 a_vocab, a_reverse_vocab, a_max_vocab_size = datautil.build_vocab(answer_tokens, is_target=True)
 print("질문 사전:", q_vocab)
-print("답변 사전:", answer)
-
+print("답변 사전:", a_vocab)
+print()
 q_sent2idx = datautil.sent2idx(tokens, q_vocab, q_max_sequence_len)
 ta_sent2idx = datautil.sent2idx(tokens, a_vocab, a_max_vocab_size, is_target=True)
 da_sent2idx = datautil.sent2idx(tokens, a_vocab, a_max_vocab_size, is_dec=True)
 
+print()
 print("질문 정수화:", question_tokens, " -> ", q_sent2idx)
 print("학습용 답변 정수화:", answer_tokens, " -> ", ta_sent2idx)
 print("테스트용 답변 정수화:", answer_tokens, " -> ", da_sent2idx)
