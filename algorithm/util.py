@@ -30,7 +30,8 @@ class DataUtil:
 
         self.enc_vocab, self.enc_reverse_vocab, self.enc_vocab_size, self.enc_sentence_length = self.build_vocab(all_input_sentences)
         self.dec_vocab, self.dec_reverse_vocab, self.dec_vocab_size,  self.dec_sentence_length = self.build_vocab(all_target_sentences, is_target=True)
-
+        print("질문 토큰 사전화:", self.enc_vocab)
+        print("답변 토큰 사전화:", self.dec_vocab)
     def load_data(self):
         contents = db.select_chat_sequence()
         question = []
