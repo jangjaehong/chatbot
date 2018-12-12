@@ -111,7 +111,7 @@ class BuildDataSet:
             data = json.load(json_file)
             category = data["category"]
             for idx, tit in enumerate(data["title"]):
-                if idx <= 7:
+                if idx <= 10:
                     q = "%s" % tit
                 else:
                     q = "%s %s" % (category, tit)
