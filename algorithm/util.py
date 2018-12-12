@@ -65,6 +65,7 @@ class DataUtil:
 
         for sentence in sentences:
             tokens = self.tokenizer(sentence)
+            print("토큰화 대상: ", sentences, ' | 결과:', tokens)
             word_counter.update(tokens)
 
         if max_vocab_size is None:
@@ -116,3 +117,5 @@ class DataUtil:
     def idx2sent_pad_removce(self, indices, reverse_vocab):
         in_index = np.where(indices == self.pad_token)
         return " ".join([self.idx2token(idx, reverse_vocab) for idx in indices[0:in_index[0][0]]])
+
+datautil = DataUtil()
