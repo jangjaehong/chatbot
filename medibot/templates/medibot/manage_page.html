@@ -74,7 +74,7 @@ $(document).ready(function(){
                         resultBox.find('.title').html("<h4>{{ user.username }}님이 오늘 섭취하신 음식의 영양정보입니다.</h4>");
                         resultBox.find('.text-info').html(info);
                         resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
-                        $('#result-box2').append(resultBox);
+                        $('#result-box4').append(resultBox);
                         drawCircleChart(foodAry, "div.circle-container1", false);
 
                         chatting_save('com', 'Medi-BOT', "영양체크를 완료했습니다.." );

@@ -26,7 +26,7 @@ $(document).ready(function(){
     {% if measure_report %}
         var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
         var value = [{{ measure_report.bmi }},  {{ measure_report.whr }}, {{ measure_report.energy }}];
-        var state = [{{ measure_report.bmi_state }}, {{ measure_report.whr_state }}, {{ measure_report.energy_state }}];
+        var state = ['{{ measure_report.bmi_state }}', '{{ measure_report.whr_state }}', '{{ measure_report.energy_state }}'];
         var age = {{ physical_report.age }};
         var gender = {{ physical_report.gender }};
         // 결과 표시
@@ -34,12 +34,14 @@ $(document).ready(function(){
     {% endif %}
 
     {% if intake_food_report %}
-        $('#result-box4).html('');
+        $('#result-box4').html('');
+        var nutrition = ["섭취량(g)", "에너지(kcal)", "탄수화물(g)", "단백질(g)", "지방(g)",
+                    "당류(g)", "나트륨(mg)", "클레스테롤(mg)", "포화지방(g)", "트랜스지방(g)"];
 
-        var foodAry = new Array(intake_food_report.energy, intake_food_report.gram, intake_food_report.kcal,
-        intake_food_report.carbohydrate, intake_food_report.protein, intake_food_report.fat,
-        intake_food_report.sugars, intake_food_report.salt, intake_food_report.cholesterol,
-        intake_food_report.saturatedfat, intake_food_report.transfat);
+        var foodAry = new Array({{ intake_food_report.energy }}, {{ intake_food_report.gram }}, {{ intake_food_report.kcal }},
+        {{ intake_food_report.carbohydrate }}, {{ intake_food_report.protein }}, {{ intake_food_report.fat }},
+        {{ intake_food_report.sugars }}, {{ intake_food_report.salt }}, {{ intake_food_report.cholesterol }},
+        {{ intake_food_report.saturatedfat }}, {{ intake_food_report.transfat }});
 
         var info = "<table class='tb-diet'>";
         info += "<tr>";
@@ -54,7 +56,7 @@ $(document).ready(function(){
         resultBox.find('.title').html("<h4>{{ user.username }}님이 오늘 섭취하신 음식의 영양정보입니다.</h4>");
         resultBox.find('.text-info').html(info);
         resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
-        $('#result-box2').append(resultBox);
+        $('#result-box4').append(resultBox);
          var flag = false;
         drawCircleChart(foodAry, "div.circle-container1", flag);
     {% endif %}

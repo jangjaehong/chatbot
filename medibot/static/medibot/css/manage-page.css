@@ -9,11 +9,11 @@
 .result-wrap #result-box1{top:0;left:0;}
 .result-wrap #result-box2{top:0;left:33%;}
 .result-wrap #result-box3{top:0;left:66%;}
-.result-wrap #result-box4{width:calc(100% - 30px);top:220px;left:0;}
+.result-wrap #result-box4{width:calc(100% - 30px);height:auto;top:220px;left:0;}
 .result-wrap .result-box .none-result{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.3em;font-weight:bold}
 
 /* 결과창 그래프 */
-.result-wrap > .result-box > .result-container{width:100%;height:100%;position:relative}
+.result-wrap > .result-box > .result-container{width:100%;height:auto;position:relative}
 .result-wrap > .result-box > .result-container > .title{font-size: 1.2em;font-weight: bold;}
 .result-wrap > .result-box > .result-container > .text-info{width:100%;height:auto;margin-top:10px;}
 .result-wrap > .result-box > .result-container > .container{margin-top:10px;position:relative}
