@@ -14,8 +14,8 @@ $(document).ready(function(){
             dataType: 'json',
             data: $('#physicalFrm').serialize(),
             beforeSend: function(){
-                addMessage('com', 'Medi-BOT', "건강상태 측정중입니다..." );
-                //유저 메세지 표시
+                //메세지 디비 저장 및 표시
+                chatting_save('com', 'Medi-BOT', "건강상태 측정을 시작합니다...." );
             },
             success: function(response){
                 if(response.result == 1){
@@ -49,8 +49,6 @@ $(document).ready(function(){
             dataType: 'json',
             data: $('#histFrm').serialize(),
             beforeSend: function(){
-                //유저 메세지 표시
-                Medi-BOT
             },
             success: function(data){
                 if(data.length == 0){
@@ -90,6 +88,7 @@ $(document).ready(function(){
 });
 /* 그래프 호출 */
 function makeBullet(category, value, state, age, gender){
+    $('#result-box1, #result-box2, #result-box3').html('');
     $('#measure_date').html('최근 측정 날짜 : {{ physical_report.pub_date }}');
     for(var i = 0; i < 3; i++){
         var container = $("#empty-result-container").clone().show().attr("id","");

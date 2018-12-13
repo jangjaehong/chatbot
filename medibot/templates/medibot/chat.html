@@ -1,10 +1,29 @@
 {% load staticfiles %}
 <script>
+/* 메세지 DB 저장 및 화면출력 */
+function chatting_save(speaker, username, contents){
+    $.ajax({
+        type: 'POST',
+        url:"/save_chatting",
+        dataType: 'text',
+        data: {
+            "speaker": speaker,
+            "username": username,
+            "contents": contents
+        }
+        success: function(response){
+            addMessage(speaker, username, contents);
+        },
+        error: function(request, status, error) {
+           alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 /* 메세지 채팅창에 추가 */
 function addMessage(sender, name, message){
     var user_img = "{% static 'medibot/img/icon/ic_user.png' %}";
     var com_img = "{% static 'medibot/img/icon/ic_com.png' %}";
-
     var speechBubble = '<div class="msg-box ' + sender + ' mb_15">';
     if( sender == 'user'){
         speechBubble += '<div class="profile-wrap"><img src="' + user_img + '"/></div>';
@@ -17,6 +36,7 @@ function addMessage(sender, name, message){
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
 };
+
 /* 채팅창 맨아래로 */
 function move_chat_scroll(){
     var sentence_last_child = $("#sentence").children(":last");
@@ -27,34 +47,17 @@ function move_chat_scroll(){
 
 /* 채팅에 기능 수행 */
 function check_event(flag){
+    /* flag==1 : 일일체크 , 2: 식단체크, 3: 기록조회 */
     if(flag == 1){
-        /* 일일체크 */
-         addMessage('com', 'Medi-BOT', "건강상태 시작합니다." );
+         chatting_save('com', 'Medi-BOT', "건강상태 시작합니다." );
         $('#physicalFrm').submit();
     }
     if(flag == 2){
-        /* 식단체크 */
-        addMessage('com', 'Medi-BOT', "영양체크를 시작합니다." );
+
+        chatting_save('com', 'Medi-BOT', "영양체크를 시작합니다." );
         $('#foodFrm').show();
     }
-    /* 일일체크 기록보기 */
-    if(flag == 3){
-        /* 기록보기 */
-        $('.result-wrap').hide();
-        $('.hist-wrap').show();
-
-        $('#hist-box' + flag).empty();
-        $('#hist-box' + flag).show();
-
-        if(flag == 1){
-            $('.hist-menu').show();
-        }else{
-            $('.hist-menu').hide();
-        }
-        $('#hist-type').val(flag);
-        $('#histFrm').submit();
-    }
-    /* 식단체크 기록보기 */
+    if(flag == 3){}
 }
 
 
@@ -63,6 +66,7 @@ function diet_check_cancel(){
     $('#foodFrm').animate({display:none});
 }
 
+/* 화면 초기화 */
 $(document).ready(function(){
     /* 채팅 초기화 */
     {% if chat_reports %}
@@ -71,9 +75,48 @@ $(document).ready(function(){
         {% endfor %}
     {% endif %}
 
+    {% if physical_report %}
+        var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
+        var value = [physical_report.bmi,  physical_report.whr, physical_report.energy];
+        var state = [physical_report.bmi_state, physical_report.whr_state, physical_report.energy_state];
+        var age = physical_report.age;
+        var gender = physical_report.gender;
+        // 결과 표시
+        makeBullet(category, value, state, age, gender);
+    {% endif %}
+
+    {% if intake_food_report %}
+        $('#result-box4).html('');
+
+        var foodAry = new Array(intake_food_report.energy, intake_food_report.gram, intake_food_report.kcal,
+        intake_food_report.carbohydrate, intake_food_report.protein, intake_food_report.fat,
+        intake_food_report.sugars, intake_food_report.salt, intake_food_report.cholesterol,
+        intake_food_report.saturatedfat, intake_food_report.transfat);
+
+        var info = "<table class='tb-diet'>";
+        info += "<tr>";
+        for(var i=0; i < nutrition.length; i++){
+            info += "<th>" + nutrition[i];
+        }
+        info += "<tr>";
+        for(var i=1; i < foodAry.length; i++){
+            info += "<td>" + foodAry[i].toFixed(2);
+        }
+        var resultBox = $('#empty-result-container').clone().show().attr("id","");
+        resultBox.find('.title').html("<h4>{{ user.username }}님이 오늘 섭취하신 음식의 영양정보입니다.</h4>");
+        resultBox.find('.text-info').html(info);
+        resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
+        $('#result-box2').append(resultBox);
+         var flag = false;
+        drawCircleChart(foodAry, "div.circle-container1", flag);
+    {% endif %}
+
     /* 채팅창 스크롤 제일 아래로 */
     move_chat_scroll();
+});
 
+/* 이벤트 초기화 묶음 */
+$(function() {
     /* 입력 버튼 이벤트 */
     $('#input_message').on('keydown', function(e){
         if(e.keyCode == 13){
@@ -87,6 +130,7 @@ $(document).ready(function(){
             return false;
         }
     });
+
     /* 채팅 입력 */
      $('#chatFrm').submit(function(e){
         /* 새로 고침 방지 */
@@ -136,7 +180,7 @@ $(document).ready(function(){
                 dataType: 'json',
                 data: $('#foodFrm').serialize(),
                 beforeSend: function(){
-                    addMessage('com', 'Medi-BOT', "영양소별 계산중입니다. 잠시만기다려주세요." );
+                    chatting_save('com', 'Medi-BOT', "영양소별 계산중입니다. 잠시만기다려주세요." );
                     $('#foodFrm').hide();
                 },
                 success: function(data){
