@@ -14,11 +14,12 @@ def index(request):
     if request.user.is_authenticated:
         # 로그인, 건강체크, 영양체크 확인
         print("check_start")
-        measure_report, intake_food_report = manage_check(request.user.pk, request.user.username, request.user.last_login)
+        physical_report, measure_report, intake_food_report = manage_check(request.user.pk, request.user.username, request.user.last_login)
         # 대화기록 로드
         chat_reports = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
         return render(request, 'medibot/index.html',
                       {"chat_reports": chat_reports,
+                       "physical_report": physical_report,
                        "measure_report": measure_report,
                        "intake_food_report": intake_food_report})
     else:
@@ -31,14 +32,19 @@ def manage_check(uid, username, last_login):
     speaker = "com"
     botname = "Medi-Bot"
     contents = ""
-    print("checking..")
     # 로그인 체크
     last_login_day = (now_date - last_login).days
     if last_login_day > 1:
         contents = "%s님 %d일만에 접속하셨네요." \
                    "혹시 사용법이 기억안나신다면 \'도움말\' 입력해주세요" % (username, last_login_day)
         # 보낼 메세지 저장
-        print("login check")
+        ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
+                   pub_date=timezone.now()).save()
+
+    #신체정보
+    physical_report = PhysicalReport.objects.filter(uid=uid).last()
+    if not physical_report:
+        contents = "신체정보를 한번도 등록안하셨네요. 먼저 신체정보를 등록해주세요!"
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
 
@@ -59,7 +65,6 @@ def manage_check(uid, username, last_login):
                        "건강체크는 매일 체크해서 관리를 해줘야 효과가 있답니다." \
                        % (username, measure_report.pub_date.strftime("%Y-%m-%d"),)
         # 보낼 메세지 저장
-        print("physical check")
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
     else:
@@ -68,7 +73,6 @@ def manage_check(uid, username, last_login):
                    "그러면 안되며 만성질환은 언제 생길지 몰라요!" \
                    % username
         # 보낼 메세지 저장
-        print("physical none")
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
 
@@ -97,7 +101,6 @@ def manage_check(uid, username, last_login):
             contents = "%s님 영양 체크를 %s 이후로 하신적이 없네요. 매일 매일 관리 해줘야 좋아요." \
                        % (username, intake_food_report.pub_date.strftime("%Y-%m-%d"),)
         # 보낼 메세지 저장
-        print("food check")
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
     else:
@@ -105,10 +108,9 @@ def manage_check(uid, username, last_login):
         contents = "%s님 영양 체크를 한번도 하신적이 없네요..오늘은 드신음식을 통해 얼마나 영양소를 섭취했는지 알아보세요." \
                    % username
         # 보낼 메세지 저장
-        print("food none")
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
-    return measure_report, intake_food_report
+    return physical_report, measure_report, intake_food_report
 
 
 def save_chatting(request):
@@ -127,7 +129,6 @@ def physical_update(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
-
                 uid = request.user.pk
                 age = int(request.POST['age'])
                 gender = int(request.POST['gender'])
@@ -138,7 +139,7 @@ def physical_update(request):
                 # 정보 업데이트
                 PhysicalReport(uid=uid, age=age, gender=gender, stature=stature, weight=weight, waist=waist, hip=hip, pub_date=timezone.now()).save()
                 physical_info = PhysicalReport.objects.filter(uid=request.user.pk).last()
-                return render(request, 'medibot/user_info.html', {"PhysicalReport": physical_info})
+                return render(request, 'medibot/user_info.html', {"physical_report": physical_info})
         return render(request)
     else:
         return redirect(reverse('accounts:login'))
@@ -183,7 +184,7 @@ def autocomplete(request):
                 kcal = food.kcal
                 context.append({'pk': pk, 'name': name, 'kcal': kcal, 'gram': gram})
             return HttpResponse(json.dumps(context), content_type="application/json")
-    return render(request, 'medibot/index.html')
+    return render(request)
 
 
 # 신체측정
@@ -307,11 +308,8 @@ def day_measure(request):
                                'age': age, 'gender': gender, "result": 1}
                     return HttpResponse(json.dumps(context), content_type="application/json")
                 else:
-                    speaker = "com"
-                    username = "Medi-Bot"
-                    contents = "신체정보를 한번도 등록안하셨네요. 먼저 신체정보를 등록해주세요!"
-                    chat_report = {"speaker": speaker, "username": username, "contents": contents}
-                    return render(request, 'medibot/index.html', {"result": 2, "chat_report": chat_report})
+                    return render(request, 'medibot/index.html', {"result": 2})
+        return render(request)
     else:
         return redirect(reverse('accounts:login'))
 
@@ -354,47 +352,48 @@ def diet(request):
                                          sugars=context["sugars"], salt=context["salt"], cholesterol=context["cholesterol"],
                                          saturatedfat=context["saturatedfat"], transfat=context["transfat"], pub_date=timezone.now()).save()
                 return HttpResponse(json.dumps(context), content_type="application/json")
+        return render(request)
     else:
         return redirect(reverse('accounts:login'))
 
 
 def hist(request):
-    if request.method == 'POST':
-        if request.is_ajax():
-            # 데이터베이스에서 조회한 bmi 수치와 날짜 저장
-            context = []
-            # 조회 기준 날짜
-            type = int(request.POST['type'])
-            term = int(request.POST['term'])
-            gubun = int(request.POST['gubun'])
-            now_date = timezone.now()
-            if type == 1:
-                for i in range(0, term):
-                    join_date = now_date + timezone.timedelta(days=-i)
-                    format_date = datetime.datetime.strftime(join_date, "%Y-%m-%d")
-                    row = PhysicalReport.objects.order_by("pub_date").filter(pub_date__gt=join_date)[:1]
-                    if row:
-                        for report in row:
-                            if gubun == 1:
-                                context.append({"value": report.bmi, "text": report.bmi_state, "date": format_date, "age": report.age, "gender": report.gender})
-                            if gubun == 2:
-                                context.append({"value": report.whr, "text": report.whr_state, "date": format_date, "age": report.age, "gender": report.gender})
-                            if gubun == 3:
-                                context.append({"value": report.energy, "text": report.energy_state, "date": format_date, "age": report.age, "gender": report.gender})
-                    else:
-                        context.append({"value": 0,  "text": "기록X", "date": format_date})
-            # if type == 2:
-            #     for i in range(0, term):
-            #         join_date = now_date + timezone.timedelta(days=-i)
-            #         format_date = datetime.datetime.strftime(join_date, "%Y-%m-%d")
-            #         row = IntakeFoodReport.objects.filter(pub_date__gt=join_date).last()
-            #         if row is not None:
-            #             context.append({"value": row.kcal, "date": format_date})
-            return HttpResponse(json.dumps(context), content_type="application/json")
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if request.is_ajax():
+                # 데이터베이스에서 조회한 bmi 수치와 날짜 저장
+                context = []
+                # 조회 기준 날짜
+                type = int(request.POST['type'])
+                term = int(request.POST['term'])
+                gubun = int(request.POST['gubun'])
+                now_date = timezone.now()
+                if type == 1:
+                    for i in range(0, term):
+                        join_date = now_date + timezone.timedelta(days=-i)
+                        format_date = datetime.datetime.strftime(join_date, "%Y-%m-%d")
+                        row = PhysicalReport.objects.order_by("pub_date").filter(pub_date__gt=join_date)[:1]
+                        if row:
+                            for report in row:
+                                if gubun == 1:
+                                    context.append({"value": report.bmi, "text": report.bmi_state, "date": format_date, "age": report.age, "gender": report.gender})
+                                if gubun == 2:
+                                    context.append({"value": report.whr, "text": report.whr_state, "date": format_date, "age": report.age, "gender": report.gender})
+                                if gubun == 3:
+                                    context.append({"value": report.energy, "text": report.energy_state, "date": format_date, "age": report.age, "gender": report.gender})
+                        else:
+                            context.append({"value": 0,  "text": "기록X", "date": format_date})
+                # if type == 2:
+                #     for i in range(0, term):
+                #         join_date = now_date + timezone.timedelta(days=-i)
+                #         format_date = datetime.datetime.strftime(join_date, "%Y-%m-%d")
+                #         row = IntakeFoodReport.objects.filter(pub_date__gt=join_date).last()
+                #         if row is not None:
+                #             context.append({"value": row.kcal, "date": format_date})
+                return HttpResponse(json.dumps(context), content_type="application/json")
+        return render(request)
     else:
-        chatreport = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-        context = {'chatreport': chatreport}
-        return render(request, 'medibot/index.html', context)
+        return redirect(reverse('accounts:login'))
 
 
 

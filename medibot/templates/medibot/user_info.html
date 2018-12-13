@@ -23,6 +23,7 @@ $(document).ready(function(){
             },
             success: function(response){
                 alert("신체정보 수정을 완료했습니다");
+                // $('#user-info').load('#tb-physical');
                 $('.tb-base .update-text').hide();
                 $('.tb-base .normal-text').show();
                 $('#btnUpdateMode').show();
@@ -62,7 +63,13 @@ $(document).ready(function(){
     <div class="physical-box-header">
         <div class="tit-wrap">
             <p class="tit">신체정보</p>
-            <p class="update">수정일 : {{ physical_report.pub_date|date:"Y-m-d" }}</p>
+            <p class="update">수정일 :
+                {% if physical_report %}
+                    {{ physical_report.pub_date|date:"Y-m-d" }}
+                {% else %}
+                    입력한 정보가 없습니다.
+                {% endif %}
+            </p>
         </div>
         <div class="btn_wrap">
             <input type="button" id="btnUpdateMode" name="btnUpdateMode" class="btn-normal-mode" value="수정모드" />
@@ -71,7 +78,7 @@ $(document).ready(function(){
     </div>
     <form action="" id="physicalFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <table class="tb-base">
+        <table class="tb-base" id="tb-physical">
             <colgroup>
                 <col width="35%">
                 <col width="65%">
@@ -82,18 +89,24 @@ $(document).ready(function(){
                     <input type="radio" id="gender1" name="gender" value="1" checked="checked">남
                     <input type="radio" id="gender2" name="gender" value="2">여
                 </td>
-                <td class="normal-text">
-                    {% if physical_report.gender == 1 %}
-                        남
-                    {% else %}
-                        여
+                <td class="normal-text" id="gender">
+                    {% if physical_report %}
+                        {% if physical_report.gender == 1 %}
+                            남
+                        {% else %}
+                            여
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>
             <tr>
                 <th><label for="age">나이 : </label></th>
                 <td class="update-text"><input id="age" name="age" max="110" type="number" value="{{ physical_report.age }}" > 세</td>
-                <td class="normal-text">{{ physical_report.age }} 세</td>
+                <td class="normal-text">
+                    {% if physical_report %}
+                        {{ physical_report.age }} 세
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <th><label for="stature">신장 : </label></th>
@@ -103,17 +116,29 @@ $(document).ready(function(){
             <tr>
                 <th><label for="weight">체중 : </label></th>
                 <td class="update-text"><input id="weight" name="weight"  type="number" step="any" min="30.0" max="200.0" value="{{ physical_report.weight }}"/> kg</td>
-                <td class="normal-text">{{ physical_report.weight }} kg</td>
+                <td class="normal-text">
+                    {% if physical_report %}
+                        {{ physical_report.weight }} kg
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <th><label for="waist">허리 둘레 : </label></th>
                 <td class="update-text"><input type="number" id="waist" name="waist" title="허리 둘레" size="3"  placeholder="1인치=2.5cm" value="{{ physical_report.waist }}"> cm</td>
-                <td class="normal-text">{{ physical_report.waist }} cm</td>
+                <td class="normal-text">
+                    {% if physical_report %}
+                        {{ physical_report.waist }} cm
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <th><label for="hip">엉덩이둘레 : </label></th>
                 <td class="update-text"><input type="number" id="hip" name="hip" title="엉덩이 둘레" size="3" placeholder="1인치=2.5cm" value="{{ physical_report.hip }}"> cm</td>
-                <td class="normal-text">{{ physical_report.hip }} cm</td>
+                <td class="normal-text">
+                    {% if physical_report %}
+                        {{ physical_report.hip }} cm
+                    {% endif %}
+                </td>
             </tr>
         </table>
     </form>

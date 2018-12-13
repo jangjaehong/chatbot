@@ -21,7 +21,7 @@ function physical_measure(){
 
                 chatting_save('com', 'Medi-BOT', "건강체크 완료했습니다." );
             }else if(response.result == 2){
-                 addMessage(response.speaker, response.username, response.contents);
+                 chatting_save('com', 'Medi-BOT', '등록된 신체정보가 없네요. 먼저 신체정보를 등록해주세요!');
             }
         },
         error: function(request, status, error) {
