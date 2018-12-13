@@ -1,44 +1,94 @@
 <script>
-$(document).ready(function(){
-    $('.result-box').hide();
-    $('#result-box1').show();
-    $('#result-box2').show();
-    $('#result-box3').show();
-    $('#result-box4').show();
+function physical_measure(){
+     // 측정하기
+    $.ajax({
+        type: 'POST',
+        url:"/day_measure",
+        beforeSend: function(){
+            //메세지 디비 저장 및 표시
+            chatting_save('com', 'Medi-BOT', "건강상태 확인 중입니다..." );
+        },
+        success: function(response){
+            if(response.result == 1){
+                // 결과데이터
+                var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
+                var value = [response.bmi,  response.whr, response.energy];
+                var state = [response.bmi_state, response.whr_state, response.energy_state];
+                var age = response.age;
+                var gender = response.gender;
+                // 결과 표시
+                makeBullet(category, value, state, age, gender);
 
-    // 측정하기
-    $('#physicalFrm').submit(function(){
-        $.ajax({
-            type: 'POST',
-            url:"/day_measure",
-            dataType: 'json',
-            data: $('#physicalFrm').serialize(),
-            beforeSend: function(){
-                //메세지 디비 저장 및 표시
-                chatting_save('com', 'Medi-BOT', "건강상태 측정을 시작합니다...." );
-            },
-            success: function(response){
-                if(response.result == 1){
-                    // 결과데이터
-                    var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
-                    var value = [response.bmi,  response.whr, response.energy];
-                    var state = [response.bmi_state, response.whr_state, response.energy_state];
-                    var age = response.age;
-                    var gender = response.gender;
-                    // 결과 표시
-                    makeBullet(category, value, state, age, gender);
-                }else if(response.result == 2){
-                     addMessage(response.speaker, response.username, response.contents);
-                }
-            },
-            error: function(request, status, error) {
-               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                chatting_save('com', 'Medi-BOT', "건강체크 완료했습니다." );
+            }else if(response.result == 2){
+                 addMessage(response.speaker, response.username, response.contents);
             }
-        });
-        return false;
+        },
+        error: function(request, status, error) {
+           alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+    return false;
+}
+
+$(document).ready(function(){
+    $('.result-box').show();
+
+    // 식단체크
+    $('#foodFrm').submit(function(e){
+        e.preventDefault();
+        if( $('#fcount').val() == 0){
+            alert("오늘 섭취한 음식을 추가해주세요!");
+        }else{
+            var table_base_info = "<tr id='info_ment' class='info_men'><td colspan='5' height='150' align='center'>음식을 검색 후 선택하시면 추가됩니다.</td></tr>";
+            $.ajax({
+                type: 'POST',
+                url:"/diet",
+                dataType: 'json',
+                data: $('#foodFrm').serialize(),
+                beforeSend: function(){
+                    chatting_save('com', 'Medi-BOT', "영양소별 계산중입니다. 잠시만기다려주세요." );
+                    $('#foodFrm').hide();
+                },
+                success: function(data){
+                    var nutrition = ["섭취량(g)", "에너지(kcal)", "탄수화물(g)", "단백질(g)", "지방(g)",
+                    "당류(g)", "나트륨(mg)", "클레스테롤(mg)", "포화지방(g)", "트랜스지방(g)"];
+                    if( data.energy == 0)
+                    {
+                        alert("상단에 일일점검을 최초 1회이상 하셔야 결과를 확인하실수 있습니다");
+                        $("#sel_food_list").html(table_base_info);
+                    }else{
+                        var foodAry = new Array(data.energy, data.gram, data.kcal, data.carbohydrate, data.protein, data.fat
+                        ,data.sugars, data.salt, data.cholesterol ,data.saturatedfat ,data.transfat);
+
+                        var info = "<table class='tb-diet'>";
+                        info += "<tr>";
+                        for(var i=0; i < nutrition.length; i++){
+                            info += "<th>" + nutrition[i];
+                        }
+                        info += "<tr>";
+                        for(var i=1; i < foodAry.length; i++){
+                            info += "<td>" + foodAry[i].toFixed(2);
+                        }
+                        var resultBox = $('#empty-result-container').clone().show().attr("id","");
+                        resultBox.find('.title').html("<h4>{{ user.username }}님이 오늘 섭취하신 음식의 영양정보입니다.</h4>");
+                        resultBox.find('.text-info').html(info);
+                        resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
+                        $('#result-box2').append(resultBox);
+                        drawCircleChart(foodAry, "div.circle-container1", false);
+
+                        chatting_save('com', 'Medi-BOT', "영양체크를 완료했습니다.." );
+                    }
+                },
+                error: function(request, status, error) {
+                   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+            return false;
+        }
     });
 
-    // 기록보기
+       // 기록보기
     $('#histFrm').submit(function(e){
         var gubun = $('#hist-gubun').val();
         var type = $('#hist-type').val();
@@ -86,6 +136,12 @@ $(document).ready(function(){
     });
 
 });
+
+/* 취소 버튼 이벤트*/
+function diet_check_cancel(){
+    $('#foodFrm').animate({display:none});
+}
+
 /* 그래프 호출 */
 function makeBullet(category, value, state, age, gender){
     $('#result-box1, #result-box2, #result-box3').html('');
@@ -121,7 +177,7 @@ function makeBullet(category, value, state, age, gender){
 </div>
 
 <!-- 기록확인을 위한 데이터 공간 -->
-<form action="" id="histFrm" name="physicalFrm" method="post" enctype="multipart/form-data">
+<form action="" id="histFrm" name="histFrm" method="post" enctype="multipart/form-data">
     <input type="hidden" id="hist-term" name="term" value="7" />
     <input type="hidden" id="hist-type" name="type" value="1" />
     <input type="hidden" id="hist-gubun" name="gubun" value="1" />

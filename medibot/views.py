@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
-from django.utils import timezone
 
 import math
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 
 from .models import *
@@ -24,11 +23,6 @@ def index(request):
                        "intake_food_report": intake_food_report})
     else:
         return redirect(reverse('accounts:login'))
-
-def save_chatting(request):
-    ChatReport(uid=request.user.pk, speaker=request.speaker, username=request.username, contents=request.contents,
-               pub_date=timezone.now()).save()
-    return render(request)
 
 def manage_check(uid, username, last_login):
     #페이지 로드시에 사용, 유효성 체크
@@ -115,6 +109,18 @@ def manage_check(uid, username, last_login):
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
     return measure_report, intake_food_report
+
+
+def save_chatting(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if request.is_ajax():
+                uid = request.user.pk
+                speaker = request.POST['speaker']
+                username = request.POST['username']
+                contents = request.POST['contents']
+                ChatReport(uid=uid, speaker=speaker, username=username, contents=contents, pub_date=timezone.now()).save()
+    return render(request)
 
 
 def physical_update(request):
@@ -272,7 +278,6 @@ def day_measure(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
-                print("측정시작")
                 physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
                 if physical_report:
                     uid = request.user.pk

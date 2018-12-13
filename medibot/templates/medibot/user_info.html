@@ -13,7 +13,7 @@ $(document).ready(function(){
     });
 
     $('#physicalFrm').submit(function(){
-        //e.preventDefault();
+        e.preventDefault();
         $.ajax({
             type: 'POST',
             url:"/physical_update",

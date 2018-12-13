@@ -35,6 +35,6 @@
 .physical-box .tb-base .update-text,
 .physical-box .tb-base .btn-physical-up{display:none}
 .physical-box .tb-base th{text-align:left}
-.physical-box .tb-base td input[type=number]{width:75%;padding:0 10px 0 0;margin-bottom:10px;background:transparent;border-bottom:1px solid #555555;font-weight:bold;font-size:1.1em;color:#fff}
-.physical-box .tb-base td input[type=number]:focus{border-bottom-color:#368AFF;}
+.physical-box .tb-base td input[type=number]{width:75%;padding:0;margin-bottom:10px;background:transparent;border-bottom:1px solid #333;font-size:1.1em;color:#333333}
+.physical-box .tb-base td input[type=number]:focus{border-bottom-color:#368AFF;font-weight:bold}
 
