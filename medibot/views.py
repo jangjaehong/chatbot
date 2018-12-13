@@ -141,12 +141,17 @@ def physical_update(request):
                 hip = float(request.POST['hip'])
                 # 정보 업데이트
                 PhysicalReport(uid=uid, age=age, gender=gender, stature=stature, weight=weight, waist=waist, hip=hip, pub_date=timezone.now()).save()
-                physical_info = PhysicalReport.objects.filter(uid=request.user.pk).last()
-                return render(request, 'medibot/user_info.html', {"physical_report": physical_info})
-        return render(request)
+                physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
+                return render(request, 'medibot/user_info.html', {"physical_report": physical_report})
+        else:
+            physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
+            return render(request, 'medibot/user_info.html', {"physical_report": physical_report})
     else:
         return redirect(reverse('accounts:login'))
 
+def physical_info(request):
+    physical_info = PhysicalReport.objects.filter(uid=request.user.pk).last()
+    return render(request, 'medibot/user_info.html', {"physical_report": physical_info})
 
 def comunication(request):
     if request.user.is_authenticated:
