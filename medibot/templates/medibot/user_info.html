@@ -8,12 +8,11 @@ $(document).ready(function(){
         $('.tb-base .normal-text').hide();
     });
 
-    $('#btnNormalMode').on('click',function(e){
+    $('#btnNormalMode').on('click',function(){
         $('#physicalFrm').submit();
     });
 
     $('#physicalFrm').submit(function(){
-        e.preventDefault();
         $.ajax({
             type: 'POST',
             url:"/physical_update",
@@ -26,8 +25,6 @@ $(document).ready(function(){
                 alert("신체정보 수정을 완료했습니다");
                 $('.tb-base .update-text').hide();
                 $('.tb-base .normal-text').show();
-
-                $(this).hide();
                 $('#btnUpdateMode').show();
             },
             error: function(request, status, error) {
@@ -95,27 +92,27 @@ $(document).ready(function(){
             </tr>
             <tr>
                 <th><label for="age">나이 : </label></th>
-                <td class="update-text"><input id="age" name="age" max="110" type="number" placeholder="나이" value="{{ physical_report.age }}" > 세</td>
+                <td class="update-text"><input id="age" name="age" max="110" type="number" value="{{ physical_report.age }}" > 세</td>
                 <td class="normal-text">{{ physical_report.age }} 세</td>
             </tr>
             <tr>
                 <th><label for="stature">신장 : </label></th>
-                <td class="update-text"><input id="stature" name="stature" type="number" step="any" min="130.0" max="250.0" placeholder="키" value="{{ physical_report.stature }}"/> cm</td>
+                <td class="update-text"><input id="stature" name="stature" type="number" step="any" min="130.0" max="250.0" value="{{ physical_report.stature }}"/> cm</td>
                 <td class="normal-text">{{ physical_report.stature }} cm</td>
             </tr>
             <tr>
                 <th><label for="weight">체중 : </label></th>
-                <td class="update-text"><input id="weight" name="weight"  type="number" step="any" min="30.0" max="200.0" placeholder="몸무게" value="{{ physical_report.weight }}"/> kg</td>
+                <td class="update-text"><input id="weight" name="weight"  type="number" step="any" min="30.0" max="200.0" value="{{ physical_report.weight }}"/> kg</td>
                 <td class="normal-text">{{ physical_report.weight }} kg</td>
             </tr>
             <tr>
                 <th><label for="waist">허리 둘레 : </label></th>
-                <td class="update-text"><input type="number" id="waist" name="waist" title="허리 둘레" size="3"  placeholder="허리 둘레(1인치=2.5cm)" value="{{ physical_report.waist }}"> cm</td>
+                <td class="update-text"><input type="number" id="waist" name="waist" title="허리 둘레" size="3"  placeholder="1인치=2.5cm" value="{{ physical_report.waist }}"> cm</td>
                 <td class="normal-text">{{ physical_report.waist }} cm</td>
             </tr>
             <tr>
                 <th><label for="hip">엉덩이둘레 : </label></th>
-                <td class="update-text"><input type="number" id="hip" name="hip" title="엉덩이 둘레" size="3" placeholder="엉덩이 둘레(1인치=2.5cm)" value="{{ physical_report.hip }}"> cm</td>
+                <td class="update-text"><input type="number" id="hip" name="hip" title="엉덩이 둘레" size="3" placeholder="1인치=2.5cm" value="{{ physical_report.hip }}"> cm</td>
                 <td class="normal-text">{{ physical_report.hip }} cm</td>
             </tr>
         </table>
