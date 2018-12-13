@@ -151,7 +151,7 @@ def physical_update(request):
 
 def physical_info(request):
     physical_info = PhysicalReport.objects.filter(uid=request.user.pk).last()
-    return render(request, 'medibot/user_info.html', {"physical_report": physical_info})
+    return render(request, 'medibot/physical_info.html', {"physical_report": physical_info})
 
 def comunication(request):
     if request.user.is_authenticated:
