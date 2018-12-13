@@ -92,6 +92,8 @@ $(document).ready(function(){
                         {% else %}
                             여
                         {% endif %}
+                    {% else %}
+                        ?
                     {% endif %}
                 </td>
             </tr>
@@ -100,22 +102,34 @@ $(document).ready(function(){
                 <td class="update-text"><input id="age" name="age" max="110" type="number" value="{{ physical_report.age }}" > 세</td>
                 <td class="normal-text">
                     {% if physical_report %}
-                        {{ physical_report.age }} 세
+                        {{ physical_report.age }}
+                    {% else %}
+                        ?
                     {% endif %}
+                    세
                 </td>
             </tr>
             <tr>
                 <th><label for="stature">신장 : </label></th>
                 <td class="update-text"><input id="stature" name="stature" type="number" step="any" min="130.0" max="250.0" value="{{ physical_report.stature }}"/> cm</td>
-                <td class="normal-text">{{ physical_report.stature }} cm</td>
+                <td class="normal-text">
+                    {% if physical_report %}
+                        {{ physical_report.stature }}
+                    {% else %}
+                        ?
+                    {% endif %}
+                cm</td>
             </tr>
             <tr>
                 <th><label for="weight">체중 : </label></th>
                 <td class="update-text"><input id="weight" name="weight"  type="number" step="any" min="30.0" max="200.0" value="{{ physical_report.weight }}"/> kg</td>
                 <td class="normal-text">
                     {% if physical_report %}
-                        {{ physical_report.weight }} kg
+                        {{ physical_report.weight }}
+                    {% else %}
+                        ?
                     {% endif %}
+                    kg
                 </td>
             </tr>
             <tr>
@@ -123,8 +137,11 @@ $(document).ready(function(){
                 <td class="update-text"><input type="number" id="waist" name="waist" title="허리 둘레" size="3"  placeholder="1인치=2.5cm" value="{{ physical_report.waist }}"> cm</td>
                 <td class="normal-text">
                     {% if physical_report %}
-                        {{ physical_report.waist }} cm
+                        {{ physical_report.waist }}
+                    {% else %}
+                        ?
                     {% endif %}
+                    cm
                 </td>
             </tr>
             <tr>
@@ -132,8 +149,11 @@ $(document).ready(function(){
                 <td class="update-text"><input type="number" id="hip" name="hip" title="엉덩이 둘레" size="3" placeholder="1인치=2.5cm" value="{{ physical_report.hip }}"> cm</td>
                 <td class="normal-text">
                     {% if physical_report %}
-                        {{ physical_report.hip }} cm
+                        {{ physical_report.hip }}
+                    {% else %}
+                        ?
                     {% endif %}
+                    cm
                 </td>
             </tr>
         </table>
