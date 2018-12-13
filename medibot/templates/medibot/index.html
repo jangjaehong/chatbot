@@ -25,10 +25,10 @@ $(document).ready(function(){
 
     {% if measure_report %}
         var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
-        var value = [measure_report.bmi,  measure_report.whr, measure_report.energy];
-        var state = [measure_report.bmi_state, measure_report.whr_state, measure_report.energy_state];
-        var age = measure_report.age;
-        var gender = measure_report.gender;
+        var value = [{{ measure_report.bmi }},  {{ measure_report.whr }}, {{ measure_report.energy }}];
+        var state = [{{ measure_report.bmi_state }}, {{ measure_report.whr_state }}, {{ measure_report.energy_state }}];
+        var age = {{ physical_report.age }};
+        var gender = {{ physical_report.gender }};
         // 결과 표시
         makeBullet(category, value, state, age, gender);
     {% endif %}

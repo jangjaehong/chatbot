@@ -96,7 +96,12 @@ $(document).ready(function(){
             success: function(data, textStatus){
                  $.each(data, function(i, item){
                     addMessage('com', item.name, item.message);
-                    eval(item.func);
+                    var func = item.func;
+                    if(func != ""){
+                        func = func.replace(/(\s*)/g,"");
+                        eval(func);
+                    }
+
                  });
             },
             complete: function(){
