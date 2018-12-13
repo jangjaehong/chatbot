@@ -11,7 +11,7 @@ class DataUtil:
         self._GO = '_GO'
         self.EOS = '_EOS'  # also function as PAD
         self.PAD = '_PAD'
-        self.extra_tokens = [self._GO, self.EOS, self.PAD]
+        self.extra_tokens = [self.PAD, self._GO, self.EOS]
 
         self.start_token = self.extra_tokens.index(self._GO)  # start_token = 0
         self.end_token = self.extra_tokens.index(self.EOS)  # end_token = 1
@@ -30,8 +30,6 @@ class DataUtil:
 
         self.enc_vocab, self.enc_reverse_vocab, self.enc_vocab_size, self.enc_sentence_length = self.build_vocab(all_input_sentences)
         self.dec_vocab, self.dec_reverse_vocab, self.dec_vocab_size,  self.dec_sentence_length = self.build_vocab(all_target_sentences, is_target=True)
-        print("질문 토큰 사전화:", self.enc_vocab)
-        print("답변 토큰 사전화:", self.dec_vocab)
     def load_data(self):
         contents = db.select_chat_sequence()
         question = []
@@ -66,7 +64,7 @@ class DataUtil:
 
         for sentence in sentences:
             tokens = self.tokenizer(sentence)
-            print("토큰화 대상: ", sentences, ' | 결과:', tokens)
+            #print("토큰화 대상: ", sentences, ' | 결과:', tokens)
             word_counter.update(tokens)
 
         if max_vocab_size is None:

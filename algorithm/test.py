@@ -11,7 +11,7 @@ class DataUtil:
         self._GO = '_GO'
         self.EOS = '_EOS'  # also function as PAD
         self.PAD = '_PAD'
-        self.extra_tokens = [self._GO, self.EOS, self.PAD]
+        self.extra_tokens = [self.PAD ,self._GO, self.EOS]
 
         self.start_token = self.extra_tokens.index(self._GO)  # start_token = 0
         self.end_token = self.extra_tokens.index(self.EOS)  # end_token = 1
@@ -39,9 +39,8 @@ class DataUtil:
 
     def max_sequence_len(self, input):
         max_seq_len = 0
-        for seq in input:
-            if len(seq) > max_seq_len:
-                max_seq_len = len(seq)
+        if len(input) > max_seq_len:
+            max_seq_len = len(input)
         return max_seq_len
 
 
@@ -81,11 +80,11 @@ class DataUtil:
         current_length = len(tokens)
         pad_length = max_sentence_length - current_length
         if is_dec:
-            return [self.start_token] + [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length), current_length
+            return [self.start_token] + [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length)
         elif is_target:
             return [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length) + [self.end_token]
         else:
-            return [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length), current_length
+            return [self.token2idx(token, vocab) for token in tokens] + ([self.pad_token] * pad_length)
 
     def idx2token(self, idx, reverse_vocab):
         return reverse_vocab[idx]
@@ -110,27 +109,33 @@ question_tokens = mecab.morphs(question)
 answer_tokens = mecab.morphs(answer)
 
 #데이터 최대길이 체크
-q_max_sequence_len =  datautil.max_sequence_len(question)
-a_max_sequence_len =  datautil.max_sequence_len(answer)
-
+q_max_sequence_len =  datautil.max_sequence_len(question_tokens)
+print(q_max_sequence_len)
+a_max_sequence_len =  datautil.max_sequence_len(answer_tokens)
 # 데이터 사전제작
 q_vocab, q_reverse_vocab, q_max_vocab_size = datautil.build_vocab(question_tokens)
 a_vocab, a_reverse_vocab, a_max_vocab_size = datautil.build_vocab(answer_tokens, is_target=True)
 
-q_sent2idx = datautil.sent2idx(tokens, q_vocab, q_max_sequence_len)
-ta_sent2idx = datautil.sent2idx(tokens, a_vocab, a_max_vocab_size, is_target=True)
-da_sent2idx = datautil.sent2idx(tokens, a_vocab, a_max_vocab_size, is_dec=True)
+q_sent2idx = datautil.sent2idx(question_tokens, q_vocab, q_max_sequence_len)
+ta_sent2idx = datautil.sent2idx(answer_tokens, a_vocab, a_max_sequence_len, is_target=True)
+da_sent2idx = datautil.sent2idx(answer_tokens, a_vocab, a_max_sequence_len, is_dec=True)
 
-print("질문 :", question)
-print("질문 토큰화:", question, " -> ", question_tokens)
-print("질문 사전:", q_vocab)
-print("질문 정수화:", question_tokens, " -> ", q_sent2idx)
+print("==========encoder(질문)==========")
+print("Data :", question)
+print("토큰화:", question, " -> ", question_tokens)
+print("사전:", q_vocab)
+print("정수화:", question_tokens, " -> ", q_sent2idx)
 print()
 
-print("답변 :", answer)
-print("답변 토큰화:", answer)
+print("==========decoder(답변)==========")
+print("Data :", answer)
+print("토큰화:", answer)
 print(" -> ", answer_tokens)
-print("답변 사전:", a_vocab)
-print("학습용 답변 정수화:", answer_tokens, " -> ", ta_sent2idx)
-print("테스트용 답변 정수화:", answer_tokens, " -> ", da_sent2idx)
+print("사전:", a_vocab)
+print()
+print("학습용 정수화:", answer_tokens)
+print(" -> ", ta_sent2idx)
+print()
+print("테스트용 정수화:", answer_tokens)
+print(" -> ", da_sent2idx)
 

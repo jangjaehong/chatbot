@@ -28,7 +28,7 @@ def index(request):
             # 디비에 저장
             ChatReport(uid=request.user.pk, speaker='com', username="Medi-Bot", contents=contents,pub_date=timezone.now()).save()
             # template 전달
-            add_message.append({"speaker":speaker, "username": username, "contents":contents})
+            #add_message.append({"speaker":speaker, "username": username, "contents":contents})
 
         # 일일체크 확인
         physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
@@ -41,12 +41,14 @@ def index(request):
                               physical_report.bmi, physical_report.bmi_state,
                               physical_report.whr, physical_report.whr_state,
                               physical_report.energy,  physical_report.energy_state,)
+                ChatReport(uid=request.user.pk, speaker=speaker, username=username, contents=contents,
+                           pub_date=timezone.now()).save()
             # 마지막 체크일이 1일 초과
             elif last_check_day > 1:
                 contents = "%s님 확인해보니깐 마지막 건강 체크가 %s 네요, 건강체크는 매일 체크해서 관리를 해줘야 효과가 있답니다." \
                            % (request.user.username, physical_report.pub_date.strftime("%Y-%m-%d"),)
-            add_message.append({"speaker": speaker, "username": username, "contents": contents})
-            ChatReport(uid=request.user.pk, speaker=speaker, username=username, contents=contents, pub_date=timezone.now()).save()
+                #add_message.append({"speaker": speaker, "username": username, "contents": contents})
+                ChatReport(uid=request.user.pk, speaker=speaker, username=username, contents=contents, pub_date=timezone.now()).save()
         else:
             # 체크 기록이 없음
             contents = "%s님 건강 체크를 한번도 하신적이 없네요. 그러면 안되며 만성질환은 언제 생길지 몰라요!" \
@@ -67,17 +69,17 @@ def index(request):
             elif last_check_day > 1:
                 contents = "%s님 확인해보니깐 마지막 영양 체크가 %s 네요, 건강체크는 매일 체크해서 관리를 해줘야 효과가 있답니다." \
                            % (request.user.username, physical_report.pub_date.strftime("%Y-%m-%d"),)
-                add_message.append({"speaker": speaker, "username": username, "contents": contents})
+                #add_message.append({"speaker": speaker, "username": username, "contents": contents})
                 ChatReport(uid=request.user.pk, speaker=speaker, username=username, contents=contents, pub_date=timezone.now()).save()
         else:
             # 체크 기록이 없음
             contents = "%s님 영양 체크를 한번도 하신적이 없네요..오늘은 드신음식을 통해 얼마나 영양소를 섭취했는지 알아보세요." \
                        % request.user.username
-            add_message.append({"speaker": speaker, "username": username, "contents": contents})
+            #add_message.append({"speaker": speaker, "username": username, "contents": contents})
             ChatReport(uid=request.user.pk, speaker=speaker, username=username, contents=contents, pub_date=timezone.now()).save()
 
         chat_reports = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-        return render(request, 'medibot/index.html', {"chat_reports": chat_reports, "add_message": add_message, "physical_report": physical_report, "intake_food_report": intake_food_report})
+        return render(request, 'medibot/index.html', {"chat_reports": chat_reports, "physical_report": physical_report, "intake_food_report": intake_food_report})
     else:
         return redirect(reverse('accounts:login'))
 
@@ -119,7 +121,8 @@ def comunication(request):
                 else:
                     answer = reply
                     func = ""
-
+                print(answer)
+                print(func.strip())
                 ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
                 # 답변 반환
                 context = [{'message': answer, 'func': func, 'name': 'Medi-BOT'}]

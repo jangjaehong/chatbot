@@ -71,12 +71,6 @@ $(document).ready(function(){
         {% endfor %}
     {% endif %}
 
-    {% if add_message %}
-        {% for msg in add_message %}
-            addMessage('{{ msg.speaker }}','{{ msg.username }}','{{ msg.contents }}');
-        {% endfor %}
-    {% endif %}
-
     /* 채팅창 스크롤 제일 아래로 */
     move_chat_scroll();
 
@@ -114,7 +108,9 @@ $(document).ready(function(){
             success: function(data, textStatus){
                  $.each(data, function(i, item){
                     addMessage('com', item.name, item.message);
-                    eval(item.func)
+                    if(itme.func != ""){
+                        eval(item.func)
+                    }
                  });
             },
             complete: function(){
