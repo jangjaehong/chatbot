@@ -2,6 +2,7 @@
 <script>
 /* 메세지 DB 저장 및 화면출력 */
 function chatting_save(speaker, username, contents){
+    addMessage(speaker, username, contents);
     $.ajax({
         type: 'POST',
         url:"/save_chatting",
@@ -10,10 +11,8 @@ function chatting_save(speaker, username, contents){
             "speaker": speaker,
             "username": username,
             "contents": contents
-        }
-        success: function(response){
-            addMessage(speaker, username, contents);
         },
+        success: function(response){},
         error: function(request, status, error) {
            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
@@ -49,11 +48,10 @@ function move_chat_scroll(){
 function check_event(flag){
     /* flag==1 : 일일체크 , 2: 식단체크, 3: 기록조회 */
     if(flag == 1){
-         chatting_save('com', 'Medi-BOT', "건강상태 시작합니다." );
+        chatting_save('com', 'Medi-BOT', "건강상태 시작합니다." );
         $('#physicalFrm').submit();
     }
     if(flag == 2){
-
         chatting_save('com', 'Medi-BOT', "영양체크를 시작합니다." );
         $('#foodFrm').show();
     }
@@ -75,12 +73,12 @@ $(document).ready(function(){
         {% endfor %}
     {% endif %}
 
-    {% if physical_report %}
+    {% if measure_report %}
         var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
-        var value = [physical_report.bmi,  physical_report.whr, physical_report.energy];
-        var state = [physical_report.bmi_state, physical_report.whr_state, physical_report.energy_state];
-        var age = physical_report.age;
-        var gender = physical_report.gender;
+        var value = [measure_report.bmi,  measure_report.whr, measure_report.energy];
+        var state = [measure_report.bmi_state, measure_report.whr_state, measure_report.energy_state];
+        var age = measure_report.age;
+        var gender = measure_report.gender;
         // 결과 표시
         makeBullet(category, value, state, age, gender);
     {% endif %}
@@ -152,9 +150,7 @@ $(function() {
             success: function(data, textStatus){
                  $.each(data, function(i, item){
                     addMessage('com', item.name, item.message);
-                    if(itme.func != ""){
-                        eval(item.func)
-                    }
+                    eval(item.func);
                  });
             },
             complete: function(){

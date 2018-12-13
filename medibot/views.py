@@ -14,10 +14,14 @@ import algorithm.chatbot as chatbot
 def index(request):
     if request.user.is_authenticated:
         # 로그인, 건강체크, 영양체크 확인
-        physical_report, intake_food_report = manage_check(request.user)
+        print("check_start")
+        measure_report, intake_food_report = manage_check(request.user.pk, request.user.username, request.user.last_login)
         # 대화기록 로드
         chat_reports = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-        return render(request, 'medibot/index.html', {"chat_reports": chat_reports, "physical_report": physical_report, "intake_food_report": intake_food_report})
+        return render(request, 'medibot/index.html',
+                      {"chat_reports": chat_reports,
+                       "measure_report": measure_report,
+                       "intake_food_report": intake_food_report})
     else:
         return redirect(reverse('accounts:login'))
 
@@ -26,52 +30,51 @@ def save_chatting(request):
                pub_date=timezone.now()).save()
     return render(request)
 
-def manage_check(user_info):
+def manage_check(uid, username, last_login):
     #페이지 로드시에 사용, 유효성 체크
     now_date = datetime.now()
     # 챗봇
     speaker = "com"
     botname = "Medi-Bot"
     contents = ""
-    # 사용자
-    username = user_info.username
-    uid = user_info.pk
-    user_last_login = user_info.last_login
-
+    print("checking..")
     # 로그인 체크
-    last_login_day = (now_date - user_last_login).days
+    last_login_day = (now_date - last_login).days
     if last_login_day > 1:
-        contents = '''%s님 %d일만에 접속하셨네요.''' \
-                   '''혹시 사용법이 기억안나신다면 \'도움말\' 입력해주세요''' % (username, last_login_day)
+        contents = "%s님 %d일만에 접속하셨네요." \
+                   "혹시 사용법이 기억안나신다면 \'도움말\' 입력해주세요" % (username, last_login_day)
         # 보낼 메세지 저장
+        print("login check")
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
 
     # 건강체크 확인
-    physical_report = PhysicalReport.objects.filter(uid=uid).last()
-    if physical_report:
-        last_check_day = (now_date - physical_report.pub_date).days
+    measure_report = MeasureReport.objects.filter(uid=uid).last()
+    if measure_report:
+        last_check_day = (now_date - measure_report.pub_date).days
         # 마지막 체크일이 어제일 경우
         if last_check_day == 1:
-            contents = '''%s님의 어제 체질량지수: %d | %s 복부비만도: %d | %s, 기초대사량: %d | %s 였네요. 오늘도 꼭 체크 해주세요!''' \
+            contents = "%s님의 어제 체질량지수: %d | %s 복부비만도: %d | %s, 기초대사량: %d | %s 였네요. 오늘도 꼭 체크 해주세요!"\
                        % (username,
-                          physical_report.bmi, physical_report.bmi_state,
-                          physical_report.whr, physical_report.whr_state,
-                          physical_report.energy, physical_report.energy_state,)
+                          measure_report.bmi, measure_report.bmi_state,
+                          measure_report.whr, measure_report.whr_state,
+                          measure_report.energy, measure_report.energy_state,)
         # 마지막 체크일이 1일 초과
         elif last_check_day > 1:
-            contents = '''%s님 확인해보니깐 %s 이후로 건강 체크가 하신적이 없네요.\n''' \
-                        '''건강체크는 매일 체크해서 관리를 해줘야 효과가 있답니다.''' \
-                       % (username, physical_report.pub_date.strftime("%Y-%m-%d"),)
+            contents = "%s님 확인해보니깐 %s 이후로 건강 체크가 하신적이 없네요." \
+                       "건강체크는 매일 체크해서 관리를 해줘야 효과가 있답니다." \
+                       % (username, measure_report.pub_date.strftime("%Y-%m-%d"),)
         # 보낼 메세지 저장
+        print("physical check")
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
     else:
         # 체크 기록이 없음
-        contents = '''%s님 건강 체크를 한번도 하신적이 없네요.\n''' \
-                   '''그러면 안되며 만성질환은 언제 생길지 몰라요!''' \
+        contents = "%s님 건강 체크를 한번도 하신적이 없네요." \
+                   "그러면 안되며 만성질환은 언제 생길지 몰라요!" \
                    % username
         # 보낼 메세지 저장
+        print("physical none")
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
 
@@ -98,8 +101,9 @@ def manage_check(user_info):
         # 마지막 체크일이 1일 초과
         elif last_check_day > 1:
             contents = "%s님 영양 체크를 %s 이후로 하신적이 없네요. 매일 매일 관리 해줘야 좋아요." \
-                       % (username, physical_report.pub_date.strftime("%Y-%m-%d"),)
+                       % (username, intake_food_report.pub_date.strftime("%Y-%m-%d"),)
         # 보낼 메세지 저장
+        print("food check")
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
     else:
@@ -107,9 +111,10 @@ def manage_check(user_info):
         contents = "%s님 영양 체크를 한번도 하신적이 없네요..오늘은 드신음식을 통해 얼마나 영양소를 섭취했는지 알아보세요." \
                    % username
         # 보낼 메세지 저장
+        print("food none")
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                    pub_date=timezone.now()).save()
-    return physical_report, intake_food_report
+    return measure_report, intake_food_report
 
 
 def physical_update(request):
