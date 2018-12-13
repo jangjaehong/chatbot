@@ -9,32 +9,28 @@ $(document).ready(function(){
     });
 
     $('#btnNormalMode').on('click',function(){
-        $('#physicalFrm').submit();
+        $('#physicalFrm').submit(
+            function(){
+                $.ajax({
+                    type: 'POST',
+                    url:"/physical_update",
+                    dataType: 'json',
+                    data: $('#physicalFrm').serialize(),
+                    success: function(response){
+                        alert("신체정보 수정을 완료했습니다");
+                        // $('#user-info').load('#tb-physical');
+                        $('.tb-base .update-text').hide();
+                        $('.tb-base .normal-text').show();
+                        $('#btnUpdateMode').show();
+                    },
+                    error: function(request, status, error) {
+                       alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                    }
+                });
+                return false;
+            });
+        );
     });
-
-    $('#physicalFrm').submit(function(){
-        $.ajax({
-            type: 'POST',
-            url:"/physical_update",
-            dataType: 'json',
-            data: $('#physicalFrm').serialize(),
-            beforeSend: function(){
-                //유저 메세지 표시
-            },
-            success: function(response){
-                alert("신체정보 수정을 완료했습니다");
-                // $('#user-info').load('#tb-physical');
-                $('.tb-base .update-text').hide();
-                $('.tb-base .normal-text').show();
-                $('#btnUpdateMode').show();
-            },
-            error: function(request, status, error) {
-               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-            }
-        });
-        return false;
-    });
-
 })
 </script>
 <div class="logo">
