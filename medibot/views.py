@@ -71,7 +71,7 @@ def manage_check(uid, username, last_login):
         # 체크 기록이 없음
         contents = "%s님 건강 체크를 한번도 하신적이 없네요." \
                    "그러면 안되며 만성질환은 언제 생길지 몰라요!!!" \
-                   "\'건강체크 시작\'이라고 하면 제가 확인해들리게요." \
+                   "\'건강체크 시작\'이라고 하면 제가 확인해드릴게요." \
                    % username
         # 보낼 메세지 저장
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
@@ -108,7 +108,7 @@ def manage_check(uid, username, last_login):
         # 체크 기록이 없음
         contents = "%s님 영양 체크를 한번도 하신적이 없네요.." \
                    "오늘은 드신음식을 통해 얼마나 영양소를 섭취했는지 알아보세요." \
-                   "\'영양체크 시작\'이라고 하면 제가 확인해들리게요." \
+                   "\'영양체크 시작\'이라고 하면 제가 확인해드릴게요." \
                    % username
         # 보낼 메세지 저장
         ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
