@@ -164,9 +164,9 @@ function loadBullet(container, value, state, config){
         .attr("d", line)
 
     d3.select(container).selectAll("#arrow").classed('hidden', false);
-    var tooltip = d3.select(container).selectAll("#arrow")
+    var arrow = d3.select(container).selectAll("#arrow")
         .style("top", (-config.paddingTop + 10)+ "px")
-        .style("left", (xScale(value) - 25) + "px");
+        .style("left", (xScale(value) - 20) + "px");
     /*tooltip.select(".text1")
         .text("나의 수치 : " + value)
     tooltip.select(".text2")
@@ -331,16 +331,17 @@ function loadCurveChart(data, container, config){
         })
         .on("mouseover", function(d){
             d3.select(container).selectAll("#arrow").classed('hidden', false);
-            var tooltip = d3.select(container).selectAll("#arrow")
+            var arrow = d3.select(container).selectAll("#arrow")
                 .style("top",  (d3.select(this).attr("cy")/2) + "px")
                 .style("left", (d3.select(this).attr("cx") - 50) + "px")
                 .transition()
                     .duration(duration/2)
                     .style("top", (d3.select(this).attr("cy") - 10)+ "px");
-            tooltip.select(".text1")
+            /*tooltip.select(".text1")
                 .text("BMI : " + d.value)
             tooltip.select(".text2")
                 .text("상태 :" + d.text)
+                */
         })
         .on("mouseout", function(d){
             d3.select(container).select("#arrow")
