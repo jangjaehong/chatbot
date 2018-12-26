@@ -14,7 +14,9 @@
 
 /* 결과창 그래프 */
 .result-wrap > .result-box > .result-container{width:100%;height:auto;position:relative;color:#333}
-.result-wrap > .result-box > .result-container > .title{width:calc(100% - 20px);padding:5px 10px;font-size:1.2em;font-weight: bold;background:#368AFF;color:#fff}
+.result-wrap > .result-box > .result-container > .header{width:calc(100% - 20px);padding:5px 10px;background:#368AFF;color:#fff}
+.result-wrap > .result-box > .result-container > .title{font-size:1.2em;font-weight: bold;}
+.result-wrap > .result-box > .result-container > .measure-date{font-size:1em;}
 .result-wrap > .result-box > .result-container > .text-info{width:calc(100% - 20px);height:auto;padding:10px}
 .result-wrap > .result-box > .result-container > .container{margin-top:10px;position:relative}
 .result-wrap > .result-box > .result-container > .bullet-container1,

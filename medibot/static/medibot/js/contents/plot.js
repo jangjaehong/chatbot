@@ -77,29 +77,29 @@ function drawBulletEnergy(value, state,  gender, age, container){
     config.gender = gender;
     config.age = age;
     config.minValue = 0;
-    config.maxValue = 4000;
+    config.maxValue = 3000;
     config.rectColor = ["#FF0000", "#FF0000", "#FF0000","#ABF200", "#B2EBF4"];
     config.ylabel = "기초대사량(kcal)"
     if(gender == 1){
         if( age >= 20 && age <= 29 ){
-            config.range = [1359.8, 1728, 2096.2, 3000.0, 4000.0];
+            config.range = [1359.8, 1728, 2096.2, 2500.0, 3000.0];
         }
         if( age >= 30 && age <= 49 ){
-            config.range = [1367.4, 1669.5,  1971.6, 3000.0, 4000.0];
+            config.range = [1367.4, 1669.5,  1971.6, 2500.0, 3000.0];
         }
         if( age >= 50 ){
-            config.range = [1359.8, 1728, 2096.2, 3000.0, 4000.0];
+            config.range = [1359.8, 1728, 2096.2, 2500.0, 3000.0];
         }
     }
     if(gender == 2){
         if( age >= 20 && age <= 29 ){
-            config.range = [1078.5, 1311.5, 1544.5, 3000.0, 4000];
+            config.range = [1078.5, 1311.5, 1544.5, 2500.0, 3000];
         }
         if( age >= 30 && age <= 49 ){
-            config.range = [1090.9, 1316.8, 1542.7, 3000.0, 4000.0];
+            config.range = [1090.9, 1316.8, 1542.7, 2500.0, 3000.0];
         }
         if( age >= 50 ){
-            config.range = [1023.9, 1252.5, 1481.1, 3000.0, 4000.0];
+            config.range = [1023.9, 1252.5, 1481.1, 2500.0, 3000.0];
         }
     }
     var bullet = loadBullet(container, value, state, config);
@@ -172,11 +172,6 @@ function loadBullet(container, value, state, config){
         .transition()
         .duration(config.duration*4)
             .style("left", (xScale(value) - 35) + "px");
-
-    /*tooltip.select(".text1")
-        .text("나의 수치 : " + value)
-    tooltip.select(".text2")
-        .text("상태 :" + state)*/
 }
 
 //꺽은선 그래프

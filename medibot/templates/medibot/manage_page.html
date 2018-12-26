@@ -145,10 +145,11 @@ function diet_check_cancel(){
 /* 그래프 호출 */
 function makeBullet(category, value, state, age, gender){
     $('#result-box1, #result-box2, #result-box3').html('');
-    $('#measure_date').html('최근 측정 날짜 : {{ physical_report.pub_date }}');
+    //$('#measure_date').html('최근 측정 날짜 : {{ physical_report.pub_date }}');
     for(var i = 0; i < 3; i++){
         var container = $("#empty-result-container").clone().show().attr("id","");
         container.find(".title").html(category[i])
+        container.find(".measure-date").html(physical_report.pub_date[i])
         container.find(".text-info").html("<p>" + category[i] + ": " + value[i] + "로 " + state[i] + "입니다.</p>");
         container.find(".container").addClass("bullet-container").addClass("bullet-container" + (i + 1));
         $('#result-box' + (i+1)).append(container);
@@ -166,7 +167,10 @@ function makeBullet(category, value, state, age, gender){
 
 <!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
 <div id="empty-result-container" class="result-container" style="display:none">
-    <div class="title"></div>
+    <div class="header">
+        <div class="title"></div>
+        <div class="measure-date"></div>
+    </div>
     <div class="container">
         <div id="arrow" class="hidden"></div>
     </div>
