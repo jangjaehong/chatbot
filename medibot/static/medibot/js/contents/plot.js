@@ -162,7 +162,7 @@ function loadBullet(container, value, state, config){
         .attr("stroke-width", "2")
         .attr("stroke", "#378AFF")
         .transition()
-        .duration(config.duration*2)
+        .duration(config.duration*4)
             .attr("d", line)
 
     d3.select(container).selectAll("#arrow").classed('hidden', false);
@@ -170,7 +170,7 @@ function loadBullet(container, value, state, config){
         .style("top", (-config.paddingTop - 10)+ "px")
         .style("left", "0px")
         .transition()
-        .duration(config.duration*2)
+        .duration(config.duration*4)
             .style("left", (xScale(value) - 35) + "px");
 
     /*tooltip.select(".text1")
