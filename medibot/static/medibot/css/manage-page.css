@@ -5,7 +5,7 @@
 
 /* 일일체크 결과창 */
 .result-wrap{width:100%;height:100%;position:relative;background:}
-.result-wrap .result-box{width:calc(33% - 10px);height:200px;margin:0 5px;box-shadow:3px 3px 3px 3px #222222;padding:5px;position:absolute;background:#fff}
+.result-wrap .result-box{width:calc(33% - 20px);height:200px;margin:0 5px;box-shadow:3px 3px 3px 3px #222222;padding:5px;position:absolute;background:#fff}
 .result-wrap #result-box1{top:0;left:0;}
 .result-wrap #result-box2{top:0;left:33%;}
 .result-wrap #result-box3{top:0;left:66%;}
