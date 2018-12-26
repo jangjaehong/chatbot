@@ -155,9 +155,9 @@ function loadBullet(container, value, state, config){
     var resultLineGroup = svg.append("g")
         .attr("class","lineGroup")
         .attr("transform", "translate(0," + config.paddingTop + ")")
-        .attr("d", line)
         .transition()
-        .duration(config.duration*4)
+        .duration(config.duration)
+            .attr("d", line)
             .attr("transform", "translate(" + config.paddingLeft + "," + config.paddingTop + ")");
 
     resultLineGroup.append("path")
