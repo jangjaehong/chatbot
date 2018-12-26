@@ -61,8 +61,9 @@ section > header{
     height:50px;
 }
 section > article{
-    width:100%;
+    width:calc(100%; - 20px)
     height: calc(100% - 50px);
+    padding:0 10px;
     position:relative;
 }
 
