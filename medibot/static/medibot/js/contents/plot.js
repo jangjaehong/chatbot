@@ -470,7 +470,7 @@ function drawCircleChart(data, container, flag){
         if(value> 100){
             config.circleColor = "#FF0000";
             config.waveColor = "#FF0000";
-            config.textColor = "#fff"
+            config.waveTextColor = "#fff"
         }else{
             config.circleColor = "#178BCA";
             config.waveColor = "#178BCA";
