@@ -62,10 +62,6 @@
     left:45%;
 }
 
-#tooltip > p{
-    display: flex;
-    justify-content: center;
-}
-#tooltip.hidden{
+#arrow.hidden{
     display:none;
 }
