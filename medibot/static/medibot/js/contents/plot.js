@@ -229,7 +229,6 @@ function drawCurveEnergy(data, container, gender, age){
     config.color = ["#eee", "#ddd", "#ccc","#989898","#747474"];
     loadCurveChart(data, container, config)
 }
-// 막대그래프
 function loadCurveChart(data, container, config){
     function transition(path) {
         path.transition()
@@ -237,11 +236,11 @@ function loadCurveChart(data, container, config){
             .attrTween("stroke-dasharray", tweenDash);
     }
     function tweenDash() {
-    var l = this.getTotalLength(),
-        i = d3.interpolateString("0," + l, l + "," + l);
-    return function (t) { return i(t); };
+        var l = this.getTotalLength(),
+            i = d3.interpolateString("0," + l, l + "," + l);
+        return function (t) { return i(t); };
     }
-   if(config == null) config = curveDefaultSettings();
+    if(config == null) config = curveDefaultSettings();
     var containerRect = d3.select(container).node().getBoundingClientRect()
         containerWidth = containerRect.width,
         containerHeight = containerRect.height;
@@ -343,11 +342,6 @@ function loadCurveChart(data, container, config){
                 .transition()
                     .duration(duration/2)
                     .style("top", (d3.select(this).attr("cy") - 10)+ "px");
-            /*tooltip.select(".text1")
-                .text("BMI : " + d.value)
-            tooltip.select(".text2")
-                .text("상태 :" + d.text)
-                */
         })
         .on("mouseout", function(d){
             d3.select(container).select("#arrow")
