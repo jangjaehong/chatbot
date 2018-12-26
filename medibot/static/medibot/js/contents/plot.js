@@ -39,7 +39,7 @@ function bulletDefaultSettings(){
         standard: 0,
         division: 1,
         duration: 1000,
-        paddingTop:40,
+        paddingTop:30,
         paddingRight:30,
         paddingBottom:20,
         paddingLeft:30,
