@@ -154,7 +154,7 @@ function loadBullet(container, value, state, config){
     //측정값을 표시하는 라인
     var resultLineGroup = svg.append("g")
         .attr("class","lineGroup")
-        .attr("transform", "translate(" + (-width) + "," + config.paddingTop + ")");
+        .attr("transform", "translate(" + config.paddingLeft + "," + config.paddingTop + ")");
     resultLineGroup.append("path")
         .datum(lineData)
         .attr("class", "line")
@@ -164,7 +164,7 @@ function loadBullet(container, value, state, config){
         .transition()
         .duration(config.duration*4)
             .attr("d", line)
-            .attr("transform", "translate(" + config.paddingLeft + "," + config.paddingTop + ")");
+            //.attr("transform", "translate(" + config.paddingLeft + "," + config.paddingTop + ")");
 
     d3.select(container).selectAll("#arrow").classed('hidden', false);
     var arrow = d3.select(container).selectAll("#arrow")
