@@ -13,8 +13,8 @@
 .result-wrap .result-box .none-result{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.3em;font-weight:bold}
 
 /* 결과창 그래프 */
-.result-wrap > .result-box > .result-container{width:100%;height:auto;position:relative}
-.result-wrap > .result-box > .result-container > .title{font-size: 1.2em;font-weight: bold;}
+.result-wrap > .result-box > .result-container{width:100%;height:auto;position:relative;color:#333}
+.result-wrap > .result-box > .result-container > .title{font-size: 1.1em;font-weight: bold;}
 .result-wrap > .result-box > .result-container > .text-info{width:100%;height:auto;margin-top:10px;}
 .result-wrap > .result-box > .result-container > .container{margin-top:10px;position:relative}
 .result-wrap > .result-box > .result-container > .bullet-container1,
