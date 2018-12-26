@@ -40,9 +40,9 @@ function bulletDefaultSettings(){
         division: 1,
         duration: 1000,
         paddingTop:40,
-        paddingRight:20,
+        paddingRight:30,
         paddingBottom:20,
-        paddingLeft:20,
+        paddingLeft:30,
     }
 }
 
