@@ -149,7 +149,7 @@ function makeBullet(category, value, state, age, gender){
     for(var i = 0; i < 3; i++){
         var container = $("#empty-result-container").clone().show().attr("id","");
         container.find(".title").html(category[i]);
-        container.find(".measure-date").html('{{ physical_report.pub_date[i] }}');
+        container.find(".measure-date").html('{{ measure_report.pub_date }}');
         container.find(".text-info").html("<p>" + category[i] + ": " + value[i] + "로 " + state[i] + "입니다.</p>");
         container.find(".container").addClass("bullet-container").addClass("bullet-container" + (i + 1));
         $('#result-box' + (i+1)).append(container);
