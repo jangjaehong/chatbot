@@ -41,7 +41,7 @@ function bulletDefaultSettings(){
         duration: 1000,
         paddingTop:20,
         paddingRight:20,
-        paddingBottom:20,
+        paddingBottom:40,
         paddingLeft:20,
     }
 }
@@ -223,6 +223,7 @@ function drawCurveEnergy(data, container, gender, age){
     config.color = ["#eee", "#ddd", "#ccc","#989898","#747474"];
     loadCurveChart(data, container, config)
 }
+// 막대그래프
 function loadCurveChart(data, container, config){
     function transition(path) {
         path.transition()
@@ -329,8 +330,8 @@ function loadCurveChart(data, container, config){
             }
         })
         .on("mouseover", function(d){
-            d3.select(container).selectAll("#tooltip").classed('hidden', false);
-            var tooltip = d3.select(container).selectAll("#tooltip")
+            d3.select(container).selectAll("#arrow").classed('hidden', false);
+            var tooltip = d3.select(container).selectAll("#arrow")
                 .style("top",  (d3.select(this).attr("cy")/2) + "px")
                 .style("left", (d3.select(this).attr("cx") - 50) + "px")
                 .transition()
@@ -342,12 +343,12 @@ function loadCurveChart(data, container, config){
                 .text("상태 :" + d.text)
         })
         .on("mouseout", function(d){
-            d3.select(container).select("#tooltip")
+            d3.select(container).select("#arrow")
                 .style("top", d3.select(this).attr("cy") + "px")
                 .transition()
                 .duration(duration/2)
                     .style("top", 0);
-            d3.select(container).select("#tooltip").classed('hidden', true);
+            d3.select(container).select("#arrow").classed('hidden', true);
         })
         .transition()
             .duration(config.duration)
