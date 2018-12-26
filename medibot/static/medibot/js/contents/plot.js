@@ -154,7 +154,7 @@ function loadBullet(container, value, state, config){
     //측정값을 표시하는 라인
     var resultLineGroup = svg.append("g")
         .attr("class","lineGroup")
-        .attr("transform", "translate(" + (-xScale(value) - 35) + "," + config.paddingTop + ")");
+        .attr("transform", "translate(" + (-xScale(value) + 35) + "," + config.paddingTop + ")");
 
     resultLineGroup.append("path")
         .datum(lineData)
