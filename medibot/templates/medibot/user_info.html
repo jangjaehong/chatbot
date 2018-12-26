@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load staticfiles %}
 <script>
 function view_noraml(flag){
     if(flag==1){
@@ -41,7 +40,7 @@ $(document).ready(function(){
                 alert("신체정보 수정을 완료했습니다");
                 view_noraml(1);
                 view_update(2);
-                $("#physical-box").load("/physical_info");
+                $("#physical-box").load("/physical_update");
             },
             error: function(request, status, error) {
                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -75,5 +74,5 @@ $(document).ready(function(){
 </div>
 
 <div class="physical-box" id="physical-box">
-    {% medibot/physical_info.html %}
+    {% include 'medibot/physical_info.html' %}
 </div>

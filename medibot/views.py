@@ -12,16 +12,24 @@ import algorithm.chatbot as chatbot
 # 메인페이지
 def index(request):
     if request.user.is_authenticated:
-        # 로그인, 건강체크, 영양체크 확인
-        print("check_start")
-        physical_report, measure_report, intake_food_report = manage_check(request.user.pk, request.user.username, request.user.last_login)
         # 대화기록 로드
         chat_reports = ChatReport.objects.filter(uid=request.user.pk).order_by('pub_date')
-        return render(request, 'medibot/index.html',
-                      {"chat_reports": chat_reports,
-                       "physical_report": physical_report,
-                       "measure_report": measure_report,
-                       "intake_food_report": intake_food_report})
+        if len(chat_reports) > 1:
+            # 로그인, 건강체크, 영양체크 확인
+            physical_report, measure_report, intake_food_report = \
+                manage_check(request.user.pk, request.user.username, request.user.last_login)
+            return render(request, 'medibot/index.html',
+                          {"chat_reports": chat_reports,
+                           "physical_report": physical_report,
+                           "measure_report": measure_report,
+                           "intake_food_report": intake_food_report})
+        else:
+            return render(request, 'medibot/index.html',
+                          {"chat_reports": chat_reports,
+                           "physical_report": None,
+                           "measure_report": None,
+                           "intake_food_report": None})
+
     else:
         return redirect(reverse('accounts:login'))
 
@@ -59,14 +67,17 @@ def manage_check(uid, username, last_login):
                           measure_report.bmi, measure_report.bmi_state,
                           measure_report.whr, measure_report.whr_state,
                           measure_report.energy, measure_report.energy_state,)
+            # 보낼 메세지 저장
+            ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
+                       pub_date=timezone.now()).save()
         # 마지막 체크일이 1일 초과
         elif last_check_day > 1:
             contents = "%s님 확인해보니깐 %s 이후로 건강 체크가 하신적이 없네요." \
                        "건강체크는 매일 체크해서 관리를 해줘야 효과가 있답니다." \
                        % (username, measure_report.pub_date.strftime("%Y-%m-%d"),)
-        # 보낼 메세지 저장
-        ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
-                   pub_date=timezone.now()).save()
+            # 보낼 메세지 저장
+            ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
+                       pub_date=timezone.now()).save()
     else:
         # 체크 기록이 없음
         contents = "%s님 건강 체크를 한번도 하신적이 없네요." \
@@ -97,13 +108,17 @@ def manage_check(uid, username, last_login):
                           intake_food_report.fat, intake_food_report.sugars,
                           intake_food_report.salt, intake_food_report.cholesterol,
                           intake_food_report.saturatedfat, intake_food_report.transfat)
+            # 보낼 메세지 저장
+            ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
+                       pub_date=timezone.now()).save()
+
         # 마지막 체크일이 1일 초과
         elif last_check_day > 1:
             contents = "%s님 영양 체크를 %s 이후로 하신적이 없네요. 매일 매일 관리 해줘야 좋아요." \
                        % (username, intake_food_report.pub_date.strftime("%Y-%m-%d"),)
-        # 보낼 메세지 저장
-        ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
-                   pub_date=timezone.now()).save()
+            # 보낼 메세지 저장
+            ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
+                       pub_date=timezone.now()).save()
     else:
         # 체크 기록이 없음
         contents = "%s님 영양 체크를 한번도 하신적이 없네요.." \
@@ -125,7 +140,7 @@ def save_chatting(request):
                 username = request.POST['username']
                 contents = request.POST['contents']
                 ChatReport(uid=uid, speaker=speaker, username=username, contents=contents, pub_date=timezone.now()).save()
-    return render(request)
+    return render(request, "medibot/chat.html")
 
 
 def physical_update(request):
@@ -141,17 +156,12 @@ def physical_update(request):
                 hip = float(request.POST['hip'])
                 # 정보 업데이트
                 PhysicalReport(uid=uid, age=age, gender=gender, stature=stature, weight=weight, waist=waist, hip=hip, pub_date=timezone.now()).save()
-                physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
-                return render(request, 'medibot/user_info.html', {"physical_report": physical_report})
+                return render(request, 'medibot/user_info.html', {})
         else:
-            physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
-            return render(request, 'medibot/user_info.html', {"physical_report": physical_report})
+            physical_info = PhysicalReport.objects.filter(uid=request.user.pk).last()
+            return render(request, 'medibot/physical_info.html', {"physical_report": physical_info})
     else:
         return redirect(reverse('accounts:login'))
-
-def physical_info(request):
-    physical_info = PhysicalReport.objects.filter(uid=request.user.pk).last()
-    return render(request, 'medibot/physical_info.html', {"physical_report": physical_info})
 
 def comunication(request):
     if request.user.is_authenticated:
@@ -164,12 +174,15 @@ def comunication(request):
                 # 사용자 질의문에 대한 챗봇의 답변
                 reply = chatbot._get_answer(msg)
                 funcIdx = reply.rfind('fn')
+
+                answer = ""
+                func = ""
                 if funcIdx:
                     answer = reply[:funcIdx]
-                    func = reply[funcIdx+4:].strip()
+                    func = reply[funcIdx+4:]
                 else:
                     answer = reply
-                    func = ""
+
                 ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
                 # 답변 반환
                 context = [{'message': answer, 'func': func, 'name': 'Medi-BOT'}]
@@ -304,7 +317,8 @@ def day_measure(request):
                     whr_result, whr_state = calc.whr(gender, waist, hip)
                     energy_result, energy_state = calc.energy(gender, age, stature, weight)
                     # 기록 DB 저장
-                    MeasureReport(uid=uid, bmi=bmi_result, bmi_state=bmi_state, whr=whr_result, whr_state=whr_state,
+                    MeasureReport(uid=uid, age=age, gender=gender, stature=stature, weight=weight, waist=waist, hip=hip,
+                                  bmi=bmi_result, bmi_state=bmi_state, whr=whr_result, whr_state=whr_state,
                                   energy=energy_result, energy_state=energy_state, pub_date=timezone.now()).save()
                     BmiReport(uid=uid, stature=stature, weight=weight, bmi=bmi_result, state=bmi_state, pub_date=timezone.now()).save()
                     WHRReport(uid=uid, gender=gender, waist=waist, hip=hip, whr=whr_result, state=whr_state, pub_date=timezone.now()).save()
@@ -336,7 +350,7 @@ def diet(request):
                            "sugars": 0.0, "salt": 0.0, "cholesterol": 0.0, "saturatedfat": 0.0, "transfat": 0.0}
 
                 # 이용자 마지막으로 기록된 기초대사량 가져옴
-                row = PhysicalReport.objects.filter(uid=uid).order_by('pub_date')
+                row = MeasureReport.objects.filter(uid=uid).order_by('pub_date')
                 if row is not None:
                     if float(row[0].energy) is not 0:
                         context["energy"] = float(row[0].energy)

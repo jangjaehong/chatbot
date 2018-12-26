@@ -54,6 +54,12 @@ class PhysicalReport(models.Model):
 
 class MeasureReport(models.Model):
     uid = models.IntegerField(null=False, default=0)
+    age = models.IntegerField(null=False, default=0)
+    gender = models.IntegerField(null=False, default=0)
+    stature = models.FloatField(null=False, default=0.0)
+    weight = models.FloatField(null=False, default=0.0)
+    waist = models.FloatField(null=False, default=0.0)
+    hip = models.FloatField(null=False, default=0.0)
     bmi = models.FloatField(null=False, default=0.0)
     bmi_state = models.CharField(max_length=10, null=False, default='')
     whr = models.FloatField(null=False, default=0.0)
