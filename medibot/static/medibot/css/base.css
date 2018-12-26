@@ -42,11 +42,10 @@ nav{
 }
 /* 좌측 유저공간 */
 .user-info-wrap{
-    width:calc(15% - 20px);
-    height:calc(100% - 20px);
+    width:100%;
+    height:calc(100% - 5px);
     position: relative;
     background:#333333;
-    padding:10px;
     box-shadow:inset 0 0 5px 0 #222222;
 }
 
