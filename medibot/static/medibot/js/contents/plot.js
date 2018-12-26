@@ -39,10 +39,10 @@ function bulletDefaultSettings(){
         standard: 0,
         division: 1,
         duration: 1000,
-        paddingTop:40,
-        paddingRight:40,
-        paddingBottom:40,
-        paddingLeft:40,
+        paddingTop:20,
+        paddingRight:20,
+        paddingBottom:20,
+        paddingLeft:20,
     }
 }
 
@@ -163,14 +163,14 @@ function loadBullet(container, value, state, config){
         .attr("stroke", "#378AFF")
         .attr("d", line)
 
-    d3.select(container).selectAll("#tooltip").classed('hidden', false);
-    var tooltip = d3.select(container).selectAll("#tooltip")
+    d3.select(container).selectAll("#arrow").classed('hidden', false);
+    var tooltip = d3.select(container).selectAll("#arrow")
         .style("top", (-config.paddingTop + 10)+ "px")
         .style("left", (xScale(value) - 25) + "px");
-    tooltip.select(".text1")
+    /*tooltip.select(".text1")
         .text("나의 수치 : " + value)
     tooltip.select(".text2")
-        .text("상태 :" + state)
+        .text("상태 :" + state)*/
 }
 
 //꺽은선 그래프
