@@ -161,14 +161,16 @@ function loadBullet(container, value, state, config){
         .attr("fill","none")
         .attr("stroke-width", "2")
         .attr("stroke", "#378AFF")
-        .attr("d", line)
+        .transition()
+        .duration(config.duration*2)
+            .attr("d", line)
 
     d3.select(container).selectAll("#arrow").classed('hidden', false);
     var arrow = d3.select(container).selectAll("#arrow")
         .style("top", (-config.paddingTop - 10)+ "px")
         .style("left", "0px")
         .transition()
-        .duration(config.duration)
+        .duration(config.duration*2)
             .style("left", (xScale(value) - 35) + "px");
 
     /*tooltip.select(".text1")
