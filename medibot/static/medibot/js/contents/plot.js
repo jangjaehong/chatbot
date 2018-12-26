@@ -471,8 +471,8 @@ function drawCircleChart(data, container, flag){
             config.circleColor = "#FF0000";
             config.waveColor = "#FF0000";
         }else{
-            config.circleColor: "#178BCA";
-            config.waveColor: "#178BCA";
+            config.circleColor = "#178BCA";
+            config.waveColor = "#178BCA";
         }
 
         var gauge = loadLiquidFillGauge("fillgauge" + c, value, title, standard, intake, config);
