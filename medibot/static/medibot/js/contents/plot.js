@@ -166,7 +166,11 @@ function loadBullet(container, value, state, config){
     d3.select(container).selectAll("#arrow").classed('hidden', false);
     var arrow = d3.select(container).selectAll("#arrow")
         .style("top", (-config.paddingTop + 10)+ "px")
-        .style("left", (xScale(value) - 35) + "px");
+        .style("left", "0px");
+        .transition()
+        .duration(config.duration)
+            .style("left", (xScale(value) - 35) + "px");
+
     /*tooltip.select(".text1")
         .text("나의 수치 : " + value)
     tooltip.select(".text2")
