@@ -446,7 +446,7 @@ function drawCircleChart(data, container, flag){
         config.waveCount = 1;
         config.valueCountUp = false;
         //config.textColor = "#A4DBf8";
-        config.textColor = "#cccccc";
+        config.textColor = "#333";
 
         var svg = chart_container.append("svg")
             .attr("id", "fillgauge" + c)
