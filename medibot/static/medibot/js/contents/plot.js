@@ -166,7 +166,6 @@ function loadBullet(container, value, state, config){
 
     resultLineGroup.transition()
         .duration(config.duration*4)
-        .attr("transform", "translate(" + (xScale(value) - 35) + "," + config.paddingTop + ")");
         .attr("transform", "translate(" + config.paddingLeft + "," + config.paddingTop + ")");
 
     d3.select(container).selectAll("#arrow").classed('hidden', false);
