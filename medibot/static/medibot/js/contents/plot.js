@@ -448,7 +448,6 @@ function drawCircleChart(data, container, flag){
         //config.textColor = "#A4DBf8";
         config.textColor = "#cccccc";
 
-
         var svg = chart_container.append("svg")
             .attr("id", "fillgauge" + c)
             .attr("class","fillgauge fillgauge" + c)
@@ -467,13 +466,17 @@ function drawCircleChart(data, container, flag){
             title = dataName[c],
             standard = "권장량:" + dataSet.dataValue[c][0].toString() + dataUnit(c),
             intake = "섭취량:" + dataSet.dataValue[c][1].toString() + dataUnit(c);
-
+        if(value> 100){
+            config.circleColor = "#FF0000";
+            config.waveColor = "#FF0000";
+        }else{
+            config.circleColor: "#178BCA";
+            config.waveColor: "#178BCA";
+        }
         var gauge = loadLiquidFillGauge("fillgauge" + c, value, title, standard, intake, config);
     }
-
-// 원 그래프 그리기
-
 }
+// 원 그래프 그리기
 function liquidFillGaugeDefaultSettings(){
     return {
         minValue: 0, // The gauge minimum value.
@@ -650,6 +653,7 @@ function loadLiquidFillGauge(elementId, value, title, standard, intake, config) 
         .attr("cy", radius)
         .attr("r", fillCircleRadius)
         .style("fill", config.waveColor);
+    // color
 
     var title2 = fillCircleGroup.append("text")
         .text(title)
