@@ -50,7 +50,7 @@ function drawBulletBMI(value, state, container){
     var config = bulletDefaultSettings();
     config.minValue = 0;
     config.maxValue = 40.0;
-    config.rectColor = ["#FF0000", "#FF5E00", "#FFBB00", "#FFE400", "#ABF200","#BDBDBD"];
+    config.rectColor = ["#B2EBF4", "#FF5E00", "#FFBB00", "#FFE400", "#ABF200","#BDBDBD"];
     config.range = [18.5, 23.0, 25.0, 30.0, 35.0, 40.0];
     config.ylabel = "체질량지수(BMI)";
     var bullet = loadBullet(container, value, state, config);
@@ -61,7 +61,7 @@ function drawBulletWHR(value, state, gender, age, container){
     config.age = age;
     config.minValue = 0;
     config.maxValue = 1.5;
-    config.rectColor = ["#eee", "#ddd", "#ccc"];
+    config.rectColor = ["#B2EBF4", "#FF5E00", "#BDBDBD"];
     if(gender == 1){
         config.range = [0.5, 1, 1.5];
     }
@@ -78,7 +78,7 @@ function drawBulletEnergy(value, state,  gender, age, container){
     config.age = age;
     config.minValue = 0;
     config.maxValue = 4000;
-    config.rectColor = ["#eee", "#ddd", "#ccc","#989898","#747474"];
+    config.rectColor = ["#B2EBF4", "#FF5E00", "#BDBDBD","#BDBDBD","#BDBDBD"];
     config.ylabel = "기초대사량(kcal)"
     if(gender == 1){
         if( age >= 20 && age <= 29 ){
