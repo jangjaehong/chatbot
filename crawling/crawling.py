@@ -43,23 +43,18 @@ class Crawling:
         contents_list = []
 
         for url in tqdm(url_list):
-            # HTTP GET Request
             req = requests.get(url)
-            # HTML 소스 가져오기
             html = req.text
-            # BeautifulSoup으로 html소스를 python객체로 변환하기
-            # 첫 인자는 html소스코드, 두 번째 인자는 어떤 parser를 이용할지 명시.
-            # 이 글에서는 Python 내장 html.parser를 이용했다.
             soup = BeautifulSoup(html, 'html.parser')
 
-            # 타이틀
+            # 질의문
             title = soup.select_one('div.cTop > span:nth-of-type(2)')
             if title:
                 title_list.append(title.text)
             else:
                 title_list.append("")
 
-            # 서브 타이틀
+            # 질의문
             all_sub_title = []
             content_all = soup.select_one('body')
             sub_title = soup.select('div.food')
@@ -69,7 +64,7 @@ class Crawling:
                 sub_title_list.append(all_sub_title)
             else:
                 sub_title_list.append([])
-            # 내용
+            # 응답문
             if len(sub_title) > 0:
                 tmp_contents_list = []
                 for idx in range(len(all_sub_title)):
@@ -88,7 +83,6 @@ class Crawling:
                 for content in contents:
                     tmp_contents.append(content.text)
                 contents_list.append([tmp_contents])
-
 
         json_arch["title"] = title_list
         json_arch["sub_title"] = sub_title_list
@@ -150,5 +144,5 @@ class BuildDataSet:
 
 
 bds = BuildDataSet()
-bds.save()
+#bds.save()
 
