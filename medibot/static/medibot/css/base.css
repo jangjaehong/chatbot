@@ -44,7 +44,6 @@ section{
     height: 100%;
     position: relative;
     background:#333333;
-    overflow-y:scroll;
 }
 section > header{
     width:100%;
