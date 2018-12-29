@@ -10,7 +10,7 @@
 }
 /* 타이틀바 */
 .chat-header{
-    width:calc(100% - 10px);
+    width:calc(100% - 20px);
     height:40px;
     padding:10px;
     position:relative;
