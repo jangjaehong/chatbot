@@ -49,11 +49,9 @@ function move_chat_scroll(){
 function check_event(flag){
     /* flag==1 : 일일체크 , 2: 식단체크, 3: 기록조회 */
     if(flag == 1){
-        chatting_save('com', 'Medi-BOT', "건강상태 시작합니다." );
         physical_measure();
     }
     if(flag == 2){
-        chatting_save('com', 'Medi-BOT', "영양체크를 시작합니다." );
         $('#foodFrm').show();
     }
     if(flag == 3){}
