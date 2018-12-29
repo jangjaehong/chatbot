@@ -57,9 +57,9 @@ section > article{
 }
 
 /* 대쉬보드 */
-section > header{width:calc(100% - 20px);height:40px;padding:10px;background:#368AFF;}
-section > header > .title{font-size:1.8em;color:#fff;font-weight:bold;line-height:150%;}
-section > header > .explain{font-size:1em;color:#fff;line-height:100%;}
+header.manage{width:calc(100% - 20px);height:40px;padding:10px;background:#368AFF;position:fixed;top:0;right:0;}
+header.manage > .title{font-size:1.8em;color:#fff;font-weight:bold;line-height:150%;}
+header.manage > .explain{font-size:1em;color:#fff;line-height:100%;}
 
 /* 유저 박스 */
 .user-item{
