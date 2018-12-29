@@ -46,6 +46,14 @@
             <li class="menu-tit">대쉬보드</li>
         </ul>
     </nav>
+
+    <!-- 채팅창 -->
+    <section>
+        <article>
+            {% block chatbot %}
+            {% endblock %}
+        </article>
+    </section>
     <!-- 유저 정보 -->
     <div class="user-info-wrap" id="user-info">
         {% block userspace %}
@@ -84,15 +92,7 @@
             <div style="background-color:#368AFF"><a href="{% url 'accounts:login' %}">로그아웃</a></div>
         </div>
     </div>
-
     <!-- 대쉬보드 -->
-    <section>
-        <article>
-            {% block chatbot %}
-            {% endblock %}
-        </article>
-    </section>
-    <!-- 채팅창 -->
     <aside>
         {% block dashboard_contents %}
         {% endblock %}
