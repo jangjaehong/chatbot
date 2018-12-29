@@ -159,7 +159,7 @@ def physical_update(request):
                 return render(request, 'medibot/user_info.html', {})
         else:
             physical_info = PhysicalReport.objects.filter(uid=request.user.pk).last()
-            return render(request, 'medibot/physical_info.html', {"physical_report": physical_info})
+            return render(request, 'medibot/user_info.html', {"physical_report": physical_info})
     else:
         return redirect(reverse('accounts:login'))
 
