@@ -5,8 +5,8 @@
 .physical-box{width:100%;height:auto;background:#fff;}
 .physical-box .physical-box-header{width:calc(100% - 20px);height:40px;padding:10px;display:flex;flex-direction:row;align-items:center;background:#368AFF}
 .physical-box .physical-box-header .tit-wrap{width:70%;color:#fff}
-.physical-box .physical-box-header .tit-wrap p.tit{font-size:1.5em;font-weight:bold;}
-.physical-box .physical-box-header .tit-wrap p.update{font-size:1em;}
+.physical-box .physical-box-header .tit-wrap p.tit{font-size:1.5em;font-weight:bold;line-height:150%;}
+.physical-box .physical-box-header .tit-wrap p.update{font-size:1em;line-height:100%}
 .physical-box .physical-box-header .btn_wrap{width:30%;}
 .physical-box .physical-box-header .btn_wrap input{background:#fff;color:#333;padding:0;border-radius:5px}
 .physical-box .physical-box-header .btn_wrap input:hover{font-weight:bold}
