@@ -40,24 +40,6 @@
     {% endblock %}
 </head>
 <body>
-    <!-- 좌측 메뉴(모바일용) -->
-    <nav>
-        <ul class="nav-menu">
-            <li class="menu-tit">대쉬보드</li>
-        </ul>
-    </nav>
-    <!-- 채팅창 -->
-    <section>
-        <article>
-            {% block chatbot %}
-            {% endblock %}
-        </article>
-    </section>
-    <!-- 유저 정보 -->
-    <div class="user-info-wrap" id="user-info">
-        {% block userspace %}
-        {% endblock %}
-    </div>
     <header style="display:none">
          <div class="logo">
             <div class="ic_menu mr_10">
@@ -91,10 +73,25 @@
             <div style="background-color:#368AFF"><a href="{% url 'accounts:login' %}">로그아웃</a></div>
         </div>
     </div>
+    <!-- 좌측 메뉴(모바일용) -->
+    <nav>
+        <ul class="nav-menu">
+            <li class="menu-tit">대쉬보드</li>
+        </ul>
+    </nav>
+    <!-- 채팅창 -->
+    <section style="margin-right:5px">
+        <article>
+            {% block chatbot %}
+            {% endblock %}
+        </article>
+    </section>
     <!-- 대쉬보드 -->
-    <aside>
+    <section style="margin-left:5px">
+        {% block userspace %}
+        {% endblock %}
         {% block dashboard_contents %}
         {% endblock %}
-    </aside>
+    </section>
 </body>
 </html>

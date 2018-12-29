@@ -67,6 +67,10 @@ $(document).ready(function(){
 </script>
 {% endblock head %}
 
+{% block chatbot %}
+{% include 'medibot/chat.html' %}
+{% endblock chatbot %}
+
 {% block userspace %}
 {% include 'medibot/user_info.html' %}
 {% endblock userspace %}
@@ -75,8 +79,5 @@ $(document).ready(function(){
 {% include 'medibot/manage_page.html' %}
 {% endblock dashboard_contents %}
 
-{% block chatbot %}
-{% include 'medibot/chat.html' %}
-{% endblock chatbot %}
 
 
