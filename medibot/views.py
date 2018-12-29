@@ -327,9 +327,9 @@ def day_measure(request):
                     EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=timezone.now()).save()
 
                     contents = "%s님 건강체크 결과입니다."\
-                               "체질량지수: %d / %s "\
-                               "복부비만도: %d / %s "\
-                               "기초대사량: %d / %s "\
+                               "체질량지수: %s / %s "\
+                               "복부비만도: %s / %s "\
+                               "기초대사량: %s / %s "\
                                % request.user.username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state
                     # 보낼 메세지 저장
                     ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
