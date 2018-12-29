@@ -88,6 +88,11 @@
     </section>
     <!-- 대쉬보드 -->
     <section style="margin-left:5px;display:flex;flex-direction:row">
+        <header class="manage-header">
+            <p class="title">대쉬보드</p>
+            <p class="explain">유저정보, 체질량지수, 복부비만도, 기초대사량, 식단체크 결과가 표시됩니다.</p>
+        </header>
+        <div class="line"></div>
         {% block userspace %}
         {% endblock %}
         {% block dashboard_contents %}

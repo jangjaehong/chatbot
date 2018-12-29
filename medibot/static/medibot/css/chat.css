@@ -11,7 +11,7 @@
 /* 타이틀바 */
 .chat-header{
     width:calc(100% - 10px);
-    height:48px;
+    height:40px;
     padding:10px;
     position:relative;
     display:flex;
@@ -55,7 +55,7 @@
 
 /* 말풍선 공통 */
 .chat-box .sentence .msg-box{
-    width:100%;
+    width:70%;
     height:auto;
     position:relative;
     display:flex;
