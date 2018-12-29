@@ -30,7 +30,7 @@
 
 /* 말풍선 공통 */
 .chat-box .sentence .msg-box{
-    width:70%;
+    width:100%;
     height:auto;
     position:relative;
     display:flex;
@@ -45,7 +45,9 @@
 .chat-box .sentence .msg-box .content-wrap{
     display:flex;
     flex-direction:column;
-    color:#111111
+    color:#111111;
+    max-width:70%;
+    width:auto;
 }
 .chat-box .sentence .msg-box .content-wrap .name{
     padding:5px;

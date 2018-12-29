@@ -6,7 +6,7 @@ function physical_measure(){
         url:"/day_measure",
         beforeSend: function(){
             //메세지 디비 저장 및 표시
-            chatting_save('com', 'Medi-BOT', "건강상태 확인 중입니다..." );
+            chatting_save('com', 'Medi-BOT', "건강체크를 시작합니다..." );
         },
         success: function(response){
             if(response.result == 1){
@@ -18,11 +18,7 @@ function physical_measure(){
                 var gender = response.gender;
                 // 결과 표시
                 makeBullet(category, value, state, age, gender);
-
-                chatting_save('com', 'Medi-BOT', "건강체크 완료했습니다." );
-            }else if(response.result == 2){
-                 chatting_save('com', 'Medi-BOT', '등록된 신체정보가 없네요. 먼저 신체정보를 등록해주세요!');
-            }
+            }else if(response.result == 2){}
         },
         error: function(request, status, error) {
            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

@@ -297,13 +297,15 @@ class Calc:
 
 
 def day_measure(request):
+    speaker = "com"
+    botname = "Medi-Bot"
     # 측정 성공:1, 신체정보 조회 실패:2
     if request.user.is_authenticated:
         if request.method == 'POST':
             if request.is_ajax():
                 physical_report = PhysicalReport.objects.filter(uid=request.user.pk).last()
+                uid = request.user.pk
                 if physical_report:
-                    uid = request.user.pk
                     age = physical_report.age
                     gender = physical_report.gender
                     stature = physical_report.stature
@@ -323,6 +325,15 @@ def day_measure(request):
                     BmiReport(uid=uid, stature=stature, weight=weight, bmi=bmi_result, state=bmi_state, pub_date=timezone.now()).save()
                     WHRReport(uid=uid, gender=gender, waist=waist, hip=hip, whr=whr_result, state=whr_state, pub_date=timezone.now()).save()
                     EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=timezone.now()).save()
+
+                    contents = "%s님 건강체크 결과입니다."\
+                               "체질량지수: %d / %s "\
+                               "복부비만도: %d / %s "\
+                               "기초대사량: %d / %s "\
+                               % request.user.username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state
+                    # 보낼 메세지 저장
+                    ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
+                               pub_date=timezone.now()).save()
                     # 리턴값
                     context = {'bmi': bmi_result, 'bmi_state': bmi_state,
                                'whr': whr_result, 'whr_state': whr_state,
@@ -330,6 +341,9 @@ def day_measure(request):
                                'age': age, 'gender': gender, "result": 1}
                     return HttpResponse(json.dumps(context), content_type="application/json")
                 else:
+                    contents = "%s님의 등록된 신체정보가 없네요. 먼저 신체정보를 등록해주세요!." % request.user.username
+                    ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
+                       pub_date=timezone.now()).save()
                     return render(request, 'medibot/index.html', {"result": 2})
         return render(request)
     else:
