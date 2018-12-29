@@ -47,7 +47,7 @@ section{
     background:#333333;
 }
 section.left-section{margin-right:5px;}
-section.right-section{margin-left:5px;padding-top:50px;}
+section.right-section{margin-left:5px;padding-top:60px;overflow-y:scroll}
 
 /* 대쉬보드 */
 section > header{width:calc(50% - 25px);height:40px;padding:10px;background:#368AFF;position:fixed;top:0;z-index:9998}
@@ -55,9 +55,7 @@ section.left-section > header{left:0}
 section.right-section > header{right:0}
 section > header > .title{font-size:1.8em;color:#fff;font-weight:bold;line-height:150%;}
 section > header > .explain{font-size:1em;color:#fff;line-height:100%;}
-
 section > article{width:100%;height:100%;position:relative;}
-section.right-section > article{overflow-y:scroll}
 
 /* 유저 박스 */
 .user-item{

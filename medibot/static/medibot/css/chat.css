@@ -12,7 +12,7 @@
 /* 채팅영역 */
 .chat-box{
     width:100%;
-    height:calc(100% - 66px); /* 헤더의 크기를 제외*/
+    height:100%; /* 헤더의 크기를 제외*/
     display:flex;
     flex-direction:column;
     position:relative;
@@ -89,7 +89,7 @@
 }
 .chat-box .input-wrap textarea{
     width:calc(100% - 72px);
-    height:60px;
+    height:calc(100% - 16px)
     padding:8px;
     border:none;
     outline:none;
