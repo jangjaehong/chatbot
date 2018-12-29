@@ -7,7 +7,7 @@
 .physical-box .physical-box-header .tit-wrap{width:70%;color:#fff}
 .physical-box .physical-box-header .tit-wrap p.tit{font-size:1.5em;font-weight:bold;}
 .physical-box .physical-box-header .tit-wrap p.update{font-size:1em;}
-.physical-box .physical-box-header .btn_wrap{width:30%;background:#fff}
+.physical-box .physical-box-header .btn_wrap{width:30%;}
 .physical-box .physical-box-header .btn_wrap input{background:#fff;color:#333;padding:0;border-radius:5px}
 .physical-box .physical-box-header .btn_wrap input:hover{font-weight:bold}
 .physical-box .physical-box-header .btn_wrap input.btn-physical-up{display:none;}
