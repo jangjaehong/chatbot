@@ -1,6 +1,5 @@
 <script>
 function physical_measure(){
-    chatting_save('com', 'Medi-BOT', "건강체크를 시작합니다..." );
      // 측정하기
     $.ajax({
         type: 'POST',
@@ -26,7 +25,6 @@ function physical_measure(){
 
 $(document).ready(function(){
     $('.result-box').show();
-
     // 식단체크
     $('#foodFrm').submit(function(e){
         e.preventDefault();
