@@ -40,23 +40,9 @@
     {% endblock %}
 </head>
 <body>
-    <header style="display:none">
-         <div class="logo">
-            <div class="ic_menu mr_10">
-                <img id="ic_menu"  src="{% static 'medibot/img/icon/ic_menu.png' %}" alt="menu" >
-                <img id="ic_arrow" src="{% static 'medibot/img/icon/ic_arrow.png' %}" alt="menu">
-            </div>
-            <div class="tit">
-                <a href="{% url 'medibot:index' %}">Medi-BOT</a>
-            </div>
-        </div>
-        <div class="ic_user mr_10" id="ic_user">
-            <div class="mr_10"> {{ user.username }} 님, 환영합니다. </div>
-            <img src="{% static 'medibot/img/icon/ic_user.png' %}" alt="userinfo">
-            <!--상단 계정 컨트롤 -->
-        </div>
-    </header>
-    <div id="user-control-box" class="user-control-box">
+
+    <!-- 좌측 메뉴(모바일용) -->
+    <nav>
         <div class="user-info">
             <div class="mr_10">
                 <img src="{% static 'medibot/img/icon/ic_user.png' %}" alt="userinfo">
@@ -67,19 +53,12 @@
                 <div class="user-item">로그인시간</div>
                 <div class="user-val">2018-09-16 12:28</div>
             </div>
+            <div class="control-box">
+                <div><a href="{% url 'medibot:index' %}">마이페이지</a></div>
+                <div style="background-color:#368AFF"><a href="{% url 'accounts:login' %}">로그아웃</a></div>
+            </div>
         </div>
-        <div class="control-box">
-            <div><a href="{% url 'medibot:index' %}">마이페이지</a></div>
-            <div style="background-color:#368AFF"><a href="{% url 'accounts:login' %}">로그아웃</a></div>
-        </div>
-    </div>
-    <!-- 좌측 메뉴(모바일용) -->
-    <nav>
-        <ul class="nav-menu">
-            <li class="menu-tit">대쉬보드</li>
-        </ul>
     </nav>
-
     <!-- 채팅창 -->
     <section class="left-section">
         <header class="chat">
