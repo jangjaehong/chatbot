@@ -89,7 +89,7 @@
 }
 .chat-box .input-wrap textarea{
     width:calc(100% - 72px);
-    height:calc(100% - 16px)
+    height:calc(100% - 16px);
     padding:8px;
     border:none;
     outline:none;
