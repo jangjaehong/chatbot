@@ -47,7 +47,7 @@ section{
     background:#333333;
 }
 section.left-section{margin-right:5px;}
-section.right-section{margin-left:5px;padding-top:60px;overflow-y:scroll}
+section.right-section{margin-left:5px;padding-top:60px;}
 
 /* 대쉬보드 */
 section > header{width:calc(50% - 25px);height:40px;padding:10px;background:#368AFF;position:fixed;top:0;z-index:9998}
