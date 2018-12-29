@@ -6,18 +6,13 @@ from algorithm.util import DataUtil
 
 class ChatTraining(object):
 
-    def __init__(self):
-        util = DataUtil()
-        self.input_batches, self.target_batches = util.load_data()
-
     def training(self):
         # 트레이닝
         tf.reset_default_graph()
         with tf.Session() as sess:
             model = Seq2Seq(mode="training")
             model.build()
-            data = (self.input_batches, self.target_batches)
-            loss_history = model.train(sess, data, from_scratch=True,
+            loss_history = model.train(sess, from_scratch=True,
                                        save_path=model.ckpt_dir + f'/chat_model_{model.n_epoch}.ckpt')
 
         plt.figure(figsize=(20, 10))
@@ -28,11 +23,14 @@ class ChatTraining(object):
         plt.show()
 
     def inference(self):
+        util = DataUtil()
+        input_batches, target_batches = util.load_data()
+
         tf.reset_default_graph()
         with tf.Session() as sess:
             model = Seq2Seq(mode='inference')
             model.build()
-            for input_batch, target_batch in zip(self.input_batches, self.target_batches):
+            for input_batch, target_batch in zip(input_batches, target_batches):
                 data = (input_batch, target_batch)
                 model.inference(sess, data, load_ckpt=model.ckpt_dir + f'/chat_model_{model.n_epoch}.ckpt')
 

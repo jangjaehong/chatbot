@@ -44,6 +44,9 @@ class Seq2Seq:
         config = Config()
         self.util = config.datautil
 
+        self.input_batches = config.input_batches
+        self.target_batches = config.target_batches
+
         self.enc_vocab = config.enc_vocab
         self.enc_reverse_vocab = config.enc_reverse_vocab
         self.enc_vocab_size = config.enc_vocab_size
@@ -283,7 +286,7 @@ class Seq2Seq:
         self._build_encoder()
         self._build_decoder()
 
-    def train(self, sess, data, from_scratch=False, load_ckpt=None, save_path=None):
+    def train(self, sess, from_scratch=False, load_ckpt=None, save_path=None):
         # Restore Checkpoint
         if from_scratch is False and os.path.isfile(load_ckpt):
             self.restore(sess, load_ckpt)
@@ -291,7 +294,7 @@ class Seq2Seq:
         # Add Optimizer to current graph
         self.add_training_op()
         sess.run(tf.global_variables_initializer())
-        input_batches, target_batches = data
+        input_batches, target_batches = self.input_batches, self.target_batches
         loss_history = []
         for epoch in tqdm(range(self.n_epoch)):
             all_preds = []
