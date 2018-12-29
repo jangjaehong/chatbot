@@ -1,13 +1,10 @@
 <script>
 function physical_measure(){
+    chatting_save('com', 'Medi-BOT', "건강체크를 시작합니다..." );
      // 측정하기
     $.ajax({
         type: 'POST',
         url:"/day_measure",
-        beforeSend: function(){
-            //메세지 디비 저장 및 표시
-            chatting_save('com', 'Medi-BOT', "건강체크를 시작합니다..." );
-        },
         success: function(response){
             if(response.result == 1){
                 // 결과데이터

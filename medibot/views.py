@@ -299,6 +299,7 @@ class Calc:
 def day_measure(request):
     speaker = "com"
     botname = "Medi-Bot"
+    username = request.user.username
     # 측정 성공:1, 신체정보 조회 실패:2
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -327,10 +328,10 @@ def day_measure(request):
                     EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=timezone.now()).save()
 
                     contents = "%s님 건강체크 결과입니다."\
-                               "체질량지수: %s / %s "\
-                               "복부비만도: %s / %s "\
-                               "기초대사량: %s / %s "\
-                               % request.user.username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state
+                               "체질량지수: %d / %s "\
+                               "복부비만도: %d / %s "\
+                               "기초대사량: %d / %s "\
+                               % (username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state)
                     # 보낼 메세지 저장
                     ChatReport(uid=uid, speaker=speaker, username=botname, contents=contents,
                                pub_date=timezone.now()).save()
