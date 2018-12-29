@@ -60,7 +60,7 @@ nav{
 }
 /* 좌측 유저공간 */
 .user-info-wrap{
-    width:15%;
+    width:10%;
     height:calc(100% - 5px);
     position: relative;
     background:#333333;

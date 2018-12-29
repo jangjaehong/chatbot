@@ -14,9 +14,9 @@
 .logo .ic_menu{display:none;}
 
 /* 좌측 유저정보 */
-.user-box{width:calc(100% - 20px);padding:10px;display:flex;flex-direction:row;background:#fff;}
-.user-box .user-info{width:70%;padding:0;display:flex;flex-direction:row;color:#333333}
-.user-box .btn-wrap{width:30%;padding:0;}
+.user-box{width:calc(100% - 20px);padding:10px;display:relative;background:#fff;}
+.user-box .user-info{width:100%;padding:0;display:flex;flex-direction:row;color:#333333}
+.user-box .btn-wrap{width:70px;padding:0;position:absolute;top:50%;right:0}
 .user-box .btn-wrap input{width:100%;padding:0;background-color:#368AFF;color:#fff;}
 .user-box .btn-wrap input:hover{font-weight:bold}
 
