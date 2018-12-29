@@ -5,7 +5,7 @@
 .logo .ic_menu{display:none;}
 
 /* 유저정보 공간 */
-.user-info-wrap{width:15%;height:100%;position: relative;background:#333333;box-shadow:inset 0 0 5px 0 #222222;}
+.user-info-wrap{width:30%;height:100%;position: relative;background:#333333;box-shadow:inset 0 0 5px 0 #222222;}
 
 /* 신체정보 Box */
 .physical-box{width:100%;height:auto;background:#fff;}

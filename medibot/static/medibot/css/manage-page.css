@@ -1,3 +1,5 @@
+.manage-box{width:70%;height:100%;position:relative}
+
 /* 대쉬보드 */
 .manage-header{width:calc(100% - 20px);height:48px;padding:10px;background:#368AFF;}
 .manage-header .title{font-size:1.8em;color:#fff;font-weight:bold}

@@ -159,53 +159,54 @@ function makeBullet(category, value, state, age, gender){
     drawBulletEnergy(value[2], state[2], gender, age, "div.bullet-container3");
 }
 </script>
-<div class="manage-header">
-    <p class="title">대쉬보드</p>
-    <p class="explain">체질량지수, 복부비만도, 기초대사량, 식단체크 결과가 표시됩니다.</p>
-</div>
-<div class="line"></div>
-
-<!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
-<div id="empty-result-container" class="result-container" style="display:none">
-    <div class="header">
-        <div class="title"></div>
-        <div class="measure-date"></div>
+<div class="manage-box">
+    <div class="manage-header">
+        <p class="title">대쉬보드</p>
+        <p class="explain">체질량지수, 복부비만도, 기초대사량, 식단체크 결과가 표시됩니다.</p>
     </div>
-    <div class="container">
-        <div id="arrow" class="hidden"></div>
+    <div class="line"></div>
+
+    <!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
+    <div id="empty-result-container" class="result-container" style="display:none">
+        <div class="header">
+            <div class="title"></div>
+            <div class="measure-date"></div>
+        </div>
+        <div class="container">
+            <div id="arrow" class="hidden"></div>
+        </div>
+        <div class="text-info"></div>
     </div>
-    <div class="text-info"></div>
-</div>
 
-<!-- 기록확인을 위한 데이터 공간 -->
-<form action="" id="histFrm" name="histFrm" method="post" enctype="multipart/form-data">
-    <input type="hidden" id="hist-term" name="term" value="7" />
-    <input type="hidden" id="hist-type" name="type" value="1" />
-    <input type="hidden" id="hist-gubun" name="gubun" value="1" />
-</form>
+    <!-- 기록확인을 위한 데이터 공간 -->
+    <form action="" id="histFrm" name="histFrm" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="hist-term" name="term" value="7" />
+        <input type="hidden" id="hist-type" name="type" value="1" />
+        <input type="hidden" id="hist-gubun" name="gubun" value="1" />
+    </form>
 
-<!-- 측정결과 표시 -->
-<div class="result-wrap">
-    <!-- 일일체크 측정결과 표시 -->
-    <!--<div class="pub_date" id="measure_date"></div>-->
-    <div class="result-box" id="result-box1"><div class="none-result">최근 '체질량지수'를 측정한 결과가 없습니다.</div></div>
-    <div class="result-box" id="result-box2"><div class="none-result">최근 '복부비만도'를 측정한 결과가 없습니다.</div></div>
-    <div class="result-box" id="result-box3"><div class="none-result">최근 '기초대사량'을 측정한 결과가 없습니다.</div></div>
-    <!-- 식단체크 측정결과 표시 -->
-    <div class="result-box" id="result-box4"><div class="none-result">최근 '섭취영양'을 측정한 결과가 없습니다.</div></div>
-</div>
-
-<!-- 기록결과 표시 -->
-<div class="hist-wrap">
-    <!-- 기록표시 구분 메뉴 -->
-    <div class="hist-menu">
-        <ul id="hist-menu" class="row_menu">
-            <li id="hist1">체질량지수(BMI)</li>
-            <li id="hist2">복부비만도(WHR)</li>
-            <li id="hist3">기초대사량(kcal)</li>
-        </ul>
+    <!-- 측정결과 표시 -->
+    <div class="result-wrap">
+        <!-- 일일체크 측정결과 표시 -->
+        <!--<div class="pub_date" id="measure_date"></div>-->
+        <div class="result-box" id="result-box1"><div class="none-result">최근 '체질량지수'를 측정한 결과가 없습니다.</div></div>
+        <div class="result-box" id="result-box2"><div class="none-result">최근 '복부비만도'를 측정한 결과가 없습니다.</div></div>
+        <div class="result-box" id="result-box3"><div class="none-result">최근 '기초대사량'을 측정한 결과가 없습니다.</div></div>
+        <!-- 식단체크 측정결과 표시 -->
+        <div class="result-box" id="result-box4"><div class="none-result">최근 '섭취영양'을 측정한 결과가 없습니다.</div></div>
     </div>
-    <div class="hist-box" id="hist-box1"></div>
-    <div class="hist-box" id="hist-box2"></div>
-</div>
 
+    <!-- 기록결과 표시 -->
+    <div class="hist-wrap">
+        <!-- 기록표시 구분 메뉴 -->
+        <div class="hist-menu">
+            <ul id="hist-menu" class="row_menu">
+                <li id="hist1">체질량지수(BMI)</li>
+                <li id="hist2">복부비만도(WHR)</li>
+                <li id="hist3">기초대사량(kcal)</li>
+            </ul>
+        </div>
+        <div class="hist-box" id="hist-box1"></div>
+        <div class="hist-box" id="hist-box2"></div>
+    </div>
+</div>
