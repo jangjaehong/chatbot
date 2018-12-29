@@ -59,7 +59,7 @@ section > article{
 
 /* 유저정보 공간 */
 .user-info-wrap{
-    width:calc(10% - 10px);
+    width:calc(15% - 10px);
     height:calc(100% - 5px);
     position: relative;
     background:#333333;

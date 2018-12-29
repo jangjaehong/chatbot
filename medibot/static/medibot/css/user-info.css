@@ -5,7 +5,7 @@
 .logo .ic_menu{display:none;}
 
 /* 신체정보 Box */
-.physical-box{width:100%;height:auto;background:#fff;}
+.physical-box{width:calc(100% - 20px);height:auto;background:#fff;padding:10px}
 .physical-box .physical-box-header{width:100%;padding:8px 0;display:flex;flex-direction:row;align-items:center;border-bottom:1px solid #368AFF;}
 .physical-box .physical-box-header .tit-wrap{width:70%;color:#333333}
 .physical-box .physical-box-header .tit-wrap p.tit{font-size:1.5em;font-weight:bold;}
