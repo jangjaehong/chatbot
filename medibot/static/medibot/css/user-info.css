@@ -1,27 +1,11 @@
 /* logo */
-.logo{
-    width:calc(100% - 20px);
-    height:48px;
-    padding:10px;
-    display:flex;
-    flex-direction:row;
-    justify-content:flex-start;
-    align-items:center;
-    background:#368AFF;
-}
+.logo{width:calc(100% - 20px);height:48px;padding:10px;display:flex;flex-direction:row;justify-content:flex-start;align-items:center;background:#368AFF;}
 .logo .tit{width:100%;font-size:1.8em;font-weight:bold;color:#fff;}
 .logo a:hover{background:#fff;}
 .logo .ic_menu{display:none;}
 
-/* 좌측 유저정보 */
-.user-box{width:calc(100% - 20px);padding:10px;display:relative;background:#fff;}
-.user-box .user-info{width:100%;padding:0;display:flex;flex-direction:row;color:#333333}
-.user-box .btn-wrap{width:70px;padding:0;position:absolute;top:50%;right:0}
-.user-box .btn-wrap input{width:100%;padding:0;background-color:#368AFF;color:#fff;}
-.user-box .btn-wrap input:hover{font-weight:bold}
-
 /* 신체정보 Box */
-.physical-box{width:calc(100% - 20px);height:auto;padding:0px 10px 10px 10px;margin:20px 0 0 0;background:#fff;}
+.physical-box{width:100%;height:auto;background:#fff;}
 .physical-box .physical-box-header{width:100%;padding:8px 0;display:flex;flex-direction:row;align-items:center;border-bottom:1px solid #368AFF;}
 .physical-box .physical-box-header .tit-wrap{width:70%;color:#333333}
 .physical-box .physical-box-header .tit-wrap p.tit{font-size:1.5em;font-weight:bold;}
