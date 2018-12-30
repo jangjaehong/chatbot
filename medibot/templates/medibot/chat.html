@@ -38,12 +38,12 @@ function addMessage(sender, name, message){
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
     $('.content' + msg_box_len).html(message.replace("\r\n", "<br />"));
-    move_chat_scroll();
+    move_chat_scroll('.content' + msg_box_len);
 };
 
 /* 채팅창 맨아래로 */
-function move_chat_scroll(){
-    var sentence_last_child = $("#sentence").children(":last");
+function move_chat_scroll(element){
+    var sentence_last_child = $(element);
     var scrollPosition = sentence_last_child.offset().top;
     //alert(scrollPosition);
     $('#sentence').animate({scrollTop : scrollPosition}, 0);
