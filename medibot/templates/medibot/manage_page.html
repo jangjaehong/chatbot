@@ -14,7 +14,7 @@ function physical_measure(){
                 var state = [response.bmi_state, response.whr_state, response.energy_state];
                 var age = response.age;
                 var gender = response.gender;
-                var measure_date = reponse.pub_date;
+                var measure_date = response.pub_date;
                 // 결과 표시
                 makeBullet(category, value, state, age, gender, measure_date);
             }else if(response.result == 2){}

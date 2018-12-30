@@ -23,9 +23,10 @@ function chatting_save(speaker, username, contents){
 /* 메세지 채팅창에 추가 */
 function addMessage(sender, name, message){
     var msg_box_len = $('#sentence .msg-box').length;
+
     var user_img = "{% static 'medibot/img/icon/ic_user.png' %}";
     var com_img = "{% static 'medibot/img/icon/ic_com.png' %}";
-    var speechBubble = '<div class="msg-box ' + sender + ' mb_15">';
+    var speechBubble = '<div class="msg-box ' + sender + ' mb_15 id="msg-box' + msg_box_len + '">';
     if( sender == 'user'){
         speechBubble += '<div class="profile-wrap"><img src="' + user_img + '"/></div>';
     }else{
@@ -38,7 +39,7 @@ function addMessage(sender, name, message){
     $('#sentence').append(speechBubble);
 
     $('#content' + msg_box_len).html(message.replace("<br>","\n"));
-    move_chat_scroll('#content' + msg_box_len);
+    move_chat_scroll('#msg-box' + msg_box_len);
 };
 
 /* 채팅창 맨아래로 */
