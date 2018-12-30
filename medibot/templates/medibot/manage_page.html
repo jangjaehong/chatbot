@@ -30,7 +30,7 @@ function physical_measure(){
 function diet_check_cancel(){
     chatting_save('user', '{{ user.username }}', '영양체크 취소');
     chatting_save('com', 'Medi-Bot', '영양체크를 취소합니다.');
-    $('#foodFrm').animate({display:none});
+    $('#foodFrm').hide();
 }
 
 /* 그래프 호출 */
