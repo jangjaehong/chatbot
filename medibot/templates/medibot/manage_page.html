@@ -29,6 +29,8 @@ function physical_measure(){
 /* 취소 버튼 이벤트*/
 function diet_check_cancel(){
     $('#foodFrm').animate({display:none});
+    chatting_save('user', '{{ user.username }}', '영양체크 취소');
+    chatting_save('com', 'Medi-Bot', '영양체크를 취소합니다.');
 }
 
 /* 그래프 호출 */
@@ -47,7 +49,6 @@ function makeBullet(category, value, state, age, gender, measure_date){
     drawBulletEnergy(value[2], state[2], gender, age, "div.bullet-container3");
 }
 $(document).ready(function(){
-    $('.result-box').show();
     // 식단체크
     $('#foodFrm').submit(function(e){
         e.preventDefault();
