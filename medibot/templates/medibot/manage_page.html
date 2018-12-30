@@ -6,8 +6,8 @@ function physical_measure(){
         type: 'POST',
         url:"/day_measure",
         success: function(response){
+            addMessage(response.speaker, response.name, response.message);
             if(response.result == 1){
-                addMessage('com', response.name, response.message);
                 // 결과데이터
                 var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
                 var value = [response.bmi,  response.whr, response.energy];
@@ -17,9 +17,7 @@ function physical_measure(){
                 var measure_date = reponse.pub_date;
                 // 결과 표시
                 makeBullet(category, value, state, age, gender, measure_date);
-            }else if(response.result == 2){
-                chatting_save('com', response.name, response.message);
-            }
+            }else if(response.result == 2){}
         },
         error: function(request, status, error) {
            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

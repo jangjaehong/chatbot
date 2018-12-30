@@ -22,6 +22,8 @@ function chatting_save(speaker, username, contents){
 
 /* 메세지 채팅창에 추가 */
 function addMessage(sender, name, message){
+    var msg_box_len = $('#sentence .msg-box').length;
+    alert(msg_box_len);
     var user_img = "{% static 'medibot/img/icon/ic_user.png' %}";
     var com_img = "{% static 'medibot/img/icon/ic_com.png' %}";
     var speechBubble = '<div class="msg-box ' + sender + ' mb_15">';
@@ -32,7 +34,7 @@ function addMessage(sender, name, message){
     }
     speechBubble += '<div class="content-wrap">';
     speechBubble += '<div class="name">' + name + '</div>';
-    speechBubble += '<div class="content">' + message + '</div>';
+    speechBubble += '<div class="content">' + message.replace("\r\n", "<br />") + '</div>';
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
 
@@ -94,7 +96,7 @@ $(document).ready(function(){
             data: $('#chatFrm').serialize(),
             success: function(data, textStatus){
                  $.each(data, function(i, item){
-                    addMessage('com', item.name, item.message);
+                    addMessage(item.speaker, item.name, item.message);
                     var func = item.func;
                     if(func != ""){
                         func = func.replace(/(\s*)/g,"");
