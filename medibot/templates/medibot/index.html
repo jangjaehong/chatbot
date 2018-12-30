@@ -29,7 +29,7 @@ $(document).ready(function(){
         var state = ['{{ measure_report.bmi_state }}', '{{ measure_report.whr_state }}', '{{ measure_report.energy_state }}'];
         var age = {{ physical_report.age }};
         var gender = {{ physical_report.gender }};
-        var pub_date = {{ physical_report.pub_date|date:"Y-m-d f"}};
+        var pub_date = "{{ physical_report.pub_date|date:"Y-m-d f"}}";
         // 결과 표시
         makeBullet(category, value, state, age, gender, pub_date);
     {% endif %}
