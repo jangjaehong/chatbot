@@ -33,12 +33,12 @@ function addMessage(sender, name, message){
     }
     speechBubble += '<div class="content-wrap">';
     speechBubble += '<div class="name">' + name + '</div>';
-    speechBubble += '<div class="content' + msg_box_len + '"></div>';
+    speechBubble += '<div class="content" id="content' + msg_box_len + '"></div>';
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
 
-    $('.content' + msg_box_len).html(message.replace("\r\n", "<br />"));
-    move_chat_scroll('.content' + msg_box_len);
+    $('#content' + msg_box_len).html(message.replace("\r\n", "<br />"));
+    move_chat_scroll('#content' + msg_box_len);
 };
 
 /* 채팅창 맨아래로 */
