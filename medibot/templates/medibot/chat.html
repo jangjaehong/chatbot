@@ -33,7 +33,7 @@ function addMessage(sender, name, message){
     }
     speechBubble += '<div class="content-wrap">';
     speechBubble += '<div class="name">' + name + '</div>';
-    speechBubble += '<div class="content" + msg_box_len></div>';
+    speechBubble += '<div class="content"' + msg_box_len + '></div>';
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
     alert(message.replace("\r\n", "<br />"));

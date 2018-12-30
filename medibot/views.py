@@ -328,7 +328,7 @@ def day_measure(request):
                     answer = "%s님 건강체크 결과입니다. \r\n"\
                                "체질량지수: %d / %s \r\n"\
                                "복부비만도: %d / %s \r\n"\
-                               "기초대사량: %d / %s \r\n"\
+                               "기초대사량: %d / %s"\
                                % (request.user.username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state)
                     ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
                     # 리턴값
