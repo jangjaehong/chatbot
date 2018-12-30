@@ -14,7 +14,7 @@ function physical_measure(){
                 var state = [response.bmi_state, response.whr_state, response.energy_state];
                 var age = response.age;
                 var gender = response.gender;
-                var measure_date = reponse.pub_date;
+                var measure_date = response.pub_date;
                 // 결과 표시
                 makeBullet(category, value, state, age, gender, measure_date);
             }else if(response.result == 2){}
@@ -155,12 +155,6 @@ $(document).ready(function(){
 </script>
 <div class="manage-box">
     <!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
-    <div id="empty-result-container" class="result-container" style="display:none">
-        <div class="container">
-            <div id="arrow" class="hidden"></div>
-        </div>
-        <div class="text-info"></div>
-    </div>
 
     <!-- 기록확인을 위한 데이터 공간 -->
     <form action="" id="histFrm" name="histFrm" method="post" enctype="multipart/form-data">
