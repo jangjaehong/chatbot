@@ -39,11 +39,11 @@ function addMessage(sender, name, message){
     $('#sentence').append(speechBubble);
 
     $('#content' + msg_box_len).html(message.replace("<br>","\n"));
-    //move_chat_scroll('#msg-box' + msg_box_len);
+    move_chat_scroll();
 };
 
 /* 채팅창 맨아래로 */
-function move_chat_scroll(element){
+function move_chat_scroll(){
     /* var sentence_last_child = $(element);
     var scrollPosition = sentence_last_child.offset().top;
     $('#sentence').animate({scrollTop : scrollPosition}, 0); */
