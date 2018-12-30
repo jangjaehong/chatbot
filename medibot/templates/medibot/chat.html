@@ -37,7 +37,7 @@ function addMessage(sender, name, message){
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
 
-    $('#content' + msg_box_len).html(message.replace("\r\n", "<br />"));
+    $('#content' + msg_box_len).html(message.replace("\n", "<br />"));
     move_chat_scroll('#content' + msg_box_len);
 };
 
