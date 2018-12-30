@@ -31,6 +31,9 @@
 
 /* 식단체크 테이블 */
 .foodFrm{width:100%;height:100%;display:none;position:absolute;right:0;top:0;}
+.foodFrm .diet-box{width:100%;height:100%}
+.foodFrm .diet-box .searchText{width:100%;padding:10px;font-size:1.2em;font-weight:bold}
+
 .foodFrm .diet-box > .tb-food {width:100%;height:calc(100% - 177px);display:flex;flex-flow: column;background:#fff;}
 .foodFrm .diet-box > .tb-food thead {flex: 0 0 auto;width: calc(100% - 0.9em);border-bottom:1px solid #D5D5D5}
 .foodFrm .diet-box > .tb-food tbody {flex: 1 1 auto;display: block;overflow-y:auto;height:100%;}
@@ -42,6 +45,7 @@
 .foodFrm .diet-box > .tb-food input[type=number]{text-align:right}
 .foodFrm .diet-box > .tb-food td:first-child, .tb-food th:first-child{width:35%;}
 
+.foodFrm .diet-box .btn_wrap{bottom:5px;}
 .foodFrm .diet-box .btn_wrap input{width:calc(50%-10px);margin:5px;}
 
 .ui-autocomplete{overflow-y:auto;}
