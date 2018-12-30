@@ -28,9 +28,9 @@ function physical_measure(){
 
 /* 취소 버튼 이벤트*/
 function diet_check_cancel(){
-    $('#foodFrm').animate({display:none});
     chatting_save('user', '{{ user.username }}', '영양체크 취소');
     chatting_save('com', 'Medi-Bot', '영양체크를 취소합니다.');
+    $('#foodFrm').animate({display:none});
 }
 
 /* 그래프 호출 */
