@@ -87,7 +87,8 @@ $(document).ready(function(){
                             info += "<td>" + foodAry[i].toFixed(2);
                         }
                         var resultBox = $('#empty-result-container').clone().show().attr("id","");
-                        resultBox.find('.title').html("<h4>{{ user.username }}님이 오늘 섭취하신 음식의 영양정보입니다.</h4>");
+                        resultBox.find('.title').html("영양체크");
+                        //container.find(".measure-date").html(measure_date);
                         resultBox.find('.text-info').html(info);
                         resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
                         $('#result-box4').append(resultBox);
