@@ -340,7 +340,7 @@ def day_measure(request):
                                'bmi': bmi_result, 'bmi_state': bmi_state,
                                'whr': whr_result, 'whr_state': whr_state,
                                'energy': energy_result, 'energy_state': energy_state,
-                               'age': age, 'gender': gender, 'pub_date': pub_date.strftime("%Y-%m-%d")}
+                               'age': age, 'gender': gender, 'pub_date': pub_date.strftime("%Y-%m-%d %f")}
                     return HttpResponse(json.dumps(context), content_type="application/json")
                 else:
                     answer = "%s님의 등록된 신체정보가 없네요. <br>" \
