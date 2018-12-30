@@ -35,9 +35,10 @@ function diet_check_cancel(){
 function makeBullet(category, value, state, age, gender, measure_date){
     $('#result-box1, #result-box2, #result-box3').html('');
     for(var i = 0; i < 3; i++){
+        $("#result-box" + (i+1) + ".title").html(category[i]);
+        $("#result-box" + (i+1) + ".measure-date").html(measure_date);
+
         var container = $("#empty-result-container").clone().show().attr("id","");
-        container.find(".title").html(category[i]);
-        container.find(".measure-date").html(measure_date);
         container.find(".text-info").html("<p>" + category[i] + ": " + value[i] + "로 " + state[i] + "입니다.</p>");
         container.find(".container").addClass("bullet-container").addClass("bullet-container" + (i + 1));
         $('#result-box' + (i+1)).append(container);
@@ -155,10 +156,6 @@ $(document).ready(function(){
 <div class="manage-box">
     <!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
     <div id="empty-result-container" class="result-container" style="display:none">
-        <div class="header">
-            <div class="title"></div>
-            <div class="measure-date"></div>
-        </div>
         <div class="container">
             <div id="arrow" class="hidden"></div>
         </div>
@@ -175,11 +172,36 @@ $(document).ready(function(){
     <!-- 측정결과 표시 -->
     <div class="result-wrap">
         <!-- 일일체크 측정결과 표시 -->
-        <div class="result-box" id="result-box1"><div class="none-result">최근 '체질량지수'를 측정한 결과가 없습니다.</div></div>
-        <div class="result-box" id="result-box2"><div class="none-result">최근 '복부비만도'를 측정한 결과가 없습니다.</div></div>
-        <div class="result-box" id="result-box3"><div class="none-result">최근 '기초대사량'을 측정한 결과가 없습니다.</div></div>
+        <div class="result-box" id="result-box1">
+            <div class="header">
+                <div class="title">체질량지수</div>
+                <div class="measure-date">0000-00-00</div>
+            </div>
+            <div class="none-result">최근 '체질량지수'를 측정한 결과가 없습니다.</div>
+        </div>
+
+        <div class="result-box" id="result-box2">
+            <div class="header">
+                <div class="title">복부비만도</div>
+                <div class="measure-date">0000-00-00</div>
+            </div>
+            <div class="none-result">최근 '복부비만도'를 측정한 결과가 없습니다.</div>
+        </div>
+        <div class="result-box" id="result-box3">
+            <div class="header">
+                <div class="title">기초대사량</div>
+                <div class="measure-date">0000-00-00</div>
+            </div>
+            <div class="none-result">최근 '기초대사량'을 측정한 결과가 없습니다.</div>
+        </div>
         <!-- 식단체크 측정결과 표시 -->
-        <div class="result-box" id="result-box4"><div class="none-result">최근 '섭취영양'을 측정한 결과가 없습니다.</div></div>
+        <div class="result-box" id="result-box4">
+            <div class="header">
+                <div class="title">영양체크</div>
+                <div class="measure-date">0000-00-00</div>
+            </div>
+            <div class="none-result">최근 '섭취영양'을 측정한 결과가 없습니다.</div>
+        </div>
     </div>
 
     <!-- 기록결과 표시 -->

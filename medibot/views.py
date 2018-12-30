@@ -329,9 +329,9 @@ def day_measure(request):
                     WHRReport(uid=uid, gender=gender, waist=waist, hip=hip, whr=whr_result, state=whr_state, pub_date=pub_date).save()
                     EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=pub_date).save()
 
-                    answer = "%s님 건강체크 결과입니다. <br />" \
-                             "체질량지수: %d / %s <br />" \
-                             "복부비만도: %d / %s <br />" \
+                    answer = "%s님 건강체크 결과입니다. <br>" \
+                             "체질량지수: %d / %s <br>" \
+                             "복부비만도: %d / %s <br>" \
                              "기초대사량: %d / %s"\
                              % (request.user.username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state)
                     ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
@@ -343,7 +343,7 @@ def day_measure(request):
                                'age': age, 'gender': gender, 'pub_date': pub_date.strftime("%Y-%m-%d")}
                     return HttpResponse(json.dumps(context), content_type="application/json")
                 else:
-                    answer = "%s님의 등록된 신체정보가 없네요. \n" \
+                    answer = "%s님의 등록된 신체정보가 없네요. <br>" \
                              "먼저 신체정보를 등록해주세요!." % request.user.username
                     ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
                     context = {"speaker": 'com', 'message': answer, 'func': "", 'name': 'Medi-BOT'}
