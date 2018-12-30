@@ -39,15 +39,15 @@ function addMessage(sender, name, message){
     $('#sentence').append(speechBubble);
 
     $('#content' + msg_box_len).html(message.replace("<br>","\n"));
-    move_chat_scroll('#msg-box' + msg_box_len);
+    //move_chat_scroll('#msg-box' + msg_box_len);
 };
 
 /* 채팅창 맨아래로 */
 function move_chat_scroll(element){
-    var sentence_last_child = $(element);
+    /* var sentence_last_child = $(element);
     var scrollPosition = sentence_last_child.offset().top;
-    //alert(scrollPosition);
-    $('#sentence').animate({scrollTop : scrollPosition}, 0);
+    $('#sentence').animate({scrollTop : scrollPosition}, 0); */
+    $('#sentence').scrollTop($('#sentence')[0].scrollHeight);
 };
 
 /* 채팅에 기능 수행 */
