@@ -62,10 +62,10 @@ def manage_check(uid, username, last_login):
         last_check_day = (now_date - measure_report.pub_date).days
         # 마지막 체크일이 어제일 경우
         if last_check_day == 1:
-            contents = "%s님의 어제 건강체크 기록입니다.\n" \
-                       "체질량지수: %d | %s\n" \
-                       "복부비만도: %d | %s\n" \
-                       "기초대사량: %d | %s 였네요.\n" \
+            contents = "%s님의 어제 건강체크 기록입니다.<br />" \
+                       "체질량지수: %d | %s<br />" \
+                       "복부비만도: %d | %s<br />" \
+                       "기초대사량: %d | %s 였네요.<br />" \
                        "오늘도 꼭 체크 해주세요!"\
                        % (username,
                           measure_report.bmi, measure_report.bmi_state,
@@ -329,14 +329,14 @@ def day_measure(request):
                     WHRReport(uid=uid, gender=gender, waist=waist, hip=hip, whr=whr_result, state=whr_state, pub_date=pub_date).save()
                     EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=pub_date).save()
 
-                    answer = "%s님 건강체크 결과입니다. \n" \
-                             "체질량지수: %d / %s \n" \
-                             "복부비만도: %d / %s \n" \
+                    answer = "%s님 건강체크 결과입니다. <br />" \
+                             "체질량지수: %d / %s <br />" \
+                             "복부비만도: %d / %s <br />" \
                              "기초대사량: %d / %s"\
                              % (request.user.username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state)
                     ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
                     # 리턴값
-                    context = {"result": 1, "speaker": 'com', 'message': answer.replace("\n","<br />"), 'func': "", 'name': 'Medi-BOT',
+                    context = {"result": 1, "speaker": 'com', 'message': answer, 'func': "", 'name': 'Medi-BOT',
                                'bmi': bmi_result, 'bmi_state': bmi_state,
                                'whr': whr_result, 'whr_state': whr_state,
                                'energy': energy_result, 'energy_state': energy_state,
