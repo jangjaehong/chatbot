@@ -19,7 +19,7 @@ $(document).ready(function(){
     /* 채팅 초기화 */
     {% if chat_reports %}
         {% for report in chat_reports %}
-            addMessage("{{ report.speaker }}","{{ report.username }}","{{ report.contents }}");
+            addMessage("{{ report.speaker }}","{{ report.username }}","{{ report.contents.replace("\n","<br />") }}");
         {% endfor %}
     {% endif %}
 
