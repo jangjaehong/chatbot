@@ -35,8 +35,8 @@ function diet_check_cancel(){
 function makeBullet(category, value, state, age, gender, measure_date){
     $('#result-box1, #result-box2, #result-box3').html('');
     for(var i = 0; i < 3; i++){
-        $("#result-box" + (i+1) + ".title").html(category[i]);
-        $("#result-box" + (i+1) + ".measure-date").html(measure_date);
+        $("#result-box" + (i+1) + " .title").html(category[i]);
+        $("#result-box" + (i+1) + " .measure-date").html(measure_date);
 
         var container = $("#empty-result-container").clone().show().attr("id","");
         container.find(".text-info").html("<p>" + category[i] + ": " + value[i] + "로 " + state[i] + "입니다.</p>");
