@@ -336,7 +336,7 @@ def day_measure(request):
                              % (request.user.username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state)
                     ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
                     # 리턴값
-                    context = {"result": 1, "speaker": 'com', 'message': answer, 'func': "", 'name': 'Medi-BOT',
+                    context = {"result": 1, "speaker": 'com', 'message': answer.replace("\n","<br />"), 'func': "", 'name': 'Medi-BOT',
                                'bmi': bmi_result, 'bmi_state': bmi_state,
                                'whr': whr_result, 'whr_state': whr_state,
                                'energy': energy_result, 'energy_state': energy_state,

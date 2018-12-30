@@ -11,7 +11,7 @@ class ChatReport(models.Model):
     uid = models.IntegerField(null=False, default=0)
     username = models.CharField(max_length=10, null=False, default='')
     speaker = models.CharField(max_length=10, null=False, default='')
-    contents = models.TextField(null=False, default='')
+    contents = models.CharField(max_length=500,null=False, default='')
     pub_date = models.DateTimeField('등록일', default=timezone.now)
     objects = models.Manager()
 
