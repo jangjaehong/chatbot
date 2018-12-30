@@ -62,7 +62,11 @@ def manage_check(uid, username, last_login):
         last_check_day = (now_date - measure_report.pub_date).days
         # 마지막 체크일이 어제일 경우
         if last_check_day == 1:
-            contents = "%s님의 어제 체질량지수: %d | %s 복부비만도: %d | %s, 기초대사량: %d | %s 였네요. 오늘도 꼭 체크 해주세요!"\
+            contents = "%s님의 어제 건강체크 기록입니다.\n" \
+                       "체질량지수: %d | %s\n" \
+                       "복부비만도: %d | %s\n" \
+                       "기초대사량: %d | %s 였네요.\n" \
+                       "오늘도 꼭 체크 해주세요!"\
                        % (username,
                           measure_report.bmi, measure_report.bmi_state,
                           measure_report.whr, measure_report.whr_state,
@@ -336,7 +340,7 @@ def day_measure(request):
                                'bmi': bmi_result, 'bmi_state': bmi_state,
                                'whr': whr_result, 'whr_state': whr_state,
                                'energy': energy_result, 'energy_state': energy_state,
-                               'age': age, 'gender': gender, 'pub_date': pub_date}
+                               'age': age, 'gender': gender, 'pub_date': pub_date.strftime("%Y-%m-%d")}
                     return HttpResponse(json.dumps(context), content_type="application/json")
                 else:
                     answer = "%s님의 등록된 신체정보가 없네요. \n" \
