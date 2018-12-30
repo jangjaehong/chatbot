@@ -1,20 +1,25 @@
 <script>
 function physical_measure(){
+    chatting_save('com', 'Medi-Bot', '건강상태 체크중입니다...');
      // 측정하기
     $.ajax({
         type: 'POST',
         url:"/day_measure",
         success: function(response){
             if(response.result == 1){
+                addMessage('com', response.name, response.message);
                 // 결과데이터
                 var category = ["체질량지수(BMI)", "복부비만도(WHR)", "기초대사량(kcal)"];
                 var value = [response.bmi,  response.whr, response.energy];
                 var state = [response.bmi_state, response.whr_state, response.energy_state];
                 var age = response.age;
                 var gender = response.gender;
+                var measure_date = reponse.pub_date;
                 // 결과 표시
-                makeBullet(category, value, state, age, gender);
-            }else if(response.result == 2){}
+                makeBullet(category, value, state, age, gender, measure_date);
+            }else if(response.result == 2){
+                chatting_save('com', response.name, response.message);
+            }
         },
         error: function(request, status, error) {
            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -23,6 +28,26 @@ function physical_measure(){
     return false;
 }
 
+/* 취소 버튼 이벤트*/
+function diet_check_cancel(){
+    $('#foodFrm').animate({display:none});
+}
+
+/* 그래프 호출 */
+function makeBullet(category, value, state, age, gender, measure_date){
+    $('#result-box1, #result-box2, #result-box3').html('');
+    for(var i = 0; i < 3; i++){
+        var container = $("#empty-result-container").clone().show().attr("id","");
+        container.find(".title").html(category[i]);
+        container.find(".measure-date").html(measure_date);
+        container.find(".text-info").html("<p>" + category[i] + ": " + value[i] + "로 " + state[i] + "입니다.</p>");
+        container.find(".container").addClass("bullet-container").addClass("bullet-container" + (i + 1));
+        $('#result-box' + (i+1)).append(container);
+    }
+    drawBulletBMI(value[0], state[0], "div.bullet-container1");
+    drawBulletWHR(value[1], state[1], gender, age, "div.bullet-container2");
+    drawBulletEnergy(value[2], state[2], gender, age, "div.bullet-container3");
+}
 $(document).ready(function(){
     $('.result-box').show();
     // 식단체크
@@ -128,27 +153,6 @@ $(document).ready(function(){
 
 });
 
-/* 취소 버튼 이벤트*/
-function diet_check_cancel(){
-    $('#foodFrm').animate({display:none});
-}
-
-/* 그래프 호출 */
-function makeBullet(category, value, state, age, gender){
-    $('#result-box1, #result-box2, #result-box3').html('');
-    //$('#measure_date').html('최근 측정 날짜 : {{ physical_report.pub_date }}');
-    for(var i = 0; i < 3; i++){
-        var container = $("#empty-result-container").clone().show().attr("id","");
-        container.find(".title").html(category[i]);
-        container.find(".measure-date").html('{{ measure_report.pub_date }}');
-        container.find(".text-info").html("<p>" + category[i] + ": " + value[i] + "로 " + state[i] + "입니다.</p>");
-        container.find(".container").addClass("bullet-container").addClass("bullet-container" + (i + 1));
-        $('#result-box' + (i+1)).append(container);
-    }
-    drawBulletBMI(value[0], state[0], "div.bullet-container1");
-    drawBulletWHR(value[1], state[1], gender, age, "div.bullet-container2");
-    drawBulletEnergy(value[2], state[2], gender, age, "div.bullet-container3");
-}
 </script>
 <div class="manage-box">
     <!-- 결과 콘텐츠 , 동적 추가를 위한 빈 틀 -->
@@ -173,7 +177,6 @@ function makeBullet(category, value, state, age, gender){
     <!-- 측정결과 표시 -->
     <div class="result-wrap">
         <!-- 일일체크 측정결과 표시 -->
-        <!--<div class="pub_date" id="measure_date"></div>-->
         <div class="result-box" id="result-box1"><div class="none-result">최근 '체질량지수'를 측정한 결과가 없습니다.</div></div>
         <div class="result-box" id="result-box2"><div class="none-result">최근 '복부비만도'를 측정한 결과가 없습니다.</div></div>
         <div class="result-box" id="result-box3"><div class="none-result">최근 '기초대사량'을 측정한 결과가 없습니다.</div></div>

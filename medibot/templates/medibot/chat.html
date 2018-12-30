@@ -35,6 +35,8 @@ function addMessage(sender, name, message){
     speechBubble += '<div class="content">' + message + '</div>';
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
+
+    move_chat_scroll();
 };
 
 /* 채팅창 맨아래로 */
@@ -77,20 +79,19 @@ $(document).ready(function(){
      $('#chatFrm').submit(function(e){
         /* 새로 고침 방지 */
         e.preventDefault();
+
+        /* 사용자 메세지 표시 */
         var input_msg = $('#input_message').val()
         $('#msg').val(input_msg);
         $('#input_message').val('');
+        addMessage('user', '{{ user.username }}', input_msg, );
 
+        /* 응답 요청 */
         $.ajax({
             type: 'POST',
             url:"/comunication",
             dataType: 'json',
             data: $('#chatFrm').serialize(),
-            beforeSend: function(){
-                //유저 메세지 표시
-                addMessage('user', '{{ user.username }}', input_msg, );
-                move_chat_scroll();
-            },
             success: function(data, textStatus){
                  $.each(data, function(i, item){
                     addMessage('com', item.name, item.message);
@@ -99,11 +100,7 @@ $(document).ready(function(){
                         func = func.replace(/(\s*)/g,"");
                         eval(func);
                     }
-
                  });
-            },
-            complete: function(){
-                move_chat_scroll();
             },
             error: function(request, status, error) {
                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

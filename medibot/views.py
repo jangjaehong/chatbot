@@ -297,9 +297,6 @@ class Calc:
 
 
 def day_measure(request):
-    speaker = "com"
-    botname = "Medi-Bot"
-    username = request.user.username
     # 측정 성공:1, 신체정보 조회 실패:2
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -319,31 +316,30 @@ def day_measure(request):
                     bmi_result, bmi_state = calc.bmi(stature, weight)
                     whr_result, whr_state = calc.whr(gender, waist, hip)
                     energy_result, energy_state = calc.energy(gender, age, stature, weight)
+                    pub_date = timezone.now()
                     # 기록 DB 저장
                     MeasureReport(uid=uid, age=age, gender=gender, stature=stature, weight=weight, waist=waist, hip=hip,
                                   bmi=bmi_result, bmi_state=bmi_state, whr=whr_result, whr_state=whr_state,
-                                  energy=energy_result, energy_state=energy_state, pub_date=timezone.now()).save()
-                    BmiReport(uid=uid, stature=stature, weight=weight, bmi=bmi_result, state=bmi_state, pub_date=timezone.now()).save()
-                    WHRReport(uid=uid, gender=gender, waist=waist, hip=hip, whr=whr_result, state=whr_state, pub_date=timezone.now()).save()
-                    EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=timezone.now()).save()
+                                  energy=energy_result, energy_state=energy_state, pub_date=pub_date).save()
+                    BmiReport(uid=uid, stature=stature, weight=weight, bmi=bmi_result, state=bmi_state, pub_date=pub_date).save()
+                    WHRReport(uid=uid, gender=gender, waist=waist, hip=hip, whr=whr_result, state=whr_state, pub_date=pub_date).save()
+                    EnergyReport(uid=uid, gender=gender, age=age, stature=stature, weight=weight, energy=energy_result, state=energy_state, pub_date=pub_date).save()
 
                     answer = "%s님 건강체크 결과입니다."\
                                "체질량지수: %d / %s | "\
                                "복부비만도: %d / %s | "\
                                "기초대사량: %d / %s | "\
-                               % (username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state)
-                    # 보낼 메세지 저장
-                    ChatReport(uid=uid, speaker=speaker, username=botname, contents=answer, pub_date=timezone.now()).save()
+                               % (request.user.username, bmi_result, bmi_state, whr_result, whr_state, energy_result, energy_state)
+
                     # 리턴값
-                    context = {'bmi': bmi_result, 'bmi_state': bmi_state,
+                    context = {"result": 1, 'message': answer, 'func': "", 'name': 'Medi-BOT',
+                               'bmi': bmi_result, 'bmi_state': bmi_state,
                                'whr': whr_result, 'whr_state': whr_state,
                                'energy': energy_result, 'energy_state': energy_state,
-                               'age': age, 'gender': gender, "result": 1,
-                               'message': answer, 'func': "", 'name': 'Medi-BOT'}
+                               'age': age, 'gender': gender, 'pub_date': pub_date}
                     return HttpResponse(json.dumps(context), content_type="application/json")
                 else:
                     answer = "%s님의 등록된 신체정보가 없네요. 먼저 신체정보를 등록해주세요!." % request.user.username
-                    ChatReport(uid=uid, speaker=speaker, username=botname, contents=answer, pub_date=timezone.now()).save()
                     context = {'message': answer, 'func': "", 'name': 'Medi-BOT'}
                     return HttpResponse(json.dumps(context), content_type="application/json")
 
