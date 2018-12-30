@@ -38,7 +38,7 @@ function addMessage(sender, name, message){
     speechBubble += '</div>';
     $('#sentence').append(speechBubble);
 
-    $('#content' + msg_box_len).html(message.replace("<br>","\n"));
+    $('#content' + msg_box_len).html(message);
     move_chat_scroll();
 };
 
@@ -114,38 +114,6 @@ $(document).ready(function(){
 });
 </script>
 
-<!-- 식단체크 데이터 공간-->
-<form action="" id="foodFrm" name="foodFrm" class="foodFrm" method="post"  enctype="multipart/form-data">
-    <input type="hidden" id="term2" name="term" value="7" />
-    <input type="hidden" name="type" value="1" />
-    {% csrf_token %}
-    <div class="diet-box">
-        <input class="searchText" id="searchText" name="searchText" type="text" autocomplete="on" placeholder="음식을 검색해주세요" value=""/>
-        <input type="hidden" id="fcount" name="fcount" value="0" />
-        <table class="tb-food" id="tb-food">
-            <thead>
-                <tr>
-                    <th>선택음식</th>
-                    <th>1회 제공량</th>
-                    <th>섭취량</th>
-                    <th>분량</th>
-                    <th>삭제</th>
-                </tr>
-            </thead>
-            <tbody id="sel_food_list">
-                <tr id="info_ment" class="info_ment">
-                    <td colspan="5" height="150" align="center">
-                        음식을 검색 후 선택하시면 추가됩니다.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="btn_wrap">
-            <input type="submit" id="btn-diet-measure" class="measure-btn" value="확인" />
-            <input type="button" id="btn-cancel" value="취소" onclick="diet_check_cancel()"/>
-        </div>
-    </div>
-</form>
 
 <!-- chatting -->
 <div id="chat-wrap" class="chat-wrap">
