@@ -45,7 +45,7 @@
 .foodFrm .diet-box > .tb-food input[type=number]{text-align:right}
 .foodFrm .diet-box > .tb-food td:first-child, .tb-food th:first-child{width:35%;}
 
-.foodFrm .diet-box .btn_wrap{bottom:5px;}
+.foodFrm .diet-box .btn_wrap{bottom:10px;background:#fff}
 .foodFrm .diet-box .btn_wrap input{width:calc(50%-10px);margin:5px;}
 
 .ui-autocomplete{overflow-y:auto;}
