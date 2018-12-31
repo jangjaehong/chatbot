@@ -73,6 +73,8 @@ $(document).ready(function(){
                         alert("건강체크를 통해 기초대사량을 최초 1회이상 측정하셔야 됩니다.");
                         $("#sel_food_list").html(table_base_info);
                     }else{
+                        addMessage(data.speaker, data.name, data.message);
+
                         $('#result-box4').html('');
                         var foodAry = new Array(data.energy, data.gram, data.kcal, data.carbohydrate, data.protein, data.fat
                         ,data.sugars, data.salt, data.cholesterol ,data.saturatedfat ,data.transfat);
@@ -93,7 +95,6 @@ $(document).ready(function(){
                         resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
                         $('#result-box4').append(resultBox);
                         drawCircleChart(foodAry, "div.circle-container1", false);
-                        addMessage(response.speaker, response.name, response.message);
                     }
                 },
                 error: function(request, status, error) {
