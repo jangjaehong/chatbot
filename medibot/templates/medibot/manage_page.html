@@ -93,8 +93,7 @@ $(document).ready(function(){
                         resultBox.find('.container').addClass('circle-container').addClass('circle-container1');
                         $('#result-box4').append(resultBox);
                         drawCircleChart(foodAry, "div.circle-container1", false);
-
-                        chatting_save('com', 'Medi-BOT', "영양체크를 완료했습니다.." );
+                        addMessage(response.speaker, response.name, response.message);
                     }
                 },
                 error: function(request, status, error) {

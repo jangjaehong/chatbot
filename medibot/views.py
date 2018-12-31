@@ -365,7 +365,8 @@ def diet(request):
                 servings = request.POST.getlist('fserving')
 
                 context = {"energy": 0.0, "gram": 0.0, "kcal": 0.0, "carbohydrate": 0.0, "protein": 0.0, "fat": 0.0,
-                           "sugars": 0.0, "salt": 0.0, "cholesterol": 0.0, "saturatedfat": 0.0, "transfat": 0.0}
+                           "sugars": 0.0, "salt": 0.0, "cholesterol": 0.0, "saturatedfat": 0.0, "transfat": 0.0,
+                           "speaker": 'com', 'message': "", 'func': "", 'name': 'Medi-BOT'}
 
                 # 이용자 마지막으로 기록된 기초대사량 가져옴
                 row = MeasureReport.objects.filter(uid=uid).order_by('pub_date')
@@ -413,6 +414,8 @@ def diet(request):
                             context["saturatedfat"], (context["energy"] * 0.07),
                             context["transfat"], (context["energy"] * 0.01))
                 ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
+                context["message"] = answer
+
                 return HttpResponse(json.dumps(context), content_type="application/json")
         return render(request)
     else:
