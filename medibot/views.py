@@ -394,16 +394,16 @@ def diet(request):
                                          saturatedfat=context["saturatedfat"], transfat=context["transfat"], pub_date=timezone.now()).save()
 
                 answer = "{}님 영양체크 결과입니다. <br>" \
-                         "섭취음식: [ {} ] <br>" \
-                         "총섭취량(g): {:f}<br>" \
-                         "총칼로리(kacl): {:f} / {:f} <br>" \
-                         "탄수화물(g): {:f} / {:f} <br>" \
-                         "단백질(g): {:f} / {:f} <br>"\
-                         "지방(g): {:f} / {:f} <br>"\
-                         "당류(g): {:f} / {:f} <br>"\
-                         "나트륨(mg): {:f} / {:f} <br>"\
-                         "콜레스테롤(mg): {:f} / {:f} <br>"\
-                         "트랜스지방(g): {:f} / {:f}".format (request.user.username, fname, context["gram"],
+                         "섭취음식: {} <br>" \
+                         "총섭취량(g): {:04.2f}<br>" \
+                         "총칼로리(kacl): {:04.2f} / {:04.2f} <br>" \
+                         "탄수화물(g): {:04.2f} / {:04.2f} <br>" \
+                         "단백질(g): {:04.2f} / {:04.2f} <br>"\
+                         "지방(g): {:04.2f} / {:04.2f} <br>"\
+                         "당류(g): {:04.2f} / {:04.2f} <br>"\
+                         "나트륨(mg): {:04.2f} / {:04.2f} <br>"\
+                         "콜레스테롤(mg): {:04.2f} / {:04.2f} <br>"\
+                         "트랜스지방(g): {:04.2f} / {:04.2f}".format (request.user.username, fname, context["gram"],
                             context["kcal"], context["energy"],
                             context["carbohydrate"], (context["energy"] * 0.55),
                             context["protein"], (context["energy"] * 0.07),
