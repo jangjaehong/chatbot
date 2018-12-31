@@ -392,30 +392,28 @@ def diet(request):
                                          sugars=context["sugars"], salt=context["salt"], cholesterol=context["cholesterol"],
                                          saturatedfat=context["saturatedfat"], transfat=context["transfat"], pub_date=timezone.now()).save()
 
-                # answer = "%s님 영양체크 결과입니다. <br>" \
-                #          "섭취음식: [ %s ] <br>" \
-                #          "총섭취량(g): %d<br>" \
-                #          "총칼로리(kacl): %d / %d <br>" \
-                #          "탄수화물(g): %d / %d <br>" \
-                #          "단백질(g): %d / %d <br>"\
-                #          "지방(g): %d / %d <br>"\
-                #          "당류(g): %d / %d <br>"\
-                #          "나트륨(mg): %d / %d <br>"\
-                #          "콜레스테롤(mg): %d / %d <br>"\
-                #          "트랜스지방(g): %d / %d"\
-                #          % (request.user.username, fname, context["gram"],
-                #             context["kcal"], context["energy"],
-                #             context["carbohydrate"], (context["energy"] * 0.55),
-                #             context["protein"], (context["energy"] * 0.07),
-                #             context["fat"], (context["energy"] * 0.1),
-                #             context["sugars"], (context["energy"] * 0.1),
-                #             context["salt"], 1957,
-                #             context["cholesterol"], 759,
-                #             context["saturatedfat"], (context["energy"] * 0.07),
-                #             context["transfat"], (context["energy"] * 0.01))
-                print(type(context["kcal"]))
-
-                #ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
+                answer = "%s님 영양체크 결과입니다. <br>" \
+                         "섭취음식: [ %s ] <br>" \
+                         "총섭취량(g): %g<br>" \
+                         "총칼로리(kacl): %g / %g <br>" \
+                         "탄수화물(g): %g / %g <br>" \
+                         "단백질(g): %g / %g <br>"\
+                         "지방(g): %g / %g <br>"\
+                         "당류(g): %g / %g <br>"\
+                         "나트륨(mg): %g / %g <br>"\
+                         "콜레스테롤(mg): %g / %g <br>"\
+                         "트랜스지방(g): %g / %g"\
+                         % (request.user.username, fname, context["gram"],
+                            context["kcal"], context["energy"],
+                            context["carbohydrate"], (context["energy"] * 0.55),
+                            context["protein"], (context["energy"] * 0.07),
+                            context["fat"], (context["energy"] * 0.1),
+                            context["sugars"], (context["energy"] * 0.1),
+                            context["salt"], 1957,
+                            context["cholesterol"], 759,
+                            context["saturatedfat"], (context["energy"] * 0.07),
+                            context["transfat"], (context["energy"] * 0.01))
+                ChatReport(uid=uid, speaker='com', username='Medi-BOT', contents=answer, pub_date=timezone.now()).save()
                 return HttpResponse(json.dumps(context), content_type="application/json")
         return render(request)
     else:
