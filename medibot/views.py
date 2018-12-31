@@ -394,15 +394,15 @@ def diet(request):
 
                 answer = "%s님 영양체크 결과입니다. <br>" \
                          "섭취음식: [ %s ] <br>" \
-                         "총섭취량(g): %f<br>" \
-                         "총칼로리(kacl): %f / %f <br>" \
-                         "탄수화물(g): %f / %f <br>" \
-                         "단백질(g): %f / %f <br>"\
-                         "지방(g): %f / %f <br>"\
-                         "당류(g): %f / %f <br>"\
-                         "나트륨(mg): %f / %f <br>"\
-                         "콜레스테롤(mg): %f / %f <br>"\
-                         "트랜스지방(g): %f / %f"\
+                         "총섭취량(g): %d<br>" \
+                         "총칼로리(kacl): %d / %d <br>" \
+                         "탄수화물(g): %d / %d <br>" \
+                         "단백질(g): %d / %d <br>"\
+                         "지방(g): %d / %d <br>"\
+                         "당류(g): %d / %d <br>"\
+                         "나트륨(mg): %d / %d <br>"\
+                         "콜레스테롤(mg): %d / %d <br>"\
+                         "트랜스지방(g): %d / %d"\
                          % (request.user.username, fname, context["gram"],
                             context["kcal"], context["energy"],
                             context["carbohydrate"], (context["energy"] * 0.55),
